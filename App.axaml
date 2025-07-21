@@ -1,0 +1,22 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SubjectHelper.App"
+             xmlns:local="using:SubjectHelper"
+             xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             RequestedThemeVariant="Dark">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+        <!-- <FluentTheme /> -->
+        <StyleInclude Source="Components/EvaluationCard.axaml"/>
+        <StyleInclude Source="Styles/Icons.axaml"/>
+        <StyleInclude Source="Styles/Colors.axaml"/>
+        <themes:MaterialTheme BaseTheme="Dark"/>
+        <avalonia:MaterialIconStyles/>
+    </Application.Styles>
+</Application>

@@ -1,0 +1,99 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:SubjectHelper.Components"
+        xmlns:converters="clr-namespace:SubjectHelper.Converters"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    <Design.PreviewWith>
+        <controls:EvaluationCard />
+    </Design.PreviewWith>
+    
+    <Styles.Resources>
+        <SolidColorBrush x:Key="BorderBrush">White</SolidColorBrush>
+        <SolidColorBrush x:Key="BackgroundBrush">#232528</SolidColorBrush>
+        <SolidColorBrush x:Key="ForegroundBrush">White</SolidColorBrush>
+        
+        <converters:PercentageFormatConverter x:Key="PercentageFormatConverter"/>
+    </Styles.Resources>
+
+    <Style Selector="controls|EvaluationCard">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid RowDefinitions="* * * *" ColumnDefinitions="* *" Width="160">
+                    
+                    <Grid
+                        ColumnDefinitions="*, Auto"
+                        Grid.Row="0"
+                        Grid.Column="0" Grid.ColumnSpan="2">
+                        
+                        <Border
+                            Grid.Column="0"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            Margin="0 0 0 -1"
+                            Padding="5">
+                            
+                            <Label Content="{TemplateBinding Title}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource ForegroundBrush}"/>
+                            
+                        </Border>
+                        
+                        <Border
+                            Grid.Column="1"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            Margin="-1 0 0 -1"
+                            Padding="5">
+                            
+                            <Button Background="Transparent">
+                                <avalonia:MaterialIcon Kind="Pencil" Foreground="{StaticResource ForegroundBrush}" Width="16" Height="16"/>
+                            </Button>
+                            
+                            
+                            
+                        </Border>
+                    </Grid>
+
+                    <Border 
+                        Grid.Column="0" Grid.ColumnSpan="2" 
+                        Grid.Row="1" 
+                        BorderBrush="{StaticResource BorderBrush}"  
+                        BorderThickness="1" 
+                        Margin="0 0 0 -1" 
+                        Padding="5">
+                        <Label Content="{TemplateBinding Weight, Converter={StaticResource PercentageFormatConverter}}"
+                               HorizontalAlignment="Center"
+                               Foreground="{StaticResource ForegroundBrush}"/>
+                    </Border>
+
+                    <Border 
+                        Grid.Column="0"
+                        Grid.Row="2" 
+                        BorderBrush="{StaticResource BorderBrush}"  
+                        BorderThickness="1" 
+                        Margin="0 0 -1 0" 
+                        Padding="5">
+                        <Label Content="{TemplateBinding Grade}"
+                               HorizontalAlignment="Center"
+                               Foreground="{StaticResource ForegroundBrush}"/>
+                    </Border>
+                
+                    <Border 
+                        Grid.Column="1"
+                        Grid.Row="2" 
+                        BorderBrush="{StaticResource BorderBrush}"  
+                        BorderThickness="1" 
+                        Margin="0 0 0 0" 
+                        Padding="5">
+                        <Label Content="{TemplateBinding LetterGrade}"
+                               HorizontalAlignment="Center"
+                               Foreground="{StaticResource ForegroundBrush}"/>
+                    </Border>
+                    
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

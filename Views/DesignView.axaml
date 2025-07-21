@@ -1,0 +1,61 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:components="clr-namespace:SubjectHelper.Components"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SubjectHelper.Views.DesignView">
+    
+    <Grid RowDefinitions="Auto, *"
+                Margin="10 5">
+        
+        <TextBlock Text="INTRODUCTION TO MANUFACTURING SYSTEMS"
+               FontSize="30"
+               FontWeight="SemiBold"
+               Grid.Row="0"
+               TextWrapping="Wrap"
+               Padding="5"
+               />
+        
+        <ScrollViewer Grid.Row="1" Padding="5">
+            <StackPanel Spacing="20">
+                <Expander HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock Text="Grades" HorizontalAlignment="Center"/>
+                    </Expander.Header>
+                    <ItemsControl>
+                    </ItemsControl>
+                </Expander>
+                
+                <WrapPanel ItemSpacing="5" LineSpacing="5">
+                    <!-- Limit on Title of 10 characters -->
+                    <components:EvaluationCard Title="In-Lab" Grade="65" Weight="30"/>
+                    <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                    <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                    <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                    <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                    <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                    <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                </WrapPanel>
+                
+                <Expander HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock Text="Attendance" HorizontalAlignment="Center"/>
+                    </Expander.Header>
+                    <WrapPanel ItemSpacing="5" LineSpacing="5">
+                        <!-- Limit on Title of 10 characters -->
+                        <components:EvaluationCard Title="In-Lab" Grade="65" Weight="30"/>
+                        <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                        <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                        <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                        <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                        <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                        <components:EvaluationCard Title="Test" Grade="95" Weight="30"/>
+                    </WrapPanel>
+                </Expander>
+                
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+    
+</UserControl>

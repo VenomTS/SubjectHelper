@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:components="clr-namespace:SubjectHelper.Components"
+             xmlns:viewModels="clr-namespace:SubjectHelper.ViewModels"
+             xmlns:converters="clr-namespace:SubjectHelper.Converters"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SubjectHelper.Views.SubjectView"
+             x:DataType="viewModels:SubjectViewModel">
+    
+    <UserControl.Resources>
+        <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+    </UserControl.Resources>
+    
+    <Grid RowDefinitions="Auto, *"
+          Margin="10 5">
+        
+        <TextBlock Text="{Binding Name}"
+               FontSize="30"
+               FontWeight="SemiBold"
+               Grid.Row="0"
+               TextWrapping="Wrap"
+               Padding="5"
+               />
+        
+        <ScrollViewer Grid.Row="1" Padding="5">
+            <StackPanel Spacing="20">
+                <Expander HorizontalAlignment="Stretch">
+                    
+                    <Expander.Header>
+                        <Label Content="Grades" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Expander.Header>
+                    
+                    <StackPanel Margin="5 10">
+                        <!-- When there are items, show this -->
+                        <WrapPanel ItemSpacing="15" LineSpacing="15"
+                                   IsVisible="{Binding Evaluations.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                            <ItemsControl 
+                                ItemsSource="{Binding Evaluations}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel ItemSpacing="10" LineSpacing="5"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <!-- Limit on Title of 10 characters -->
+                                        <components:EvaluationCard Title="{Binding Name}" Grade="{Binding Points}" Weight="{Binding Weight}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </WrapPanel>
+                        
+                        <!-- When there are no items, show this -->
+                        <Label Content="Nothing in Here :)"
+                               IsVisible="{Binding !Evaluations.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                    </StackPanel>
+                </Expander>
+                
+                <Expander HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock Text="Attendance" HorizontalAlignment="Center"/>
+                    </Expander.Header>
+                    <WrapPanel ItemSpacing="5" LineSpacing="5">
+                    </WrapPanel>
+                </Expander>
+                
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+    
+</UserControl>
