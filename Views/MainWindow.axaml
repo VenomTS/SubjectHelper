@@ -12,7 +12,19 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+    
+    <StackPanel>
+        <TabStrip ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedSubject}">
+            <TabStrip.ItemTemplate>
+                <DataTemplate>
+                    <TabItem Header="{Binding Name}"/>
+                </DataTemplate>
+            </TabStrip.ItemTemplate>
+        </TabStrip>
+        
+        <ContentControl Content="{Binding SelectedSubject}"/>
+    </StackPanel>
 
-    <ContentControl Content="{Binding CurrentViewModel}"/>
+    <!-- <ContentControl Content="{Binding CurrentViewModel}"/> -->
 
 </Window>
