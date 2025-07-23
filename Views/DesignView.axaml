@@ -7,4 +7,8 @@
              x:Class="SubjectHelper.Views.DesignView"
              x:DataType="viewModels:DesignViewModel">
     
+    <StackPanel Orientation="Vertical">
+        
+    </StackPanel>
+    
 </UserControl>

@@ -15,7 +15,7 @@ public partial class SubjectViewModel : ViewModelBase
     private string _name;
 
     [ObservableProperty] private string _newEvaluationTitle = string.Empty;
-    [ObservableProperty] private decimal _newEvaluationWeight;
+    [ObservableProperty] private decimal _newEvaluationWeight = 1;
     [ObservableProperty] private int _newEvaluationPoints;
 
     public ObservableCollection<EvaluationViewModel> Evaluations { get; } = [];
@@ -31,6 +31,9 @@ public partial class SubjectViewModel : ViewModelBase
     [RelayCommand]
     private void OpenEvaluationFormDialog()
     {
+        NewEvaluationTitle = string.Empty;
+        NewEvaluationWeight = 1;
+        NewEvaluationPoints = 0;
         IsEvaluationFormDialogOpen = true;
     }
 

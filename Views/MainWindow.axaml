@@ -3,6 +3,7 @@
         xmlns:vm="using:SubjectHelper.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:components="clr-namespace:SubjectHelper.Components"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SubjectHelper.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -13,18 +14,12 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     
-    <StackPanel>
-        <TabStrip ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedSubject}">
-            <TabStrip.ItemTemplate>
-                <DataTemplate>
-                    <TabItem Header="{Binding Name}"/>
-                </DataTemplate>
-            </TabStrip.ItemTemplate>
-        </TabStrip>
-        
-        <ContentControl Content="{Binding SelectedSubject}"/>
-    </StackPanel>
-
-    <!-- <ContentControl Content="{Binding CurrentViewModel}"/> -->
+    <ScrollViewer Padding="10 15">
+        <TabControl ItemsSource="{Binding TabItems}" SelectedContent="{Binding SelectedTabItem}"
+                    Theme="{StaticResource ScrollTabControl}">
+        </TabControl>
+    </ScrollViewer>
+    
+    <!-- <TabControl></TabControl> -->
 
 </Window>

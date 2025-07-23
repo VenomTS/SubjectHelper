@@ -38,7 +38,7 @@ public class EvaluationForm : TemplatedControl
     }
 
     public static readonly StyledProperty<decimal> WeightProperty = AvaloniaProperty.Register<EvaluationForm, decimal>(
-        nameof(Weight), defaultBindingMode: BindingMode.TwoWay, defaultValue: 0m);
+        nameof(Weight), defaultBindingMode: BindingMode.TwoWay, defaultValue: 1);
 
     public decimal Weight
     {

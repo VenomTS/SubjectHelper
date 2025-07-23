@@ -10,6 +10,9 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
+        <None Remove="Fonts\Font Awesome 6 Brands-Regular-400.otf" />
+        <None Remove="Fonts\Font Awesome 6 Free-Regular-400.otf" />
+        <None Remove="Fonts\Font Awesome 6 Free-Solid-900.otf" />
     </ItemGroup>
 
     <ItemGroup>
@@ -25,10 +28,11 @@
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
         <PackageReference Include="DialogHost.Avalonia" Version="0.9.3" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.6.25358.103" />
         <PackageReference Include="Semi.Avalonia" Version="11.2.1.9" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Fonts\" />
+      <Folder Include="Factories\" />
     </ItemGroup>
 </Project>

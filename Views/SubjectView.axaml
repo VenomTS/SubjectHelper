@@ -36,17 +36,18 @@
                         <StackPanel Margin="5 10" Spacing="10">
                             <Button HorizontalAlignment="Center"
                                     Theme="{StaticResource SolidButton}"
-                                    Classes="Tertiary"
+                                    Classes="Success"
                                     Command="{Binding OpenEvaluationFormDialogCommand}"
                                     >
                                 <PathIcon Data="{StaticResource SemiIconPlus}" Width="16" Height="16"/>
                             </Button>
                             
                             <ItemsControl
+                                Background="Red"
                                 ItemsSource="{Binding Evaluations}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <WrapPanel ItemSpacing="10" LineSpacing="5" Orientation="Horizontal"/>
+                                        <WrapPanel Background="Yellow" ItemSpacing="10" LineSpacing="15" Orientation="Horizontal"/>
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>

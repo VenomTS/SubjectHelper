@@ -10,6 +10,12 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
+             
+    <Application.Resources>
+        <FontFamily x:Key="FaBrands">/Assets/Fonts/Brands.otf#Font Awesome 6 Brands</FontFamily>
+        <FontFamily x:Key="FaRegular">/Assets/Fonts/Regular.otf#Font Awesome 6 Regular</FontFamily>
+        <FontFamily x:Key="FaSolid">/Assets/Fonts/Solid.otf#Font Awesome 6 Regular</FontFamily>
+    </Application.Resources>
   
     <Application.Styles>
         <semi:SemiTheme Locale="en-US"/>

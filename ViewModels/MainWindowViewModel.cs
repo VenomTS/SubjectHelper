@@ -1,71 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SubjectHelper.Models;
+using SubjectHelper.Interfaces;
 
 namespace SubjectHelper.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    public ObservableCollection<TabItem> TabItems { get; } = [];
 
-    // [ObservableProperty] private ViewModelBase _currentViewModel;
+    [ObservableProperty] private TabItem _selectedTabItem;
 
-    public ObservableCollection<SubjectViewModel> Subjects { get; } = [];
-    
-    [ObservableProperty]
-    private SubjectViewModel _selectedSubject;
+    private readonly ISubjectRepository _subjectRepo;
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(ISubjectRepository subjectRepository)
     {
-        List<Evaluation> evaluations =
-        [
-            CreateEvaluation("Midterm", 30, 67),
-            CreateEvaluation("Quiz 1", 5, 100),
-            CreateEvaluation("Quiz 2", 5, 80),
-            CreateEvaluation("Project 1", 10, 100),
-            CreateEvaluation("Project 2", 10, 100),
-            CreateEvaluation("Final", 40, 100),
-        ];
+        _subjectRepo = subjectRepository;
 
-        var subject = new Subject
-        {
-            Name = "Computer Architecture",
-            Evaluations = evaluations
-        };
-        
-        Subjects.Add(new SubjectViewModel(subject));
-        
-        evaluations =
-        [
-            CreateEvaluation("Midterm", 20, 100),
-            CreateEvaluation("Quiz 1", 5, 88),
-            CreateEvaluation("Quiz 2", 5, 100),
-            CreateEvaluation("Quiz 3", 5, 96),
-            CreateEvaluation("Quiz 4", 5, 96),
-            CreateEvaluation("Project", 30, 95),
-            CreateEvaluation("Final", 30, 100),
-        ];
+        var subjects = _subjectRepo.GetSubjects().ToList();
 
-        subject = new Subject
+        foreach (var subject in subjects)
         {
-            Name = "Operations Research I",
-            Evaluations = evaluations
-        };
+            var tabItem = new TabItem
+            {
+                Header = subject.Name,
+                Content = new SubjectViewModel(subject)
+            };
+            TabItems.Add(tabItem);
+        }
         
-        Subjects.Add(new SubjectViewModel(subject));
-        
-        SelectedSubject = Subjects[0];
-    }
-
-    private Evaluation CreateEvaluation(string name, decimal weight, int points)
-    {
-        return new Evaluation
-        {
-            Name = name,
-            Points = points,
-            Weight = weight
-        };
+        _selectedTabItem = TabItems.First();
     }
 
 }

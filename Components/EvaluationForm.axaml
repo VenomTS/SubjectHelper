@@ -15,7 +15,7 @@
                         <Label Content="Title" HorizontalAlignment="Center"/>
                         <TextBox
                             Classes="Bordered"
-                            MaxLength="10" MinLines="1"
+                            MaxLength="20" MinLines="1"
                             MaxLines="1" Text="{TemplateBinding Title, Mode=TwoWay}"/>
                     </StackPanel>
         
@@ -26,6 +26,7 @@
                             Value="{TemplateBinding Weight, Mode=TwoWay}"
                             Minimum="1"
                             Maximum="100"
+                            ShowButtonSpinner="False"
                             />
                     </StackPanel>
         
@@ -35,6 +36,7 @@
                             Value="{TemplateBinding Points, Mode=TwoWay}"
                             Minimum="0"
                             Maximum="100"
+                            ShowButtonSpinner="False"
                             />
                     </StackPanel>
         
