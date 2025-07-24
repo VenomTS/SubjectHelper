@@ -19,7 +19,11 @@
             
             <TextBlock Grid.Column="0" Text="Subjects" FontSize="36" FontWeight="Bold" LetterSpacing="0.75"/>
             
-            <Button Grid.Column="1" Theme="{DynamicResource SolidButton}" CornerRadius="16" Classes="Success">
+            <Button Grid.Column="1" 
+                    Theme="{DynamicResource SolidButton}" 
+                    CornerRadius="16" 
+                    Classes="Success"
+                    Command="{Binding OpenSubjectAddFormDialogCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <TextBlock FontFamily="{StaticResource FaSolid}" Text="&#x2b;" FontSize="24" VerticalAlignment="Center"/>
                     <TextBlock Text="Add Subject" FontSize="20" VerticalAlignment="Center"/>

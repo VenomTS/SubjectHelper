@@ -61,17 +61,15 @@ public partial class SubjectViewModel : PageViewModel
     {
         var dialogOptions = new DialogOptions
         {
-            Title = "Add Evaluation",
             StartupLocation = WindowStartupLocation.CenterOwner,
             Mode = DialogMode.None,
-            Button = DialogButton.OKCancel,
+            IsCloseButtonVisible = false,
             CanResize = false,
         };
-
-        var vm = new EvaluationFormViewModel();
         
-        // Should probably give him owner too
-        var result = await Dialog.ShowModal<EvaluationFormView, EvaluationFormViewModel>(vm, options: dialogOptions);
+        var vm = new EvaluationFormViewModel();
+
+        var result = await Dialog.ShowCustomModal<EvaluationFormView, EvaluationFormViewModel, DialogResult>(vm, null, dialogOptions);
 
         if (result != DialogResult.OK) return;
         
@@ -92,16 +90,15 @@ public partial class SubjectViewModel : PageViewModel
     {
         var dialogOptions = new DialogOptions
         {
-            Title = "Edit Evaluation",
             StartupLocation = WindowStartupLocation.CenterOwner,
             Mode = DialogMode.None,
-            Button = DialogButton.OKCancel,
+            IsCloseButtonVisible = false,
             CanResize = false,
         };
         
         var vm = new EvaluationFormViewModel(evaluationViewModel.Name, evaluationViewModel.Weight, evaluationViewModel.Grade);
         
-        var result = await Dialog.ShowModal<EvaluationFormView, EvaluationFormViewModel>(vm, options: dialogOptions);
+        var result = await Dialog.ShowCustomModal<EvaluationFormView, EvaluationFormViewModel, DialogResult>(vm, null, dialogOptions);
         
         if(result != DialogResult.OK) return;
         
@@ -137,7 +134,7 @@ public partial class SubjectViewModel : PageViewModel
         CalculateWeightedGrade();
     }
 
-    private Evaluation CreateEvaluation(string name, decimal weight, int grade)
+    private static Evaluation CreateEvaluation(string name, decimal weight, int grade)
     {
         return new Evaluation
         {

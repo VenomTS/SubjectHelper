@@ -1,7 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:SubjectHelper.Components"
-        xmlns:converters="clr-namespace:SubjectHelper.Converters"
         xmlns:u="https://irihi.tech/ursa">
     <Design.PreviewWith>
         <controls:SubjectCard />

@@ -28,6 +28,7 @@
                     FontSize="32"
                     FontWeight="Bold"
                     LetterSpacing="1"
+                    TextWrapping="Wrap"
                     VerticalAlignment="Center" HorizontalAlignment="Left"/>
                 
                 <ProgressBar
@@ -77,6 +78,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
+                        <!-- Hacky Solution for CancelDeleteCommand. Check SubjectViewModel for more info -->
                         <components:EvaluationCard Title="{Binding Name}"
                                                    Grade="{Binding Grade}"
                                                    Weight="{Binding Weight}" 

@@ -1,36 +1,24 @@
+using System;
 using Avalonia;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Irihi.Avalonia.Shared.Contracts;
 using SubjectHelper.Models;
+using SubjectHelper.ViewModels.Bases;
+using Ursa.Controls;
 
 namespace SubjectHelper.Components.EvaluationForm;
 
-public class EvaluationFormViewModel : AvaloniaObject
+public partial class EvaluationFormViewModel : ViewModelBase, IDialogContext
 {
-    public static readonly StyledProperty<string> TitleProperty = AvaloniaProperty.Register<EvaluationFormViewModel, string>(
-        nameof(Title));
-
-    public string Title
-    {
-        get => GetValue(TitleProperty);
-        set => SetValue(TitleProperty, value);
-    }
-
-    public static readonly StyledProperty<decimal> WeightProperty = AvaloniaProperty.Register<EvaluationFormViewModel, decimal>(
-        nameof(Weight));
-
-    public decimal Weight
-    {
-        get => GetValue(WeightProperty);
-        set => SetValue(WeightProperty, value);
-    }
-
-    public static readonly StyledProperty<int> GradeProperty = AvaloniaProperty.Register<EvaluationFormViewModel, int>(
-        nameof(Grade));
-
-    public int Grade
-    {
-        get => GetValue(GradeProperty);
-        set => SetValue(GradeProperty, value);
-    }
+    [ObservableProperty] 
+    [NotifyCanExecuteChangedFor(nameof(SaveEvaluationCommand))]
+    private string _title;
+    
+    [ObservableProperty] private decimal _weight;
+    [ObservableProperty] private int _grade;
+    
+    private bool SaveEvaluationCanExecute => !string.IsNullOrWhiteSpace(Title);
 
     public EvaluationFormViewModel()
     {
@@ -45,4 +33,17 @@ public class EvaluationFormViewModel : AvaloniaObject
         Weight = weight;
         Grade = grade;
     }
+
+    [RelayCommand(CanExecute = nameof(SaveEvaluationCanExecute))]
+    private void SaveEvaluation() => RequestClose?.Invoke(this, DialogResult.OK);
+    
+    [RelayCommand]
+    private void CancelEvaluation() => RequestClose?.Invoke(this, DialogResult.Cancel);
+
+    public void Close()
+    {
+        RequestClose?.Invoke(this, DialogResult.Cancel);
+    }
+
+    public event EventHandler<object?>? RequestClose;
 }

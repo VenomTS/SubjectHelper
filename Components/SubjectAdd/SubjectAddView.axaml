@@ -1,0 +1,71 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:subjectAdd="clr-namespace:SubjectHelper.Components.SubjectAdd"
+             xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SubjectHelper.Components.SubjectAdd.SubjectAddView"
+             x:DataType="subjectAdd:SubjectAddViewModel"
+             Width="512"
+             Loaded="Control_OnLoaded">
+    
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="Escape" Command="{Binding CloseWindowCommand}"/>
+    </UserControl.KeyBindings>
+    
+    <Grid RowDefinitions="Auto, *, Auto" Margin="24">
+        
+        <TextBlock 
+            Grid.Row="0"
+            Text="Add New Subject"
+            FontSize="20"
+            />
+        
+        <u:Form 
+            Grid.Row="1"
+            Margin="0 25 0 0"
+            HorizontalAlignment="Stretch"
+            LabelPosition="Top">
+            <u:Form.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel />
+                </ItemsPanelTemplate>
+            </u:Form.ItemsPanel>
+            
+            <u:FormItem Label="Subject Name">
+                <TextBox
+                    x:Name="SubjectNameInput"
+                    KeyDown="SubjectName_OnKeyDown"
+                    u:FormItem.Label="Subject Name"
+                    u:FormItem.IsRequired="True"
+                    Text="{Binding SubjectName}"/>
+            </u:FormItem>
+            
+            <u:FormItem Label="Subject Code">
+                <TextBox
+                    x:Name="SubjectCodeInput"
+                    KeyDown="SubjectCode_OnKeyDown"
+                    u:FormItem.Label="Subject Code"
+                    u:FormItem.IsRequired="False"
+                    Text="{Binding SubjectCode}">
+                    
+                    <TextBox.KeyBindings>
+                        <KeyBinding Gesture="Enter" Command="{Binding AddSubjectCommand}"/>
+                    </TextBox.KeyBindings>
+                    
+                </TextBox>
+            </u:FormItem>
+        </u:Form>
+        
+        <Button 
+            Grid.Row="2"
+            Content="Add Subject"
+            HorizontalAlignment="Stretch"
+            Theme="{DynamicResource SolidButton}"
+            Margin="0 15 0 0"
+            Command="{Binding AddSubjectCommand}"/>
+        
+    </Grid>
+    
+</UserControl>

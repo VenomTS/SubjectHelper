@@ -3,39 +3,99 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:evaluationForm="clr-namespace:SubjectHelper.Components.EvaluationForm"
+             xmlns:u="https://irihi.tech/ursa"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SubjectHelper.Components.EvaluationForm.EvaluationFormView"
-             x:DataType="evaluationForm:EvaluationFormViewModel">
+             x:DataType="evaluationForm:EvaluationFormViewModel"
+             Width="512"
+             Loaded="Control_OnLoaded">
     
-    <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center" Margin="10 25" Width="160">
-
-        <StackPanel Orientation="Vertical" Spacing="5">
-            <Label Content="Title" HorizontalAlignment="Center" />
-            <TextBox
-                Classes="Bordered"
-                MaxLength="20" MinLines="1"
-                MaxLines="1" Text="{Binding Title, Mode=TwoWay}" />
-        </StackPanel>
-
-        <StackPanel Orientation="Vertical" Spacing="5">
-            <Label Content="Weight" HorizontalAlignment="Center" />
-
-            <NumericUpDown
-                Value="{Binding Weight, Mode=TwoWay}"
-                Minimum="1"
-                Maximum="100"
-                ShowButtonSpinner="False" />
-        </StackPanel>
-
-        <StackPanel Orientation="Vertical" Spacing="5">
-            <Label Content="Points" HorizontalAlignment="Center" />
-            <NumericUpDown
-                Value="{Binding Grade, Mode=TwoWay}"
-                Minimum="0"
-                Maximum="100"
-                ShowButtonSpinner="False" />
-        </StackPanel>
-
-    </StackPanel>
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="Escape" Command="{Binding CancelEvaluationCommand}"/>
+    </UserControl.KeyBindings>
     
+    <Grid RowDefinitions="Auto, *, Auto"
+          Margin="24">
+        
+        <TextBlock Grid.Row="0"
+                   Text="Evaluation"
+                   VerticalAlignment="Bottom"
+                   FontSize="20"/>
+        
+        <u:Form Grid.Row="1"
+                Margin="0 20 0 0"
+                HorizontalAlignment="Stretch"
+                LabelPosition="Top">
+            
+            <u:Form.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel/>
+                </ItemsPanelTemplate>
+            </u:Form.ItemsPanel>
+            
+            <u:FormItem Label="Title">
+                <TextBox
+                    x:Name="EvaluationTitleInput"
+                    KeyDown="EvaluationTitleInput_OnKeyDown"
+                    u:FormItem.Label="Title"
+                    u:FormItem.IsRequired="True"
+                    MaxLength="20"
+                    Text="{Binding Title, Mode=TwoWay}"/>
+            </u:FormItem>
+            
+            <u:FormItem Label="Weight">
+                <NumericUpDown
+                    x:Name="EvaluationWeightInput"
+                    KeyDown="EvaluationWeightInput_OnKeyDown"
+                    u:FormItem.Label="Weight"
+                    u:FormItem.IsRequired="True"
+                    Value="{Binding Weight, Mode=TwoWay}"
+                    Minimum="1"
+                    Maximum="100"
+                    ShowButtonSpinner="False" />
+            </u:FormItem>
+            
+            <u:FormItem Label="Grade">
+                <NumericUpDown
+                    x:Name="EvaluationGradeInput"
+                    KeyDown="EvaluationGradeInput_OnKeyDown"
+                    u:FormItem.Label="Grade"
+                    u:FormItem.IsRequired="True"
+                    Value="{Binding Grade, Mode=TwoWay}"
+                    Minimum="0"
+                    Maximum="100"
+                    ShowButtonSpinner="False">
+                    
+                    <NumericUpDown.KeyBindings>
+                        <KeyBinding Gesture="Enter" Command="{Binding SaveEvaluationCommand}"/>
+                    </NumericUpDown.KeyBindings>
+                    
+                </NumericUpDown>
+            </u:FormItem>
+        </u:Form>
+        
+        <Grid Grid.Row="2"
+              Margin="0 10 0 0"
+              ColumnDefinitions="*, *"
+              ColumnSpacing="25">
+            
+            <Button Grid.Column="0"
+                    Classes="Success"
+                    Theme="{StaticResource SolidButton}"
+                    HorizontalAlignment="Stretch"
+                    Content="Save"
+                    Command="{Binding SaveEvaluationCommand}"/>
+            
+            <Button Grid.Column="1" 
+                    Classes="Danger"
+                    Theme="{StaticResource SolidButton}"
+                    HorizontalAlignment="Stretch"
+                    Content="Cancel"
+                    Command="{Binding CancelEvaluationCommand}"/>
+            
+        </Grid>
+        
+        
+        
+    </Grid>
 </UserControl>

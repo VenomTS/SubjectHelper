@@ -75,19 +75,31 @@
                                            Foreground="{StaticResource EditIconColor}"/>
                                 </Button>
                                 
-                                <u:PopConfirm 
+                                <u:PopConfirm
+                                    x:Name="PopConfirm"
                                     PopupHeader="Delete Evaluation?" 
-                                    Placement="TopEdgeAlignedRight" 
+                                    Placement="TopEdgeAlignedRight"
                                     ConfirmCommand="{TemplateBinding ConfirmDeleteCommand}"
                                     ConfirmCommandParameter="{TemplateBinding ConfirmDeleteCommandParameter}"
                                     CancelCommand="{TemplateBinding CancelDeleteCommand}"
                                     CancelCommandParameter="{TemplateBinding CancelDeleteCommandParameter}"
+                                    TriggerMode="Click"
                                     Classes="Error">
                                     <u:PopConfirm.PopupContent>
                                         <MultiBinding StringFormat="This will permanently delete the evaluation '{0}' and all of its data. This action cannot be undone">
                                             <TemplateBinding Property="Title"/>
                                         </MultiBinding>
                                     </u:PopConfirm.PopupContent>
+                                    
+                                    <u:PopConfirm.KeyBindings>
+                                        <KeyBinding Gesture="Enter"
+                                                    Command="{Binding ConfirmCommand, ElementName=PopConfirm}"
+                                                    CommandParameter="{Binding ConfirmCommandParameter, ElementName=PopConfirm}"/>
+                                        <!-- Way too broken for me to fix it -->
+                                        <!-- <KeyBinding Gesture="Escape" -->
+                                        <!--             Command="{Binding CancelCommand, ElementName=PopConfirm}" -->
+                                        <!--             CommandParameter="{Binding CancelCommandParameter, ElementName=PopConfirm}"/> -->
+                                    </u:PopConfirm.KeyBindings>
                                     
                                     <Button 
                                         VerticalAlignment="Center"
