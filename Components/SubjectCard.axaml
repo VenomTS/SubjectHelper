@@ -14,8 +14,6 @@
         <SolidColorBrush x:Key="ViewIconColor">#60A5FA</SolidColorBrush>
         <SolidColorBrush x:Key="EditIconColor">#BB86FC</SolidColorBrush>
         <SolidColorBrush x:Key="DeleteIconColor">#FF5E5B</SolidColorBrush>
-        
-        <converters:RandomNumberGeneratorConverter x:Key="RandomNumberGeneratorConverter"/>
     </Styles.Resources>
 
     <Style Selector="controls|SubjectCard">

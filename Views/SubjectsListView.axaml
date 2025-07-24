@@ -39,6 +39,7 @@
                     <components:SubjectCard 
                         Title="{Binding Name}" 
                         Code="{Binding Code}"
+                        BorderColor="{Binding BorderColor}"
                         ViewCommand="{Binding $parent[ItemsControl].((viewModels:SubjectsListViewModel)DataContext).GoToSubjectCommand}"
                         ViewCommandParameter="{Binding .}"
                         ConfirmDeleteCommand="{Binding $parent[ItemsControl].((viewModels:SubjectsListViewModel)DataContext).DeleteSubjectCommand}"

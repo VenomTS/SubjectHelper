@@ -45,7 +45,11 @@
                     Foreground="{Binding WeightedGrade, Converter={StaticResource ProgressBarColorConverter}}"
                 />
                 
-                <Button Grid.Column="2" Theme="{DynamicResource BorderlessButton}" Padding="0" HorizontalAlignment="Right">
+                <Button Grid.Column="2" 
+                        Theme="{DynamicResource BorderlessButton}" 
+                        Padding="0" 
+                        HorizontalAlignment="Right"
+                        Command="{Binding OpenCreateEvaluationFormDialogCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="5">
                         <Label 
                             FontFamily="{StaticResource FaSolid}"
@@ -64,7 +68,7 @@
             <ItemsControl
                 IsVisible="{Binding Evaluations.Count}"
                 Margin="0 25 0 0"
-                Grid.Row="2"
+                Grid.Row="1"
                 ItemsSource="{Binding Evaluations}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -84,7 +88,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
             
-            <StackPanel Grid.Row="2" 
+            <StackPanel Grid.Row="1" 
                         HorizontalAlignment="Center"
                         Orientation="Vertical" 
                         IsVisible="{Binding !Evaluations.Count}"

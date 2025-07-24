@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SubjectHelper.Components.EvaluationForm;
@@ -16,21 +17,27 @@ namespace SubjectHelper.ViewModels;
 
 public partial class SubjectViewModel : PageViewModel
 {
-    private Subject _subject;
+    private Subject? _subject;
     
     private readonly ISubjectRepository _subjectRepo;
 
-    [ObservableProperty] private string _name;
+    [ObservableProperty] private string _name = string.Empty;
 
-    [ObservableProperty] private string _code;
+    [ObservableProperty] private string _code = string.Empty;
 
     [ObservableProperty] private int _weightedGrade;
+    
+    [ObservableProperty] private SolidColorBrush _borderColor;
 
     public ObservableCollection<EvaluationViewModel> Evaluations { get; } = [];
 
     public SubjectViewModel(ISubjectRepository subjectRepo)
     {
         Page = ApplicationPages.Subject;
+
+        var color = RandomColorGenerator.GenerateRandomColor();
+        
+        _borderColor = new SolidColorBrush(color);
         
         _subjectRepo = subjectRepo;
     }
@@ -38,10 +45,9 @@ public partial class SubjectViewModel : PageViewModel
     public void Initialize(string name)
     {
         var subject = _subjectRepo.GetSubject(name);
-        if(subject == null)
-            throw new Exception("Subject not found");
-            
-        _subject = subject;
+        
+        _subject = subject ?? throw new Exception("Subject not found");
+        
         Name = subject.Name;
         Code = subject.Code;
         foreach (var evaluation in subject.Evaluations)
@@ -70,6 +76,9 @@ public partial class SubjectViewModel : PageViewModel
         if (result != DialogResult.OK) return;
         
         var evaluation = CreateEvaluation(vm.Title, vm.Weight, vm.Grade);
+        
+        if(_subject == null)
+            throw new Exception("Subject is undefined");
 
         _subject.Evaluations.Add(evaluation);
         
@@ -103,6 +112,9 @@ public partial class SubjectViewModel : PageViewModel
         
         var newEvaluation = CreateEvaluation(vm.Title, vm.Weight, vm.Grade);
         
+        if(_subject == null)
+            throw new Exception("Subject is undefined");
+        
         _subject.Evaluations[evaluationIndex] = newEvaluation;
         
         Evaluations[evaluationIndex] = new EvaluationViewModel(newEvaluation);
@@ -118,7 +130,7 @@ public partial class SubjectViewModel : PageViewModel
         if(evaluationIndex == -1) 
             throw new Exception("Evaluation not found although it should be present");
         
-        _subject.Evaluations.RemoveAt(evaluationIndex);
+        _subject!.Evaluations.RemoveAt(evaluationIndex);
         
         Evaluations.RemoveAt(evaluationIndex);
         
@@ -137,7 +149,9 @@ public partial class SubjectViewModel : PageViewModel
 
     private void CalculateWeightedGrade()
     {
-        decimal weightedGrade = _subject.Evaluations.Sum(evaluation => evaluation.Grade * (evaluation.Weight / 100m));
+        if(_subject == null)
+            throw new Exception("Subject is undefined");
+        var weightedGrade = _subject.Evaluations.Sum(evaluation => evaluation.Grade * (evaluation.Weight / 100m));
         WeightedGrade = (int) Math.Round(weightedGrade);
     }
 }

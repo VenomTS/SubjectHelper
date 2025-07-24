@@ -1,3 +1,4 @@
+using System;
 using SubjectHelper.Factories;
 using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
@@ -9,7 +10,7 @@ public class NavigationService : INavigationService
 {
     private readonly PageFactory _factory;
     
-    private MainWindowViewModel _mainWindowViewModel;
+    private MainWindowViewModel? _mainWindowViewModel;
 
     public NavigationService(PageFactory factory)
     {
@@ -23,6 +24,8 @@ public class NavigationService : INavigationService
     
     public void NavigateToPage(ApplicationPages page, object? data = null)
     {
+        if (_mainWindowViewModel == null)
+            throw new Exception("MainWindowViewModel not set before navigating to page");
         _mainWindowViewModel.CurrentViewModel = _factory.GetPageViewModel(page, data);
     }
 }
