@@ -4,72 +4,108 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:components="clr-namespace:SubjectHelper.Components"
              xmlns:viewModels="clr-namespace:SubjectHelper.ViewModels"
-             xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             xmlns:converters="clr-namespace:SubjectHelper.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SubjectHelper.Views.SubjectView"
              x:DataType="viewModels:SubjectViewModel">
     
-    <dialogHostAvalonia:DialogHost CloseOnClickAway="False" IsOpen="{Binding IsEvaluationFormDialogOpen}">
-        <dialogHostAvalonia:DialogHost.DialogContent>
-            <!-- Dialog content goes here -->
-            <components:EvaluationForm
-                Title="{Binding NewEvaluationTitle}"
-                Weight="{Binding NewEvaluationWeight}"
-                Points="{Binding NewEvaluationPoints}"
-                SaveCommand="{Binding CloseEvaluationFormDialogCommand}"
-                CancelCommand="{Binding CloseEvaluationFormDialogCommand}"
+    <UserControl.Resources>
+        <converters:ProgressBarColorConverter x:Key="ProgressBarColorConverter"/>
+        <converters:NumberToLetterGradeConverter x:Key="NumberToLetterGradeConverter"/>
+    </UserControl.Resources>
+    
+    <ScrollViewer>
+        <Grid RowDefinitions="Auto, *" Margin="20 10">
+            <Grid 
+                Grid.Row="0"
+                ColumnDefinitions="*, *, *"
+                Margin="10 0"
+                >
+                
+                <TextBlock
+                    Grid.Column="0"
+                    Text="{Binding Name}"
+                    FontSize="32"
+                    FontWeight="Bold"
+                    LetterSpacing="1"
+                    VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                
+                <ProgressBar
+                    Theme="{DynamicResource ProgressRing}"
+                    IsVisible="{Binding Evaluations.Count}"
+                    Width="75"
+                    Height="75"
+                    Grid.Column="1"
+                    Value="{Binding WeightedGrade}"
+                    Minimum="0"
+                    Maximum="100"
+                    HorizontalAlignment="Center"
+                    ShowProgressText="True"
+                    ProgressTextFormat="{Binding WeightedGrade, Converter={StaticResource NumberToLetterGradeConverter}}"
+                    Foreground="{Binding WeightedGrade, Converter={StaticResource ProgressBarColorConverter}}"
                 />
-        </dialogHostAvalonia:DialogHost.DialogContent>
-        
-        <!-- Rest of the actual code goes here -->
-        <Grid RowDefinitions="*"
-          Margin="10 5">
+                
+                <Button Grid.Column="2" Theme="{DynamicResource BorderlessButton}" Padding="0" HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Label 
+                            FontFamily="{StaticResource FaSolid}"
+                            Content="&#xf055;"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            />
+                        <Label Content="Add Evaluation"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               />
+                    </StackPanel>
+                </Button>
+            </Grid>
             
-            <ScrollViewer Grid.Row="0" Padding="5">
-                <StackPanel Spacing="15">
-                    <Expander HorizontalAlignment="Stretch">
-                        
-                        <Expander.Header>
-                            <Label Content="Grades" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Expander.Header>
-                        
-                        <StackPanel Margin="5 10" Spacing="10">
-                            <Button HorizontalAlignment="Center"
-                                    Theme="{StaticResource SolidButton}"
-                                    Classes="Success"
-                                    Command="{Binding OpenEvaluationFormDialogCommand}"
-                                    >
-                                <PathIcon Data="{StaticResource SemiIconPlus}" Width="16" Height="16"/>
-                            </Button>
-                            
-                            <ItemsControl
-                                Background="Red"
-                                ItemsSource="{Binding Evaluations}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Background="Yellow" ItemSpacing="10" LineSpacing="15" Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <components:EvaluationCard Title="{Binding Name}" 
-                                                                   Grade="{Binding Points}"
-                                                                   Weight="{Binding Weight}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </Expander>
-                    
-                    <Expander HorizontalAlignment="Stretch">
-                        <Expander.Header>
-                            <Label Content="Attendance" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Expander.Header>
-                    </Expander>
-                    
-                </StackPanel>
-            </ScrollViewer>
+            <ItemsControl
+                IsVisible="{Binding Evaluations.Count}"
+                Margin="0 25 0 0"
+                Grid.Row="2"
+                ItemsSource="{Binding Evaluations}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel ItemSpacing="10" LineSpacing="15" Orientation="Horizontal" ItemsAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <components:EvaluationCard Title="{Binding Name}"
+                                                   Grade="{Binding Grade}"
+                                                   Weight="{Binding Weight}" 
+                                                   EditCommand="{Binding $parent[ItemsControl].((viewModels:SubjectViewModel)DataContext).OpenEditEvaluationFormDialogCommand}"
+                                                   EditCommandParameter="{Binding .}"
+                                                   ConfirmDeleteCommand="{Binding $parent[ItemsControl].((viewModels:SubjectViewModel)DataContext).DeleteEvaluationCommand}"
+                                                   ConfirmDeleteCommandParameter="{Binding .}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+            <StackPanel Grid.Row="2" 
+                        HorizontalAlignment="Center"
+                        Orientation="Vertical" 
+                        IsVisible="{Binding !Evaluations.Count}"
+                        Margin="0 25 0 0">
+                
+                <Label FontFamily="{StaticResource FaSolid}" Content="&#xf56c;" FontSize="64" HorizontalAlignment="Center"/>
+                
+                <TextBlock Text="No grades yet" TextAlignment="Center" 
+                           FontSize="30"
+                           FontWeight="SemiBold"
+                           Margin="0 15 0 0"/>
+                
+                <TextBlock Text="Add your first evaluation to get started" TextAlignment="Center"
+                           FontSize="16"
+                           Margin="0 10 0 0"
+                           Foreground="DarkGray"
+                           />
+                
+            </StackPanel>
+            
         </Grid>
-    </dialogHostAvalonia:DialogHost>
+    </ScrollViewer>
     
 </UserControl>

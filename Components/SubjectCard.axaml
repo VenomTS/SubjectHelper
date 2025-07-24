@@ -1,0 +1,119 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:SubjectHelper.Components"
+        xmlns:converters="clr-namespace:SubjectHelper.Converters"
+        xmlns:u="https://irihi.tech/ursa">
+    <Design.PreviewWith>
+        <controls:SubjectCard />
+    </Design.PreviewWith>
+    
+    <Styles.Resources>
+        <SolidColorBrush x:Key="CardBackground">#1e293b</SolidColorBrush>
+        <SolidColorBrush x:Key="CardBottomBackground">#334155</SolidColorBrush>
+        
+        <SolidColorBrush x:Key="ViewIconColor">#60A5FA</SolidColorBrush>
+        <SolidColorBrush x:Key="EditIconColor">#BB86FC</SolidColorBrush>
+        <SolidColorBrush x:Key="DeleteIconColor">#FF5E5B</SolidColorBrush>
+        
+        <converters:RandomNumberGeneratorConverter x:Key="RandomNumberGeneratorConverter"/>
+    </Styles.Resources>
+
+    <Style Selector="controls|SubjectCard">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{StaticResource CardBackground}" Width="384" Height="148" BorderThickness="5 0 5 0" BorderBrush="{TemplateBinding BorderColor}" CornerRadius="16">
+                    
+                    <Grid RowDefinitions="70*, 30*">
+                        
+                        <StackPanel Grid.Row="0" 
+                                    HorizontalAlignment="Left" Spacing="5"
+                                    Margin="10 10">
+                            <TextBlock
+                                Text="{TemplateBinding Title}"
+                                FontSize="20"
+                                FontWeight="Medium"
+                                TextWrapping="Wrap"
+                                Width="300" />
+                            
+                            <TextBlock
+                                Text="{TemplateBinding Code}"
+                                FontSize="14"
+                                FontWeight="Light"/>
+                        </StackPanel>
+                        
+                        <Border 
+                            Grid.Row="1" 
+                            Background="{StaticResource CardBottomBackground}"
+                            CornerRadius="0 0 16 16">
+                            
+                            <StackPanel 
+                                Orientation="Horizontal" 
+                                Spacing="10" 
+                                HorizontalAlignment="Right" 
+                                VerticalAlignment="Center"
+                                Margin="0 0 15 0">
+                                
+                                <Button
+                                    VerticalAlignment="Center"
+                                    Theme="{DynamicResource BorderlessButton}"
+                                    Command="{TemplateBinding ViewCommand}"
+                                    CommandParameter="{TemplateBinding ViewCommandParameter}"
+                                    Padding="0"
+                                    Width="24">
+                                    <Label FontFamily="{StaticResource FaRegular}" 
+                                           Content="&#xf06e;" 
+                                           Padding="0"
+                                           FontSize="18"
+                                           Foreground="{StaticResource ViewIconColor}"/>
+                                </Button>
+                                
+                                <Button
+                                    VerticalAlignment="Center"
+                                    Theme="{DynamicResource BorderlessButton}"
+                                    Command="{TemplateBinding EditCommand}"
+                                    CommandParameter="{TemplateBinding EditCommandParameter}"
+                                    Padding="0"
+                                    Width="24">
+                                    <Label FontFamily="{StaticResource FaRegular}" 
+                                           Content="&#xf044;" 
+                                           Padding="0"
+                                           FontSize="18"
+                                           Foreground="{StaticResource EditIconColor}"/>
+                                </Button>
+                                
+                                <u:PopConfirm 
+                                    PopupHeader="Delete Subject?" 
+                                    Placement="TopEdgeAlignedRight" 
+                                    ConfirmCommand="{TemplateBinding ConfirmDeleteCommand}"
+                                    ConfirmCommandParameter="{TemplateBinding ConfirmDeleteCommandParameter}"
+                                    Classes="Error">
+                                    <u:PopConfirm.PopupContent>
+                                        <MultiBinding StringFormat="This will permanently delete the subject '{0}' and all of its data. This action cannot be undone">
+                                            <TemplateBinding Property="Title"/>
+                                        </MultiBinding>
+                                    </u:PopConfirm.PopupContent>
+                                    
+                                    <Button
+                                        VerticalAlignment="Center"
+                                        Theme="{DynamicResource BorderlessButton}"
+                                        Padding="0"
+                                        Width="24">
+                                        <Label FontFamily="{StaticResource FaRegular}" 
+                                               Content="&#xf2ed;" 
+                                               Padding="0"
+                                               FontSize="18"
+                                               Foreground="{StaticResource DeleteIconColor}"/>
+                                    </Button>
+                                </u:PopConfirm>
+                                
+                            </StackPanel>
+                            
+                        </Border>
+                        
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

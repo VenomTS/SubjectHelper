@@ -2,6 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using SubjectHelper.ViewModels;
+using SubjectHelper.ViewModels.Bases;
 
 namespace SubjectHelper;
 

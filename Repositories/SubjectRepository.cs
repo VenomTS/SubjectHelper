@@ -24,7 +24,7 @@ public class SubjectRepository : ISubjectRepository
             CreateEvaluation("Final", 40, 100),
         ];
 
-        AddSubject(CreateSubject("Computer Architecture", evaluations));
+        AddSubject(CreateSubject("Computer Architecture", "CS304", evaluations));
         
         evaluations =
         [
@@ -36,7 +36,7 @@ public class SubjectRepository : ISubjectRepository
             CreateEvaluation("Final", 40, 83),
         ];
 
-        AddSubject(CreateSubject("Database Management", evaluations));
+        AddSubject(CreateSubject("Database Management", "CS306", evaluations));
         
         evaluations =
         [
@@ -49,7 +49,7 @@ public class SubjectRepository : ISubjectRepository
             CreateEvaluation("Final", 30, 100),
         ];
 
-        AddSubject(CreateSubject("Operations Research I", evaluations));
+        AddSubject(CreateSubject("Operations Research I", "IE303", evaluations));
         
         evaluations =
         [
@@ -58,7 +58,7 @@ public class SubjectRepository : ISubjectRepository
             CreateEvaluation("Final", 40, 100),
         ];
 
-        AddSubject(CreateSubject("Introduction to Management", evaluations));
+        AddSubject(CreateSubject("Introduction to Management", "MAN102", evaluations));
         
         evaluations =
         [
@@ -69,7 +69,7 @@ public class SubjectRepository : ISubjectRepository
             CreateEvaluation("Final", 35, 96),
         ];
 
-        AddSubject(CreateSubject("Discrete Mathematics II", evaluations));
+        AddSubject(CreateSubject("Discrete Mathematics II", "MATH209", evaluations));
     }
     
     public IEnumerable<Subject> GetSubjects()
@@ -79,7 +79,7 @@ public class SubjectRepository : ISubjectRepository
 
     public Subject? GetSubject(string name)
     {
-        throw new System.NotImplementedException();
+        return _subjects.FirstOrDefault(subject => subject.Name == name);
     }
 
     public Subject? AddSubject(Subject subject)
@@ -90,27 +90,28 @@ public class SubjectRepository : ISubjectRepository
         return subject;
     }
 
-    public Subject? RemoveSubject(Subject subject)
+    public bool DeleteSubject(Subject subject)
     {
-        throw new System.NotImplementedException();
+        return _subjects.Remove(subject);
     }
 
-    private Subject CreateSubject(string name, IEnumerable<Evaluation> evaluations)
+    private Subject CreateSubject(string name, string code, IEnumerable<Evaluation> evaluations)
     {
         return new Subject
         {
             Name = name,
+            Code = code,
             Evaluations = evaluations.ToList()
         };
     }
 
-    private Evaluation CreateEvaluation(string name, decimal weight, int points)
+    private Evaluation CreateEvaluation(string name, decimal weight, int grade)
     {
         return new Evaluation
         {
             Name = name,
             Weight = weight,
-            Points = points
+            Grade = grade
         };
     }
 }

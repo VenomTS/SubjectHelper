@@ -2,8 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="SubjectHelper.App"
              xmlns:local="using:SubjectHelper"
-             xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
              xmlns:semi="https://irihi.tech/semi"
+             xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
              RequestedThemeVariant="Dark">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -19,15 +19,11 @@
   
     <Application.Styles>
         <semi:SemiTheme Locale="en-US"/>
+        <u-semi:SemiTheme Locale="en-US"/>
         <semi:SemiPopupAnimations />
-        <dialogHostAvalonia:DialogHostStyles/>
         <StyleInclude Source="Components/EvaluationCard.axaml"/>
-        <StyleInclude Source="Components/EvaluationForm.axaml"/>
+        <StyleInclude Source="Components/SubjectCard.axaml"/>
         <StyleInclude Source="Styles/Icons.axaml"/>
         <StyleInclude Source="Styles/Colors.axaml"/>
-        
-        
-        <!-- <FluentTheme/> -->
-        
     </Application.Styles>
 </Application>

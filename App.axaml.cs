@@ -1,12 +1,17 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
+using SubjectHelper.Factories;
+using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
 using SubjectHelper.Repositories;
+using SubjectHelper.Services;
 using SubjectHelper.ViewModels;
+using SubjectHelper.ViewModels.Bases;
 using SubjectHelper.Views;
 
 namespace SubjectHelper;
@@ -22,15 +27,39 @@ public partial class App : Application
     {
         var collection = new ServiceCollection();
 
+        // Singleton = Always in Memory
         collection.AddSingleton<MainWindowViewModel>();
+        collection.AddSingleton<PageFactory>();
+        collection.AddSingleton<INavigationService, NavigationService>();
         
+        // Scoped = Created once and reused
+        collection.AddScoped<SubjectsListViewModel>();
         collection.AddScoped<ISubjectRepository, SubjectRepository>();
+        
+        // Transient = Created every time
+        collection.AddTransient<SubjectViewModel>();
 
-        // collection.AddSingleton<Func<ApplicationPages, PageViewModel>>(provider => name => name switch
-        // {
-        //     ApplicationPages.Subject => provider.GetRequiredService<SubjectViewModel>(),
-        //     _ => throw new InvalidOperationException()
-        // });
+        collection.AddSingleton<Func<ApplicationPages, object?, PageViewModel>>(provider => (name, data) =>
+        {
+            switch (name)
+            {
+                case ApplicationPages.Subjects:
+                    return provider.GetRequiredService<SubjectsListViewModel>();
+                case ApplicationPages.Subject:
+                    if (data is not string subjectName)
+                        throw new Exception("Data passed MUST BE SUBJECT NAME");
+                    var vm = provider.GetRequiredService<SubjectViewModel>();
+                    vm.Initialize(subjectName);
+                    return vm;
+                case ApplicationPages.ScheduleMaker:
+                    break;
+                case ApplicationPages.Unknown:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(name), name, null);
+            }
+            throw new Exception("Unknown ApplicationPage");
+        });
         
         var services = collection.BuildServiceProvider();
         

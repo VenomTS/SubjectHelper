@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace SubjectHelper.Views;
 
-public partial class DesignView : UserControl
+public partial class SubjectsListView : UserControl
 {
-    public DesignView()
+    public SubjectsListView()
     {
         InitializeComponent();
     }

@@ -3,23 +3,93 @@
         xmlns:vm="using:SubjectHelper.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:components="clr-namespace:SubjectHelper.Components"
+        xmlns:u="https://irihi.tech/ursa"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SubjectHelper.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="SubjectHelper">
+        Title="SubjectHelper"
+        CanResize="False">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     
-    <ScrollViewer Padding="10 15">
-        <TabControl ItemsSource="{Binding TabItems}" SelectedContent="{Binding SelectedTabItem}"
-                    Theme="{StaticResource ScrollTabControl}">
-        </TabControl>
-    </ScrollViewer>
-    
-    <!-- <TabControl></TabControl> -->
+    <SplitView
+        x:Name="SplitPane"
+        IsPaneOpen="False"
+        DisplayMode="CompactInline"
+        CompactPaneLength="35"
+        OpenPaneLength="200">
+        
+        <SplitView.Pane>
+            <Grid Margin="5 32 0 0"
+                  RowDefinitions="Auto, *">
+                
+                <Button
+                    Grid.Row="0"
+                    FontFamily="{StaticResource FaSolid}"
+                    Theme="{DynamicResource BorderlessButton}"
+                    Content="&#xf0c9;" Click="UpdatePaneVisibility"
+                    FontSize="24"
+                    Margin="0 0 5 0"
+                    Padding="0"
+                    Foreground="White" HorizontalAlignment="Left"/>
+                
+                <StackPanel 
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Orientation="Vertical"
+                    VerticalAlignment="Center"
+                    Margin="0 0 0 50">
+                    <Grid
+                        ColumnDefinitions="Auto, *"
+                        Margin="0 20 0 0">
+                        <Button
+                            Grid.Column="0"
+                            FontFamily="{StaticResource FaSolid}"
+                            Theme="{DynamicResource BorderlessButton}"
+                            Content="&#xf5da;"
+                            Command="{Binding GoToSubjectsCommand}"
+                            FontSize="20"
+                            Margin="0 0 5 0"
+                            Padding="0"
+                            Foreground="White" HorizontalAlignment="Left"/>
+                        <TextBlock 
+                            Grid.Column="1" Text="Subjects"
+                            FontSize="18"
+                            FontWeight="SemiBold"
+                            LetterSpacing="0.5"
+                            VerticalAlignment="Center"
+                            IsVisible="{Binding $parent[SplitView].IsPaneOpen}" />
+                    </Grid>
+                    <Grid
+                        ColumnDefinitions="Auto, *"
+                        Margin="0 5">
+                        <Button
+                            Grid.Column="0"
+                            FontFamily="{StaticResource FaSolid}"
+                            Theme="{DynamicResource BorderlessButton}"
+                            Content="&#xf017;"
+                            Command="{Binding GoToScheduleMakerCommand}"
+                            FontSize="20"
+                            Margin="0 0 5 0"
+                            Padding="0"
+                            Foreground="White" HorizontalAlignment="Left"/>
+                    
+                        <TextBlock 
+                            Grid.Column="1" Text="Schedule Maker"
+                            FontSize="18"
+                            FontWeight="SemiBold"
+                            LetterSpacing="0.5"
+                            VerticalAlignment="Center"
+                            IsVisible="{Binding $parent[SplitView].IsPaneOpen}" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </SplitView.Pane>
+        
+        <ContentControl Content="{Binding CurrentViewModel}"/>
+    </SplitView>
 
 </Window>

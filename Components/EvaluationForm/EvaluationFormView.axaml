@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:evaluationForm="clr-namespace:SubjectHelper.Components.EvaluationForm"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SubjectHelper.Components.EvaluationForm.EvaluationFormView"
+             x:DataType="evaluationForm:EvaluationFormViewModel">
+    
+    <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center" Margin="10 25" Width="160">
+
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <Label Content="Title" HorizontalAlignment="Center" />
+            <TextBox
+                Classes="Bordered"
+                MaxLength="20" MinLines="1"
+                MaxLines="1" Text="{Binding Title, Mode=TwoWay}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <Label Content="Weight" HorizontalAlignment="Center" />
+
+            <NumericUpDown
+                Value="{Binding Weight, Mode=TwoWay}"
+                Minimum="1"
+                Maximum="100"
+                ShowButtonSpinner="False" />
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <Label Content="Points" HorizontalAlignment="Center" />
+            <NumericUpDown
+                Value="{Binding Grade, Mode=TwoWay}"
+                Minimum="0"
+                Maximum="100"
+                ShowButtonSpinner="False" />
+        </StackPanel>
+
+    </StackPanel>
+    
+</UserControl>

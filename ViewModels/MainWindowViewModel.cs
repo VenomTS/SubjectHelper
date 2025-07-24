@@ -1,36 +1,32 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using Avalonia.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
+using SubjectHelper.ViewModels.Bases;
 
 namespace SubjectHelper.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public ObservableCollection<TabItem> TabItems { get; } = [];
+    private readonly INavigationService _navigationService;
+    
+    [ObservableProperty] private PageViewModel? _currentViewModel;
 
-    [ObservableProperty] private TabItem _selectedTabItem;
-
-    private readonly ISubjectRepository _subjectRepo;
-
-    public MainWindowViewModel(ISubjectRepository subjectRepository)
+    public MainWindowViewModel(INavigationService navigationService)
     {
-        _subjectRepo = subjectRepository;
-
-        var subjects = _subjectRepo.GetSubjects().ToList();
-
-        foreach (var subject in subjects)
-        {
-            var tabItem = new TabItem
-            {
-                Header = subject.Name,
-                Content = new SubjectViewModel(subject)
-            };
-            TabItems.Add(tabItem);
-        }
-        
-        _selectedTabItem = TabItems.First();
+        _navigationService = navigationService;
+        _navigationService.SetMainWindowViewModel(this);
+        GoToSubjects();
     }
 
+    [RelayCommand]
+    private void GoToSubjects()
+    {
+        _navigationService.NavigateToPage(ApplicationPages.Subjects);
+    }
+
+    [RelayCommand]
+    private void GoToScheduleMaker()
+    {
+    }
 }

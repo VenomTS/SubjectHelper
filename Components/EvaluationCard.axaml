@@ -1,17 +1,14 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:SubjectHelper.Components"
-        xmlns:converters="clr-namespace:SubjectHelper.Converters">
+        xmlns:converters="clr-namespace:SubjectHelper.Converters"
+        xmlns:u="https://irihi.tech/ursa">
     
     <Design.PreviewWith>
         <controls:EvaluationCard />
     </Design.PreviewWith>
     
     <Styles.Resources>
-        <!-- <SolidColorBrush x:Key="BorderBrush">White</SolidColorBrush> -->
-        <!-- <SolidColorBrush x:Key="BackgroundBrush">#232528</SolidColorBrush> -->
-        <!-- <SolidColorBrush x:Key="ForegroundBrush">White</SolidColorBrush> -->
-        
         <SolidColorBrush x:Key="CardBackground">#1E1E1E</SolidColorBrush>
         <SolidColorBrush x:Key="CardBorder">#2D2D2D</SolidColorBrush>
         
@@ -19,8 +16,8 @@
         <SolidColorBrush x:Key="SecondaryText">#A0A0A0</SolidColorBrush>
         
         <SolidColorBrush x:Key="EditIconColor">#BB86FC</SolidColorBrush>
+        <SolidColorBrush x:Key="DeleteIconColor">#FF5E5B</SolidColorBrush>
         
-        <SolidColorBrush x:Key="BadgeBackground">#F57C00</SolidColorBrush>
         <SolidColorBrush x:Key="BadgeForeground">#FFFFFF</SolidColorBrush>
         
         <converters:PercentageFormatConverter x:Key="PercentageFormatConverter"/>
@@ -34,15 +31,15 @@
                 
                 <Border
                     Background="{StaticResource CardBackground}"
-                    BorderBrush="{StaticResource CardBorder}" BorderThickness="1"
+                    BorderBrush="{StaticResource CardBorder}" 
+                    BorderThickness="5"
                     Padding="10 12"
                     CornerRadius="8"
-                    Width="512"
+                    Width="448"
                     >
                     
                     <Grid
-                        RowDefinitions="Auto, Auto, Auto, Auto"
-                        >
+                        RowDefinitions="Auto, Auto, Auto, Auto">
                         
                         <!-- Title and Edit Button -->
                         <Grid 
@@ -57,17 +54,55 @@
                                 FontSize="32"
                                 VerticalAlignment="Center"
                                 Foreground="{StaticResource PrimaryText}"/>
-                            <Button 
-                                Grid.Column="1" 
-                                VerticalAlignment="Center"
-                                Theme="{StaticResource BorderlessButton}"
-                                >
-                                <Label FontFamily="{StaticResource FaRegular}" 
-                                       Content="&#xf044;" 
-                                       Padding="0"
-                                       FontSize="18"
-                                       Foreground="{StaticResource EditIconColor}"/>
-                            </Button>
+                            
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="0 0 12 0"
+                                        Spacing="15">
+                                
+                                <Button
+                                    VerticalAlignment="Center"
+                                    Theme="{DynamicResource BorderlessButton}"
+                                    Command="{TemplateBinding EditCommand}"
+                                    CommandParameter="{TemplateBinding EditCommandParameter}"
+                                    Padding="0"
+                                    Width="20">
+                                    <Label FontFamily="{StaticResource FaRegular}" 
+                                           Content="&#xf044;" 
+                                           Padding="0"
+                                           FontSize="18"
+                                           Foreground="{StaticResource EditIconColor}"/>
+                                </Button>
+                                
+                                <u:PopConfirm 
+                                    PopupHeader="Delete Evaluation?" 
+                                    Placement="TopEdgeAlignedRight" 
+                                    ConfirmCommand="{TemplateBinding ConfirmDeleteCommand}"
+                                    ConfirmCommandParameter="{TemplateBinding ConfirmDeleteCommandParameter}"
+                                    CancelCommand="{TemplateBinding CancelDeleteCommand}"
+                                    CancelCommandParameter="{TemplateBinding CancelDeleteCommandParameter}"
+                                    Classes="Error">
+                                    <u:PopConfirm.PopupContent>
+                                        <MultiBinding StringFormat="This will permanently delete the evaluation '{0}' and all of its data. This action cannot be undone">
+                                            <TemplateBinding Property="Title"/>
+                                        </MultiBinding>
+                                    </u:PopConfirm.PopupContent>
+                                    
+                                    <Button 
+                                        VerticalAlignment="Center"
+                                        Theme="{DynamicResource BorderlessButton}"
+                                        Padding="0"
+                                        Width="20"
+                                    >
+                                        <Label FontFamily="{StaticResource FaSolid}" 
+                                               Content="&#xf2ed;"
+                                               Padding="0"
+                                               FontSize="18"
+                                               Foreground="{StaticResource DeleteIconColor}"/>
+                                    </Button>
+                                </u:PopConfirm>
+                            </StackPanel>
                         </Grid>
                         
                         <!-- Weight -->
@@ -126,78 +161,6 @@
                         
                     </Grid>
                 </Border>
-                
-                <!-- <Grid RowDefinitions="* * * *" ColumnDefinitions="* *" Width="160"> -->
-                <!--      -->
-                <!--     <Grid -->
-                <!--         ColumnDefinitions="*, Auto" -->
-                <!--         Grid.Row="0" -->
-                <!--         Grid.Column="0" Grid.ColumnSpan="2"> -->
-                <!--          -->
-                <!--         <Border -->
-                <!--             Grid.Column="0" -->
-                <!--             BorderBrush="{StaticResource BorderBrush}" -->
-                <!--             BorderThickness="1" -->
-                <!--             Margin="0 0 0 -1" -->
-                <!--             Padding="5"> -->
-                <!--              -->
-                <!--             <Label Content="{TemplateBinding Title}" -->
-                <!--                    HorizontalAlignment="Center" -->
-                <!--                    VerticalAlignment="Center" -->
-                <!--                    Foreground="{StaticResource ForegroundBrush}"/> -->
-                <!--              -->
-                <!--         </Border> -->
-                <!--          -->
-                <!--         <Border -->
-                <!--             Grid.Column="1" -->
-                <!--             BorderBrush="{StaticResource BorderBrush}" -->
-                <!--             BorderThickness="1" -->
-                <!--             Margin="-1 0 0 -1" -->
-                <!--             Padding="5"> -->
-                <!--              -->
-                <!--             <Button Theme="{StaticResource BorderlessButton}" Foreground="{StaticResource ForegroundBrush}"> -->
-                <!--                 <PathIcon Data="{StaticResource SemiIconEdit}" Width="16" Height="16"/> -->
-                <!--             </Button> -->
-                <!--              -->
-                <!--         </Border> -->
-                <!--     </Grid> -->
-                <!-- -->
-                <!--     <Border  -->
-                <!--         Grid.Column="0" Grid.ColumnSpan="2"  -->
-                <!--         Grid.Row="1"  -->
-                <!--         BorderBrush="{StaticResource BorderBrush}"   -->
-                <!--         BorderThickness="1"  -->
-                <!--         Margin="0 0 0 -1"  -->
-                <!--         Padding="5"> -->
-                <!--         <Label Content="{TemplateBinding Weight, Converter={StaticResource PercentageFormatConverter}}" -->
-                <!--                HorizontalAlignment="Center" -->
-                <!--                Foreground="{StaticResource ForegroundBrush}"/> -->
-                <!--     </Border> -->
-                <!-- -->
-                <!--     <Border  -->
-                <!--         Grid.Column="0" -->
-                <!--         Grid.Row="2"  -->
-                <!--         BorderBrush="{StaticResource BorderBrush}"   -->
-                <!--         BorderThickness="1"  -->
-                <!--         Margin="0 0 -1 0"  -->
-                <!--         Padding="5"> -->
-                <!--         <Label Content="{TemplateBinding Grade}" -->
-                <!--                HorizontalAlignment="Center" -->
-                <!--                Foreground="{StaticResource ForegroundBrush}"/> -->
-                <!--     </Border> -->
-                <!-- -->
-                <!--     <Border  -->
-                <!--         Grid.Column="1" -->
-                <!--         Grid.Row="2"  -->
-                <!--         BorderBrush="{StaticResource BorderBrush}"   -->
-                <!--         BorderThickness="1"  -->
-                <!--         Margin="0 0 0 0"  -->
-                <!--         Padding="5"> -->
-                <!--         <Label Content="{TemplateBinding LetterGrade}" -->
-                <!--                HorizontalAlignment="Center" -->
-                <!--                Foreground="{StaticResource ForegroundBrush}"/> -->
-                <!--     </Border> -->
-                <!-- </Grid> -->
             </ControlTemplate>
         </Setter>
     </Style>
