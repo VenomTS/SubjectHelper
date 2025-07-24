@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using SubjectHelper.Components.SubjectAdd;
+using SubjectHelper.Components.SubjectEdit;
 using SubjectHelper.Factories;
 using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
@@ -21,9 +23,19 @@ public partial class SubjectsListViewModel : PageViewModel
     
     public ObservableCollection<SubjectViewModel> Subjects { get; } = [];
 
+    private readonly DialogOptions _customDialogOptions;
+
     public SubjectsListViewModel(INavigationService navigationService, ISubjectRepository subjectRepo, PageFactory factory)
     {
         Page = ApplicationPages.Subjects;
+
+        _customDialogOptions = new DialogOptions
+        {
+            StartupLocation = WindowStartupLocation.CenterOwner,
+            Mode = DialogMode.None,
+            IsCloseButtonVisible = false,
+            CanResize = false,
+        };
         
         _subjectRepo = subjectRepo;
         _navigationService = navigationService;
@@ -49,69 +61,51 @@ public partial class SubjectsListViewModel : PageViewModel
     [RelayCommand]
     private async Task OpenSubjectAddFormDialog()
     {
-        var dialogOptions = new DialogOptions
-        {
-            // Title = "Add Subject",
-            StartupLocation = WindowStartupLocation.CenterOwner,
-            Mode = DialogMode.None,
-            // Button = DialogButton.OKCancel,
-            CanResize = false,
-        };
-
         var vm = new SubjectAddViewModel();
 
-        var result = await Dialog.ShowCustomModal<SubjectAddView, SubjectAddViewModel, DialogResult>(vm, options: dialogOptions);
+        var result = await Dialog.ShowCustomModal<SubjectAddView, SubjectAddViewModel, DialogResult>(vm, options: _customDialogOptions);
 
         if (result != DialogResult.OK) return;
 
         var subject = new Subject
         {
-            Name = vm.SubjectName,
-            Code = vm.SubjectCode,
+            Name = vm.SubjectName.Trim(),
+            Code = vm.SubjectCode.Trim(),
             Evaluations = [],
         };
         
-        _subjectRepo.AddSubject(subject);
+        await _subjectRepo.AddSubject(subject);
         
         var subjectViewModel = CreateSubjectViewModel(subject);
         
         Subjects.Add(subjectViewModel);
     }
-    
-    // [RelayCommand]
-    // private async Task OpenEditEvaluationFormDialog(EvaluationViewModel evaluationViewModel)
-    // {
-    //     var dialogOptions = new DialogOptions
-    //     {
-    //         Title = "Edit Evaluation",
-    //         StartupLocation = WindowStartupLocation.CenterOwner,
-    //         Mode = DialogMode.None,
-    //         Button = DialogButton.OKCancel,
-    //         CanResize = false,
-    //     };
-    //     
-    //     var vm = new EvaluationFormViewModel(evaluationViewModel.Name, evaluationViewModel.Weight, evaluationViewModel.Grade);
-    //     
-    //     var result = await Dialog.ShowModal<EvaluationFormView, EvaluationFormViewModel>(vm, options: dialogOptions);
-    //     
-    //     if(result != DialogResult.OK) return;
-    //     
-    //     var evaluationIndex = Evaluations.IndexOf(evaluationViewModel);
-    //
-    //     if (evaluationIndex == -1)
-    //         throw new Exception("Evaluation not found although it should be present");
-    //     
-    //     var newEvaluation = CreateEvaluation(vm.Title, vm.Weight, vm.Grade);
-    //     
-    //     if(_subject == null)
-    //         throw new Exception("Subject is undefined");
-    //     
-    //     _subject.Evaluations[evaluationIndex] = newEvaluation;
-    //     
-    //     Evaluations[evaluationIndex] = new EvaluationViewModel(newEvaluation);
-    //     
-    //     CalculateWeightedGrade();
-    // }
+
+    [RelayCommand]
+    private async Task OpenEditSubjectFormDialog(SubjectViewModel subjectViewModel)
+    {
+        var vm = new SubjectEditViewModel
+        {
+            SubjectName = subjectViewModel.Name,
+            SubjectCode = subjectViewModel.Code,
+        };
+        
+        var result = await Dialog.ShowCustomModal<SubjectEditView, SubjectEditViewModel, DialogResult>(vm, options: _customDialogOptions);
+        
+        if(result != DialogResult.OK) return;
+
+        var newSubject = new Subject
+        {
+            Name = vm.SubjectName.Trim(),
+            Code = vm.SubjectCode.Trim(),
+        };
+        
+        await _subjectRepo.UpdateSubject(subjectViewModel.Name, newSubject);
+        
+        var newSubjectViewModel = CreateSubjectViewModel(newSubject);
+        
+        Subjects[Subjects.IndexOf(subjectViewModel)] = newSubjectViewModel;
+    }
 
     [RelayCommand]
     private void GoToSubject(SubjectViewModel subject)
@@ -120,14 +114,9 @@ public partial class SubjectsListViewModel : PageViewModel
     }
 
     [RelayCommand]
-    private void DeleteSubject(SubjectViewModel subjectViewModel)
+    private async Task DeleteSubject(SubjectViewModel subjectViewModel)
     {
-        var subject = _subjectRepo.GetSubject(subjectViewModel.Name);
-        
-        if(subject == null)
-            throw new Exception("Subject not found");
-
-        _subjectRepo.DeleteSubject(subject);
+        await _subjectRepo.DeleteSubject(subjectViewModel.Name);
         
         Subjects.Remove(subjectViewModel);
     }

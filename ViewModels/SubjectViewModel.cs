@@ -78,7 +78,7 @@ public partial class SubjectViewModel : PageViewModel
         if(_subject == null)
             throw new Exception("Subject is undefined");
 
-        _subject.Evaluations.Add(evaluation);
+        await _subjectRepo.AddEvaluation(_subject.Name, evaluation);
         
         Evaluations.Add(new EvaluationViewModel(evaluation));
         
@@ -112,7 +112,7 @@ public partial class SubjectViewModel : PageViewModel
         if(_subject == null)
             throw new Exception("Subject is undefined");
         
-        _subject.Evaluations[evaluationIndex] = newEvaluation;
+        await _subjectRepo.UpdateEvaluationAt(_subject.Name, evaluationIndex, newEvaluation);
         
         Evaluations[evaluationIndex] = new EvaluationViewModel(newEvaluation);
         
@@ -127,7 +127,7 @@ public partial class SubjectViewModel : PageViewModel
         if(evaluationIndex == -1) 
             throw new Exception("Evaluation not found although it should be present");
         
-        _subject!.Evaluations.RemoveAt(evaluationIndex);
+        _subjectRepo.DeleteEvaluationAt(_subject!.Name, evaluationIndex);
         
         Evaluations.RemoveAt(evaluationIndex);
         
@@ -138,7 +138,7 @@ public partial class SubjectViewModel : PageViewModel
     {
         return new Evaluation
         {
-            Name = name,
+            Name = name.Trim(),
             Weight = weight,
             Grade = grade,
         };

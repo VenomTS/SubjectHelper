@@ -2,11 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:subjectAdd="clr-namespace:SubjectHelper.Components.SubjectAdd"
              xmlns:u="https://irihi.tech/ursa"
+             xmlns:subjectEdit="clr-namespace:SubjectHelper.Components.SubjectEdit"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SubjectHelper.Components.SubjectAdd.SubjectAddView"
-             x:DataType="subjectAdd:SubjectAddViewModel"
+             x:Class="SubjectHelper.Components.SubjectEdit.SubjectEditView"
+             x:DataType="subjectEdit:SubjectEditViewModel"
              Width="512"
              Loaded="Control_OnLoaded">
     
@@ -18,7 +18,7 @@
         
         <TextBlock 
             Grid.Row="0"
-            Text="Add New Subject"
+            Text="Edit Subject"
             FontSize="20"
             />
         
@@ -51,7 +51,7 @@
                     Text="{Binding SubjectCode}">
                     
                     <TextBox.KeyBindings>
-                        <KeyBinding Gesture="Enter" Command="{Binding AddSubjectCommand}"/>
+                        <KeyBinding Gesture="Enter" Command="{Binding EditSubjectCommand}"/>
                     </TextBox.KeyBindings>
                     
                 </TextBox>
@@ -64,11 +64,11 @@
               ColumnSpacing="10">
             
             <Button Grid.Column="1"
-                    Content="Add Subject"
+                    Content="Save"
                     HorizontalAlignment="Stretch"
                     Theme="{DynamicResource SolidButton}"
                     Classes="Success"
-                    Command="{Binding AddSubjectCommand}"/>
+                    Command="{Binding EditSubjectCommand}"/>
             
             <Button Grid.Column="0"
                     Content="Cancel"
@@ -78,4 +78,5 @@
                     Command="{Binding CloseWindowCommand}"/>
         </Grid>
     </Grid>
+    
 </UserControl>

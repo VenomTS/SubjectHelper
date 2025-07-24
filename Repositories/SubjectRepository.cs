@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
 using SubjectHelper.Models;
 
@@ -71,38 +74,90 @@ public class SubjectRepository : ISubjectRepository
 
         AddSubject(CreateSubject("Discrete Mathematics II", "MATH209", evaluations));
     }
-    
+
     public IEnumerable<Subject> GetSubjects()
     {
-        return  _subjects;
+        return _subjects;
     }
 
     public Subject? GetSubject(string name)
     {
-        return _subjects.FirstOrDefault(subject => subject.Name == name);
+        return _subjects.FirstOrDefault(s => s.Name == name);
     }
 
-    public Subject? AddSubject(Subject subject)
+    public async Task<RepositoryActions> AddSubject(Subject subject)
     {
-        if (_subjects.Any(s => s.Name == subject.Name))
-            return null;
+        if (IsSubjectInDatabase(subject.Name))
+            return RepositoryActions.Conflict;
+        
         _subjects.Add(subject);
-        return subject;
+        return RepositoryActions.Success;
     }
 
-    public bool DeleteSubject(Subject subject)
+    public async Task<RepositoryActions> UpdateSubject(string name, Subject updatedSubject)
     {
-        return _subjects.Remove(subject);
+        var subject = GetSubject(name);
+        if (subject == null)
+            return RepositoryActions.NotFound;
+
+        subject.Name = updatedSubject.Name;
+        subject.Code = updatedSubject.Code;
+        // Evaluations are updated through their part of the repository
+        // subject.Evaluations = updatedSubject.Evaluations;
+        return RepositoryActions.Success;
     }
 
-    private Subject CreateSubject(string name, string code, IEnumerable<Evaluation> evaluations)
+    public async Task<RepositoryActions> DeleteSubject(string name)
     {
-        return new Subject
-        {
-            Name = name,
-            Code = code,
-            Evaluations = evaluations.ToList()
-        };
+        var subject = GetSubject(name);
+        if(subject == null)
+            return RepositoryActions.NotFound;
+
+        _subjects.Remove(subject);
+        return RepositoryActions.Success;
+    }
+
+    public IEnumerable<Evaluation> GetEvaluations(string name)
+    {
+        return !IsSubjectInDatabase(name) ? [] : _subjects.SelectMany(s => s.Evaluations);
+    }
+
+    public async Task<RepositoryActions> AddEvaluation(string name, Evaluation evaluation)
+    {
+        var subject = GetSubject(name);
+        if(subject == null)
+            return RepositoryActions.NotFound;
+        
+        subject.Evaluations.Add(evaluation);
+        return RepositoryActions.Success;
+    }
+
+    public async Task<RepositoryActions> UpdateEvaluationAt(string name, int evaluationIndex, Evaluation updatedEvaluation)
+    {
+        var subject = GetSubject(name);
+        if (subject == null || evaluationIndex >= subject.Evaluations.Count)
+            return RepositoryActions.NotFound;
+        
+        var evaluation = subject.Evaluations[evaluationIndex];
+        evaluation.Name = updatedEvaluation.Name;
+        evaluation.Weight = updatedEvaluation.Weight;
+        evaluation.Grade = updatedEvaluation.Grade;
+        return RepositoryActions.Success;
+    }
+
+    public async Task<RepositoryActions> DeleteEvaluationAt(string name, int evaluationIndex)
+    {
+        var subject = GetSubject(name);
+        if (subject == null || evaluationIndex >= subject.Evaluations.Count)
+            return RepositoryActions.NotFound;
+        
+        subject.Evaluations.RemoveAt(evaluationIndex);
+        return RepositoryActions.Success;
+    }
+    
+    private bool IsSubjectInDatabase(string name)
+    {
+        return _subjects.Any(s => s.Name == name);
     }
 
     private Evaluation CreateEvaluation(string name, decimal weight, int grade)
@@ -111,7 +166,17 @@ public class SubjectRepository : ISubjectRepository
         {
             Name = name,
             Weight = weight,
-            Grade = grade
+            Grade = grade,
+        };
+    }
+
+    private Subject CreateSubject(string name, string code = "", IEnumerable<Evaluation>? evaluations = null)
+    {
+        return new Subject
+        {
+            Name = name,
+            Code = code,
+            Evaluations = evaluations == null ? [] : evaluations.ToList(),
         };
     }
 }

@@ -5,20 +5,20 @@ using Irihi.Avalonia.Shared.Contracts;
 using SubjectHelper.ViewModels.Bases;
 using Ursa.Controls;
 
-namespace SubjectHelper.Components.SubjectAdd;
+namespace SubjectHelper.Components.SubjectEdit;
 
-public partial class SubjectAddViewModel : ViewModelBase, IDialogContext
+public partial class SubjectEditViewModel : ViewModelBase, IDialogContext
 {
     [ObservableProperty] 
-    [NotifyCanExecuteChangedFor(nameof(AddSubjectCommand))]
+    [NotifyCanExecuteChangedFor(nameof(EditSubjectCommand))]
     private string _subjectName = string.Empty;
     
     [ObservableProperty] private string _subjectCode = string.Empty;
     
-    private bool AddSubjectCanExecute => !string.IsNullOrWhiteSpace(SubjectName);
+    private bool EditSubjectCanExecute => !string.IsNullOrWhiteSpace(SubjectName);
 
-    [RelayCommand(CanExecute = nameof(AddSubjectCanExecute))]
-    private void AddSubject()
+    [RelayCommand(CanExecute = nameof(EditSubjectCanExecute))]
+    private void EditSubject()
     {
         RequestClose?.Invoke(this, DialogResult.OK);
     }

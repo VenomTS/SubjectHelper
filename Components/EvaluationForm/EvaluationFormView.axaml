@@ -79,19 +79,19 @@
               ColumnDefinitions="*, *"
               ColumnSpacing="25">
             
-            <Button Grid.Column="0"
-                    Classes="Success"
-                    Theme="{StaticResource SolidButton}"
-                    HorizontalAlignment="Stretch"
-                    Content="Save"
-                    Command="{Binding SaveEvaluationCommand}"/>
-            
-            <Button Grid.Column="1" 
+            <Button Grid.Column="0" 
                     Classes="Danger"
-                    Theme="{StaticResource SolidButton}"
+                    Theme="{DynamicResource SolidButton}"
                     HorizontalAlignment="Stretch"
                     Content="Cancel"
                     Command="{Binding CancelEvaluationCommand}"/>
+            
+            <Button Grid.Column="1"
+                    Classes="Success"
+                    Theme="{DynamicResource SolidButton}"
+                    HorizontalAlignment="Stretch"
+                    Content="Save"
+                    Command="{Binding SaveEvaluationCommand}"/>
             
         </Grid>
         

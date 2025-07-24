@@ -23,7 +23,7 @@
         <semi:SemiPopupAnimations />
         <StyleInclude Source="Components/EvaluationCard.axaml"/>
         <StyleInclude Source="Components/SubjectCard.axaml"/>
-        <StyleInclude Source="Styles/Icons.axaml"/>
+        <StyleInclude Source="Components/SidePanelButton.axaml"/>
         <StyleInclude Source="Styles/Colors.axaml"/>
     </Application.Styles>
 </Application>

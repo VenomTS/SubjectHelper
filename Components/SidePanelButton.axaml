@@ -1,0 +1,43 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:SubjectHelper.Components">
+    <Design.PreviewWith>
+        <controls:SidePanelButton />
+    </Design.PreviewWith>
+    
+    <Styles.Resources>
+        <SolidColorBrush x:Key="ItemForeground">#ffffff</SolidColorBrush>
+    </Styles.Resources>
+
+    <Style Selector="controls|SidePanelButton">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Button Margin="0 5"
+                        Theme="{DynamicResource BorderlessButton}"
+                        Command="{TemplateBinding ClickCommand}"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="0"
+                        Height="36">
+                        
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock FontFamily="{StaticResource FaSolid}"
+                                   Text="{TemplateBinding FontAwesomeIcon}"
+                                   Foreground="{StaticResource ItemForeground}"
+                                   VerticalAlignment="Center"
+                                   FontSize="24"/>
+                            
+                        <TextBlock Text="{TemplateBinding Text}"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   LetterSpacing="0.5"
+                                   VerticalAlignment="Center"
+                                   IsVisible="{TemplateBinding IsTextVisible}"
+                                   Foreground="{StaticResource ItemForeground}"/>
+                    </StackPanel>
+                </Button>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

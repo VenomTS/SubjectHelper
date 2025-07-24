@@ -21,8 +21,7 @@
             
             <Button Grid.Column="1" 
                     Theme="{DynamicResource SolidButton}" 
-                    CornerRadius="16" 
-                    Classes="Success"
+                    CornerRadius="12"
                     Command="{Binding OpenSubjectAddFormDialogCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <TextBlock FontFamily="{StaticResource FaSolid}" Text="&#x2b;" FontSize="24" VerticalAlignment="Center"/>
@@ -47,7 +46,9 @@
                         ViewCommand="{Binding $parent[ItemsControl].((viewModels:SubjectsListViewModel)DataContext).GoToSubjectCommand}"
                         ViewCommandParameter="{Binding .}"
                         ConfirmDeleteCommand="{Binding $parent[ItemsControl].((viewModels:SubjectsListViewModel)DataContext).DeleteSubjectCommand}"
-                        ConfirmDeleteCommandParameter="{Binding .}"/>
+                        ConfirmDeleteCommandParameter="{Binding .}"
+                        EditCommand="{Binding $parent[ItemsControl].((viewModels:SubjectsListViewModel)DataContext).OpenEditSubjectFormDialogCommand}"
+                        EditCommandParameter="{Binding .}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
