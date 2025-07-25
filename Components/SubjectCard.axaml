@@ -23,7 +23,7 @@
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Border Background="{StaticResource CardBackground}" Width="384" Height="148" BorderThickness="0 0 5 5" BorderBrush="{TemplateBinding BorderColor}" CornerRadius="16">
+                <Border Background="{StaticResource CardBackground}" Width="384" Height="148" BorderThickness="5 0 0 5" BorderBrush="{TemplateBinding BorderColor}" CornerRadius="16">
                     
                     <Grid RowDefinitions="70*, 30*">
                         

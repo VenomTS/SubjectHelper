@@ -34,7 +34,7 @@
 
                 <Border Background="{StaticResource CardBackground}"
                         BorderBrush="{StaticResource CardBorder}"
-                        BorderThickness="0 0 8 8"
+                        BorderThickness="8 0 0 8"
                         Padding="10 12"
                         CornerRadius="8"
                         Width="448">
