@@ -8,19 +8,13 @@ namespace SubjectHelper.Interfaces;
 public interface ISubjectRepository
 {
     // Subject related stuff
-    // Name is used as unique identified
-    IEnumerable<Subject> GetSubjects();
-    Subject? GetSubject(string name);
+    Task<List<Subject>> GetSubjectsAsync();
+    Task<Subject?> GetSubjectByIdAsync(int id);
+    // Task<Subject?> GetSubjectByNameAsync(string name);
 
-    Task<RepositoryActions> AddSubject(Subject subject);
-    Task<RepositoryActions> UpdateSubject(string name, Subject updatedSubject);
-    Task<RepositoryActions> DeleteSubject(string name);
-    
-    // Evaluation related stuff
-    // Name argument refers to a subject to which the evaluation is relatred
-    IEnumerable<Evaluation> GetEvaluations(string name);
-
-    Task<RepositoryActions> AddEvaluation(string name, Evaluation evaluation);
-    Task<RepositoryActions> UpdateEvaluationAt(string name, int evaluationIndex, Evaluation updatedEvaluation);
-    Task<RepositoryActions> DeleteEvaluationAt(string name, int evaluationIndex);
+    Task<Subject?> AddSubjectAsync(Subject subject);
+    Task<Subject?> UpdateSubjectAsync(int id, Subject updatedSubject);
+    // Task<Subject?> UpdateSubjectAsync(string name, Subject updatedSubject);
+    Task<Subject?> DeleteSubjectAsync(int id);
+    // Task<Subject?> DeleteSubjectAsync(string name);
 }

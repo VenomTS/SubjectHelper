@@ -8,6 +8,8 @@ public partial class EvaluationViewModel : ViewModelBase
 {
     private Evaluation _evaluation;
 
+    public int Id { get; set; }
+
     [ObservableProperty]
     private string _name;
 
@@ -23,5 +25,7 @@ public partial class EvaluationViewModel : ViewModelBase
         _name = evaluation.Name;
         _weight = evaluation.Weight;
         _grade = evaluation.Grade;
+        
+        Id = evaluation.Id;
     }
 }

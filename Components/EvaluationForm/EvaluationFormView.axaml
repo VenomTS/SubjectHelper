@@ -43,15 +43,18 @@
                     Text="{Binding Title, Mode=TwoWay}"/>
             </u:FormItem>
             
-            <u:FormItem Label="Weight">
+            <u:FormItem>
+                <u:FormItem.Label>
+                    <MultiBinding StringFormat="Weight - Maximum is {0}%">
+                        <Binding Path="MaximumWeight"/>
+                    </MultiBinding>
+                </u:FormItem.Label>
                 <NumericUpDown
                     x:Name="EvaluationWeightInput"
                     KeyDown="EvaluationWeightInput_OnKeyDown"
                     u:FormItem.Label="Weight"
                     u:FormItem.IsRequired="True"
                     Value="{Binding Weight, Mode=TwoWay}"
-                    Minimum="1"
-                    Maximum="100"
                     ShowButtonSpinner="False" />
             </u:FormItem>
             
@@ -62,8 +65,6 @@
                     u:FormItem.Label="Grade"
                     u:FormItem.IsRequired="True"
                     Value="{Binding Grade, Mode=TwoWay}"
-                    Minimum="0"
-                    Maximum="100"
                     ShowButtonSpinner="False">
                     
                     <NumericUpDown.KeyBindings>

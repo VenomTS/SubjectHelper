@@ -15,10 +15,20 @@ public partial class EvaluationFormViewModel : ViewModelBase, IDialogContext
     [NotifyCanExecuteChangedFor(nameof(SaveEvaluationCommand))]
     private string _title;
     
-    [ObservableProperty] private decimal _weight;
-    [ObservableProperty] private int _grade;
+    [ObservableProperty] 
+    [NotifyCanExecuteChangedFor(nameof(SaveEvaluationCommand))]
+    private decimal _weight;
     
-    private bool SaveEvaluationCanExecute => !string.IsNullOrWhiteSpace(Title);
+    [ObservableProperty] private decimal _maximumWeight;
+    
+    [ObservableProperty] 
+    [NotifyCanExecuteChangedFor(nameof(SaveEvaluationCommand))]
+    private int _grade;
+    
+    private bool SaveEvaluationCanExecute => 
+        !string.IsNullOrWhiteSpace(Title) &&
+        Weight > 0 && Weight <= MaximumWeight &&
+        Grade is >= 0 and <= 100;
 
     public EvaluationFormViewModel()
     {

@@ -81,7 +81,7 @@
                         <!-- Hacky Solution for CancelDeleteCommand. Check SubjectViewModel for more info -->
                         <components:EvaluationCard Title="{Binding Name}"
                                                    Grade="{Binding Grade}"
-                                                   Weight="{Binding Weight}" 
+                                                   Weight="{Binding Weight}"
                                                    EditCommand="{Binding $parent[ItemsControl].((viewModels:SubjectViewModel)DataContext).OpenEditEvaluationFormDialogCommand}"
                                                    EditCommandParameter="{Binding .}"
                                                    ConfirmDeleteCommand="{Binding $parent[ItemsControl].((viewModels:SubjectViewModel)DataContext).DeleteEvaluationCommand}"

@@ -79,7 +79,8 @@
                                            Foreground="{StaticResource EditIconColor}"/>
                                 </Button>
                                 
-                                <u:PopConfirm 
+                                <u:PopConfirm
+                                    x:Name="PopConfirm"
                                     PopupHeader="Delete Subject?" 
                                     Placement="TopEdgeAlignedRight" 
                                     ConfirmCommand="{TemplateBinding ConfirmDeleteCommand}"
@@ -90,6 +91,16 @@
                                             <TemplateBinding Property="Title"/>
                                         </MultiBinding>
                                     </u:PopConfirm.PopupContent>
+                                    
+                                    <u:PopConfirm.KeyBindings>
+                                        <KeyBinding Gesture="Enter"
+                                                    Command="{Binding ConfirmCommand, ElementName=PopConfirm}"
+                                                    CommandParameter="{Binding ConfirmCommandParameter, ElementName=PopConfirm}"/>
+                                        <!-- Way too broken for me to fix it -->
+                                        <!-- <KeyBinding Gesture="Escape" -->
+                                        <!--             Command="{Binding CancelCommand, ElementName=PopConfirm}" -->
+                                        <!--             CommandParameter="{Binding CancelCommandParameter, ElementName=PopConfirm}"/> -->
+                                    </u:PopConfirm.KeyBindings>
                                     
                                     <Button
                                         VerticalAlignment="Center"

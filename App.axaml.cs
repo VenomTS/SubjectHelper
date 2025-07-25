@@ -4,11 +4,12 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SubjectHelper.Data;
 using SubjectHelper.Factories;
 using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
-using SubjectHelper.Models;
 using SubjectHelper.Repositories;
 using SubjectHelper.Services;
 using SubjectHelper.ViewModels;
@@ -28,6 +29,8 @@ public partial class App : Application
     {
         var collection = new ServiceCollection();
 
+        collection.AddDbContext<DatabaseContext>();
+
         // Singleton = Always in Memory
         collection.AddSingleton<MainWindowViewModel>();
         collection.AddSingleton<PageFactory>();
@@ -36,8 +39,10 @@ public partial class App : Application
         // Scoped = Created once and reused
         collection.AddScoped<SubjectsListViewModel>();
         collection.AddScoped<ISubjectRepository, SubjectRepository>();
+        collection.AddScoped<IEvaluationRepository, EvaluationRepository>();
         
-        // Transient = Created every time
+        // Transient - Created every time
+        // MUST BE TRANSIENT - IF NOT ISSUES MAY HAPPEN
         collection.AddTransient<SubjectViewModel>();
 
         collection.AddSingleton<Func<ApplicationPages, object?, PageViewModel>>(provider => (name, data) =>
@@ -47,10 +52,10 @@ public partial class App : Application
                 case ApplicationPages.Subjects:
                     return provider.GetRequiredService<SubjectsListViewModel>();
                 case ApplicationPages.Subject:
-                    if (data is not string subjectName)
-                        throw new Exception("Data passed MUST BE SUBJECT NAME");
+                    if (data is not int subjectId)
+                        throw new Exception("Data passed MUST BE SUBJECT'S ID");
                     var vm = provider.GetRequiredService<SubjectViewModel>();
-                    vm.Initialize(subjectName);
+                    _ = vm.Initialize(subjectId);
                     return vm;
                 case ApplicationPages.ScheduleMaker:
                     break;
