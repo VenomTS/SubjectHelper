@@ -1,4 +1,3 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,7 +57,6 @@ public partial class SubjectsListViewModel : PageViewModel
 
     private SubjectViewModel CreateSubjectViewModel(Subject subject)
     {
-        // Will have to change subject.Name to subject.Id
         return (SubjectViewModel) _factory.GetPageViewModel(ApplicationPages.Subject, subject.Id);
     }
 

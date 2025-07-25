@@ -8,7 +8,7 @@ namespace SubjectHelper.Views;
 
 public partial class SubjectsListView : UserControl
 {
-    private SubjectsListViewModel _subjectListVM;
+    private SubjectsListViewModel? _subjectListVM;
     
     public SubjectsListView()
     {

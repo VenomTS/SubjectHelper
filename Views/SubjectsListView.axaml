@@ -8,10 +8,6 @@
              x:Class="SubjectHelper.Views.SubjectsListView"
              x:DataType="viewModels:SubjectsListViewModel">
     
-    <Design.DataContext>
-        <viewModels:SubjectsListViewModel/>
-    </Design.DataContext>
-    
     <StackPanel Orientation="Vertical" Margin="20 10">
         
         <Grid
@@ -52,6 +48,8 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        
+        <!-- Should probably add something to show when there is no subjects -->
         
     </StackPanel>
     

@@ -103,7 +103,7 @@ public partial class SubjectViewModel : PageViewModel
         
         evaluation = await _evaluationRepo.AddEvaluationAsync(evaluation);
         
-        Evaluations.Add(new EvaluationViewModel(evaluation));
+        Evaluations.Add(new EvaluationViewModel(evaluation!));
         
         await CalculateWeightedGrade();
         
@@ -139,7 +139,7 @@ public partial class SubjectViewModel : PageViewModel
         
         newEvaluation = await _evaluationRepo.UpdateEvaluationAsync(evaluationViewModel.Id, newEvaluation);
         
-        Evaluations[evaluationIndex] = new EvaluationViewModel(newEvaluation);
+        Evaluations[evaluationIndex] = new EvaluationViewModel(newEvaluation!);
         
         await CalculateWeightedGrade();
         
