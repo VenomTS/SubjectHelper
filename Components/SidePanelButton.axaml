@@ -10,7 +10,6 @@
     </Styles.Resources>
 
     <Style Selector="controls|SidePanelButton">
-        <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
                 <Button Margin="0 5"

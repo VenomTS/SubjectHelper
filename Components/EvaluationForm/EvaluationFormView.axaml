@@ -93,10 +93,6 @@
                     HorizontalAlignment="Stretch"
                     Content="Save"
                     Command="{Binding SaveEvaluationCommand}"/>
-            
         </Grid>
-        
-        
-        
     </Grid>
 </UserControl>

@@ -9,7 +9,7 @@ namespace SubjectHelper.Components;
 public class EvaluationCard : TemplatedControl
 {
     public static readonly StyledProperty<string> TitleProperty = AvaloniaProperty.Register<EvaluationCard, string>(
-        nameof(Title));
+        nameof(Title), "Untitled");
 
     public string Title
     {

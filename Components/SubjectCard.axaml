@@ -7,19 +7,23 @@
     </Design.PreviewWith>
     
     <Styles.Resources>
-        <SolidColorBrush x:Key="CardBackground">#1e293b</SolidColorBrush>
-        <SolidColorBrush x:Key="CardBottomBackground">#334155</SolidColorBrush>
+        <!-- <SolidColorBrush x:Key="CardBackground">#1e293b</SolidColorBrush> -->
+        <!-- <SolidColorBrush x:Key="CardBottomBackground">#334155</SolidColorBrush> -->
+        <SolidColorBrush x:Key="CardBackground">#212121</SolidColorBrush>
+        <SolidColorBrush x:Key="CardBottomBackground">#303030</SolidColorBrush>
         
         <SolidColorBrush x:Key="ViewIconColor">#60A5FA</SolidColorBrush>
         <SolidColorBrush x:Key="EditIconColor">#BB86FC</SolidColorBrush>
         <SolidColorBrush x:Key="DeleteIconColor">#FF5E5B</SolidColorBrush>
+        
+        <!-- 5 0 5 0 - Old Border Thickness for First Border -->
     </Styles.Resources>
 
     <Style Selector="controls|SubjectCard">
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Border Background="{StaticResource CardBackground}" Width="384" Height="148" BorderThickness="5 0 5 0" BorderBrush="{TemplateBinding BorderColor}" CornerRadius="16">
+                <Border Background="{StaticResource CardBackground}" Width="384" Height="148" BorderThickness="0 0 5 5" BorderBrush="{TemplateBinding BorderColor}" CornerRadius="16">
                     
                     <Grid RowDefinitions="70*, 30*">
                         
@@ -96,10 +100,6 @@
                                         <KeyBinding Gesture="Enter"
                                                     Command="{Binding ConfirmCommand, ElementName=PopConfirm}"
                                                     CommandParameter="{Binding ConfirmCommandParameter, ElementName=PopConfirm}"/>
-                                        <!-- Way too broken for me to fix it -->
-                                        <!-- <KeyBinding Gesture="Escape" -->
-                                        <!--             Command="{Binding CancelCommand, ElementName=PopConfirm}" -->
-                                        <!--             CommandParameter="{Binding CancelCommandParameter, ElementName=PopConfirm}"/> -->
                                     </u:PopConfirm.KeyBindings>
                                     
                                     <Button
