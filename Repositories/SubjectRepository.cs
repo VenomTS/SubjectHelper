@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
@@ -10,7 +9,7 @@ namespace SubjectHelper.Repositories;
 
 public class SubjectRepository : ISubjectRepository
 {
-    private List<Subject> _subjects = [];
+    private readonly List<Subject> _subjects = [];
 
     public SubjectRepository()
     {
