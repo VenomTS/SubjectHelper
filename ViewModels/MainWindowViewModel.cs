@@ -28,5 +28,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void GoToScheduleMaker()
     {
+        _navigationService.NavigateToPage(ApplicationPages.ScheduleMakerSubjects);
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SubjectHelper.Models;
+using SubjectHelper.Models.ScheduleMaker;
 
 namespace SubjectHelper.Data;
 
@@ -9,6 +10,15 @@ public class DatabaseContext : DbContext
     
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<Evaluation> Evaluations { get; set; }
+
+    public DbSet<SubjectSM> SubjectSM { get; set; }
+    public DbSet<SectionSM> SectionSM { get; set; }
+    public DbSet<TimeSM> TimeSM { get; set; }
+
+    public DatabaseContext()
+    {
+        Database.EnsureCreated();
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -22,6 +32,14 @@ public class DatabaseContext : DbContext
             .HasDefaultValue("");
         modelBuilder.Entity<Subject>()
             .HasIndex(s => s.Name)
+            .IsUnique();
+
+        modelBuilder.Entity<SubjectSM>()
+            .HasIndex(s => s.Title)
+            .IsUnique();
+        
+        modelBuilder.Entity<SectionSM>()
+            .HasIndex(s => s.Title)
             .IsUnique();
     }
 }

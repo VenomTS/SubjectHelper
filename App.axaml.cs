@@ -4,16 +4,19 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SubjectHelper.Components.ScheduleMakerComponents.TimeComponent;
 using SubjectHelper.Data;
 using SubjectHelper.Factories;
 using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
+using SubjectHelper.Interfaces.ScheduleMaker;
 using SubjectHelper.Repositories;
+using SubjectHelper.Repositories.ScheduleMaker;
 using SubjectHelper.Services;
 using SubjectHelper.ViewModels;
 using SubjectHelper.ViewModels.Bases;
+using SubjectHelper.ViewModels.ScheduleMaker;
 using SubjectHelper.Views;
 
 namespace SubjectHelper;
@@ -38,8 +41,13 @@ public partial class App : Application
         
         // Scoped = Created once and reused
         collection.AddScoped<SubjectsListViewModel>();
+        collection.AddScoped<SubjectsSMViewModel>();
         collection.AddScoped<ISubjectRepository, SubjectRepository>();
         collection.AddScoped<IEvaluationRepository, EvaluationRepository>();
+        
+        collection.AddScoped<ISubjectSMRepository, SubjectSMRepository>();
+        collection.AddScoped<ISectionSMRepository, SectionSMRepository>();
+        collection.AddScoped<ITimeSMRepository, TimeSMRepository>();
         
         // Transient - Created every time
         // MUST BE TRANSIENT - IF NOT ISSUES MAY HAPPEN
@@ -57,8 +65,8 @@ public partial class App : Application
                     var vm = provider.GetRequiredService<SubjectViewModel>();
                     _ = vm.Initialize(subjectId);
                     return vm;
-                case ApplicationPages.ScheduleMaker:
-                    break;
+                case ApplicationPages.ScheduleMakerSubjects:
+                    return provider.GetRequiredService<SubjectsSMViewModel>();
                 case ApplicationPages.Unknown:
                     break;
                 default:

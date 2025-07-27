@@ -5,5 +5,10 @@ public enum ApplicationPages
     Unknown,
     Subjects,
     Subject,
-    ScheduleMaker,
+    ScheduleMakerSubjects,
+    ScheduleMakerSchedule,
+    
+    TimeComponent,
+    SectionComponent,
+    SubjectComponent,
 }

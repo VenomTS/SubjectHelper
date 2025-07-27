@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:components="clr-namespace:SubjectHelper.Components"
+        xmlns:scheduleMakerComponents="clr-namespace:SubjectHelper.Components.ScheduleMakerComponents"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SubjectHelper.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
