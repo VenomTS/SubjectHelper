@@ -9,5 +9,5 @@ public class SectionSM
     public string Instructor { get; set; } = string.Empty;
     public List<TimeSM> Times { get; set; } = [];
 
-    public int SubjectId { get; set; }
+    public int SubjectSMId { get; set; }
 }

@@ -5,15 +5,15 @@ using SubjectHelper.Helper;
 
 namespace SubjectHelper.Converters;
 
-public class NumberToLetterGradeConverter : IValueConverter
+public class GradeConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not int grade) return null;
 
         var letterGrade = GradeManipulator.GetGrade(grade);
-        
-        return $"{grade} ({letterGrade})";
+
+        return letterGrade;
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -22,6 +22,6 @@ public class NumberToLetterGradeConverter : IValueConverter
         
         var grade = GradeManipulator.GetGrade(letterGrade);
 
-        return $"{grade} ({letterGrade})";
+        return grade;
     }
 }

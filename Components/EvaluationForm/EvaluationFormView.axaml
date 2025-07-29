@@ -18,7 +18,7 @@
           Margin="24">
         
         <TextBlock Grid.Row="0"
-                   Text="Evaluation"
+                   Text="{Binding Header}"
                    VerticalAlignment="Bottom"
                    FontSize="20"/>
         

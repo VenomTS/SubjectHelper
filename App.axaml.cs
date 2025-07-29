@@ -38,6 +38,8 @@ public partial class App : Application
         collection.AddSingleton<MainWindowViewModel>();
         collection.AddSingleton<PageFactory>();
         collection.AddSingleton<INavigationService, NavigationService>();
+        collection.AddSingleton<IDialogService, DialogService>();
+        collection.AddSingleton<IToastService, ToastService>();
         
         // Scoped = Created once and reused
         collection.AddScoped<SubjectsListViewModel>();
@@ -86,6 +88,9 @@ public partial class App : Application
             {
                 DataContext = services.GetRequiredService<MainWindowViewModel>(),
             };
+
+            // Initializing "Window"
+            services.GetRequiredService<IDialogService>().Initialize(desktop.MainWindow);
         }
 
         base.OnFrameworkInitializationCompleted();

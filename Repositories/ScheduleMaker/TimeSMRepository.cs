@@ -24,7 +24,7 @@ public class TimeSMRepository : ITimeSMRepository
 
     public async Task<List<TimeSM>> GetTimesBySectionIdAsync(int sectionId)
     {
-        return await _dbContext.TimeSM.Where(s => s.SectionId == sectionId).ToListAsync();
+        return await _dbContext.TimeSM.Where(s => s.SectionSMId == sectionId).ToListAsync();
     }
 
     public async Task<TimeSM?> GetTimeByIdAsync(int id)

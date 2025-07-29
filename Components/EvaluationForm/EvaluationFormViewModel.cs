@@ -24,24 +24,28 @@ public partial class EvaluationFormViewModel : ViewModelBase, IDialogContext
     [ObservableProperty] 
     [NotifyCanExecuteChangedFor(nameof(SaveEvaluationCommand))]
     private int _grade;
+
+    [ObservableProperty] private string _header = string.Empty;
     
     private bool SaveEvaluationCanExecute => 
         !string.IsNullOrWhiteSpace(Title) &&
         Weight > 0 && Weight <= MaximumWeight &&
         Grade is >= 0 and <= 100;
 
-    public EvaluationFormViewModel()
+    public EvaluationFormViewModel(decimal maxWeight = 0)
     {
         Title = string.Empty;
         Weight = 1;
         Grade = 0;
+        MaximumWeight = maxWeight;
     }
 
-    public EvaluationFormViewModel(string name, decimal weight, int grade)
+    public EvaluationFormViewModel(EvaluationFormViewModel oldVM, decimal maxWeight = 0)
     {
-        Title = name;
-        Weight = weight;
-        Grade = grade;
+        Title = oldVM.Title;
+        Weight = oldVM.Weight;
+        Grade = oldVM.Grade;
+        MaximumWeight = maxWeight;
     }
 
     [RelayCommand(CanExecute = nameof(SaveEvaluationCanExecute))]

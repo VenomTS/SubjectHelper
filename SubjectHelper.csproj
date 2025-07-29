@@ -42,6 +42,18 @@
 
     <ItemGroup>
       <None Remove="SubjectHelperDB.db" />
-      <AdditionalFiles Include="SubjectHelperDB.db" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Components\Test\" />
+      <Folder Include="Dialogs\" />
+      <Folder Include="Styles\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Components\Cards\SubjectCard.axaml.cs">
+        <DependentUpon>SubjectCard.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

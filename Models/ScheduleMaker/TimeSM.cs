@@ -9,5 +9,5 @@ public class TimeSM
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
 
-    public int SectionId { get; set; }
+    public int SectionSMId { get; set; }
 }

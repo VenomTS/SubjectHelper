@@ -1,8 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -18,29 +18,20 @@ namespace SubjectHelper.ViewModels;
 
 public partial class SubjectViewModel : PageViewModel
 {
-    private Subject? _subject;
-    
     private readonly ISubjectRepository _subjectRepo;
     private readonly IEvaluationRepository _evaluationRepo;
+    private readonly IDialogService _dialogService;
+    private readonly IToastService _toastService;
 
     [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _code = string.Empty;
     [ObservableProperty] private int _weightedGrade;
     [ObservableProperty] private SolidColorBrush _borderColor;
-
-    public ObservableCollection<EvaluationViewModel> Evaluations { get; } = [];
-    public int Id { get; set; }
-    public WindowToastManager? ToastManager { get; set; }
     
-    private static readonly DialogOptions CustomDialogOptions = new()
-    {
-        StartupLocation = WindowStartupLocation.CenterOwner,
-        Mode = DialogMode.None,
-        IsCloseButtonVisible = false,
-        CanResize = false,
-    };
+    public ObservableCollection<EvaluationViewModel> Evaluations { get; } = [];
+    public int SubjectId { get; set; }
 
-    public SubjectViewModel(ISubjectRepository subjectRepo, IEvaluationRepository evaluationRepo)
+    public SubjectViewModel(ISubjectRepository subjectRepo, IEvaluationRepository evaluationRepo, IDialogService dialogService, IToastService toastService)
     {
         Page = ApplicationPages.Subject;
 
@@ -50,100 +41,84 @@ public partial class SubjectViewModel : PageViewModel
         
         _subjectRepo = subjectRepo;
         _evaluationRepo = evaluationRepo;
+        _dialogService = dialogService;
+        _toastService = toastService;
+        
+        Evaluations.CollectionChanged += EvaluationsUpdated;
     }
+
+    private void EvaluationsUpdated(object? sender, NotifyCollectionChangedEventArgs e) => _ = CalculateWeightedGrade();
 
     public async Task Initialize(int id)
     {
         var subject = await _subjectRepo.GetSubjectByIdAsync(id);
+        if(subject == null)
+            throw new Exception("Subject not found");
         
-        _subject = subject ?? throw new Exception("Subject not found");
-        
-        Id = subject.Id;
+        SubjectId = id;
         Name = subject.Name;
         Code = subject.Code;
 
-        var evaluations = await _evaluationRepo.GetEvaluationsBySubjectIdAsync(subject.Id);
+        var evaluations = await _evaluationRepo.GetEvaluationsBySubjectIdAsync(SubjectId);
         foreach (var evaluation in evaluations)
             Evaluations.Add(new EvaluationViewModel(evaluation));
-        
-        await CalculateWeightedGrade();
     }
 
     [RelayCommand]
-    private async Task OpenCreateEvaluationFormDialog()
+    private async Task CreateEvaluation()
     {
-        var vm = new EvaluationFormViewModel
+        var maxWeight = await GetMaximumAllowedWeight();
+        if (maxWeight <= 0)
         {
-            MaximumWeight = await GetMaximumAllowedWeight()
-        };
-
-        if (vm.MaximumWeight <= 0)
-        {
-            ToastManager?.Show(ToastCreator.CreateToast("Weight is at 100%", NotificationType.Information));
+            _toastService.ShowToast("Weight is at 100%", NotificationType.Information);
             return;
         }
 
-        var result = await Dialog.ShowCustomModal<EvaluationFormView, EvaluationFormViewModel, DialogResult>(vm, null, CustomDialogOptions);
+        var vm = new EvaluationFormViewModel(maxWeight);
+
+        var result = await _dialogService.ShowEvaluationForm("Create Evaluation", vm);
 
         if (result != DialogResult.OK) return;
 
-        if (vm.Weight > vm.MaximumWeight)
-        {
-            ToastManager?.Show(ToastCreator.CreateToast("Weight exceeded", NotificationType.Error));
-            return;
-        }
-
-        var evaluation = new Evaluation
+        var evaluation = await _evaluationRepo.AddEvaluationAsync(new Evaluation
         {
             Name = vm.Title,
-            Weight = Math.Round(vm.Weight, 2),
+            Weight = vm.Weight,
             Grade = vm.Grade,
-            SubjectId = _subject!.Id,
-        };
+            SubjectId = SubjectId,
+        });
         
-        evaluation = await _evaluationRepo.AddEvaluationAsync(evaluation);
-        
-        Evaluations.Add(new EvaluationViewModel(evaluation!));
-        
-        await CalculateWeightedGrade();
-        
-        ToastManager?.Show(ToastCreator.CreateToast("Evaluation added", NotificationType.Success));
+        Evaluations.Add(CreateEvaluationViewModel(evaluation!));
+        _toastService.ShowToast("Evaluation Created", NotificationType.Success);
     }
 
     [RelayCommand]
-    private async Task OpenEditEvaluationFormDialog(EvaluationViewModel evaluationViewModel)
+    private async Task EditEvaluation(EvaluationViewModel evaluationVM)
     {
-        var vm = new EvaluationFormViewModel(evaluationViewModel.Name, evaluationViewModel.Weight, evaluationViewModel.Grade) 
+        var maxWeight = await GetMaximumAllowedWeight(evaluationVM.Weight);
+        
+        var vm = new EvaluationFormViewModel(new EvaluationFormViewModel
         {
-            MaximumWeight = await GetMaximumAllowedWeight(evaluationViewModel.Weight)
-        };
+            Title = evaluationVM.Name,
+            Weight = evaluationVM.Weight,
+            Grade = evaluationVM.Grade,
+        }, maxWeight);
+        
+        var result = await _dialogService.ShowEvaluationForm("Edit Evaluation", vm);
+        
+        if (result != DialogResult.OK) return;
 
-        var result = await Dialog.ShowCustomModal<EvaluationFormView, EvaluationFormViewModel, DialogResult>(vm, null, CustomDialogOptions);
+        var evaluationIndex = Evaluations.IndexOf(evaluationVM);
         
-        if(result != DialogResult.OK) return;
-        
-        if (vm.Weight > vm.MaximumWeight)
-        {
-            ToastManager?.Show(ToastCreator.CreateToast("Weight exceeded", NotificationType.Error));
-            return;
-        }
-        
-        var evaluationIndex = Evaluations.IndexOf(evaluationViewModel);
-
-        var newEvaluation = new Evaluation
+        var newEvaluation = await _evaluationRepo.UpdateEvaluationAsync(evaluationVM.Id, new Evaluation
         {
             Name = vm.Title,
-            Weight = Math.Round(vm.Weight, 2),
+            Weight = vm.Weight,
             Grade = vm.Grade,
-        };
+        });
         
-        newEvaluation = await _evaluationRepo.UpdateEvaluationAsync(evaluationViewModel.Id, newEvaluation);
-        
-        Evaluations[evaluationIndex] = new EvaluationViewModel(newEvaluation!);
-        
-        await CalculateWeightedGrade();
-        
-        ToastManager?.Show(ToastCreator.CreateToast("Evaluation edited", NotificationType.Success));
+        Evaluations[evaluationIndex] = CreateEvaluationViewModel(newEvaluation!);
+        _toastService.ShowToast("Evaluation Edited", NotificationType.Success);
     }
 
     [RelayCommand]
@@ -153,14 +128,17 @@ public partial class SubjectViewModel : PageViewModel
         
         Evaluations.Remove(evaluationViewModel);
         
-        await CalculateWeightedGrade();
-        
-        ToastManager?.Show(ToastCreator.CreateToast("Evaluation deleted", NotificationType.Warning));
+        _toastService.ShowToast("Evaluation Deleted", NotificationType.Success);
+    }
+
+    private static EvaluationViewModel CreateEvaluationViewModel(Evaluation evaluation)
+    {
+        return new EvaluationViewModel(evaluation);
     }
 
     private async Task CalculateWeightedGrade()
     {
-        var allEvaluations = await _evaluationRepo.GetEvaluationsBySubjectIdAsync(_subject!.Id);
+        var allEvaluations = await _evaluationRepo.GetEvaluationsBySubjectIdAsync(SubjectId);
 
         decimal weightedGrade = allEvaluations.Sum(evaluation => evaluation.Grade * (evaluation.Weight / 100m));
 
@@ -169,7 +147,7 @@ public partial class SubjectViewModel : PageViewModel
 
     private async Task<decimal> GetMaximumAllowedWeight(decimal replacingWeight = 0)
     {
-        var allEvaluations = await _evaluationRepo.GetEvaluationsBySubjectIdAsync(_subject!.Id);
+        var allEvaluations = await _evaluationRepo.GetEvaluationsBySubjectIdAsync(SubjectId);
         
         var currentWeight = allEvaluations.Sum(evaluation => evaluation.Weight);
 

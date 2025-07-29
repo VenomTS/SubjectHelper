@@ -5,7 +5,6 @@
              xmlns:semi="https://irihi.tech/semi"
              xmlns:u-Semi="https://irihi.tech/ursa/themes/semi"
              RequestedThemeVariant="Dark">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
         <local:ViewLocator/>
@@ -15,15 +14,22 @@
         <FontFamily x:Key="FaBrands">/Assets/Fonts/Brands.otf#Font Awesome 6 Brands</FontFamily>
         <FontFamily x:Key="FaRegular">/Assets/Fonts/Regular.otf#Font Awesome 6 Regular</FontFamily>
         <FontFamily x:Key="FaSolid">/Assets/Fonts/Solid.otf#Font Awesome 6 Regular</FontFamily>
+        
+        <SolidColorBrush x:Key="ViewIconColor" Color="#60A5FA"/>
+        <SolidColorBrush x:Key="EditIconColor" Color="#BB86FC"/>
+        <SolidColorBrush x:Key="DeleteIconColor" Color="#FF5E5B"/>
     </Application.Resources>
   
     <Application.Styles>
         <semi:SemiTheme Locale="en-US"/>
         <u-Semi:SemiTheme Locale="en-US"/>
         <semi:SemiPopupAnimations />
-        <StyleInclude Source="Components/EvaluationCard.axaml"/>
-        <StyleInclude Source="Components/SubjectCard.axaml"/>
+        
+        <Style Selector="Button.Icon:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Opacity" Value="0.75"/>
+        </Style>
+        
         <StyleInclude Source="Components/SidePanelButton.axaml"/>
-        <StyleInclude Source="Styles/Colors.axaml"/>
     </Application.Styles>
 </Application>

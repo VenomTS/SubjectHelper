@@ -18,12 +18,12 @@ public class SubjectSMRepository : ISubjectSMRepository
     
     public async Task<List<SubjectSM>> GetSubjectsAsync()
     {
-        return await _dbContext.SubjectSM.ToListAsync();
+        return await _dbContext.SubjectSM.Include(s => s.Sections).ThenInclude(s => s.Times).ToListAsync();
     }
 
     public async Task<SubjectSM?> GetSubjectByIdAsync(int id)
     {
-        return await _dbContext.SubjectSM.FindAsync(id);
+        return await _dbContext.SubjectSM.Include(s => s.Sections).ThenInclude(s => s.Times).FirstOrDefaultAsync(s => s.Id == id);
     }
 
     public async Task<SubjectSM?> AddSubjectAsync(SubjectSM subject)

@@ -24,7 +24,7 @@ public class SectionSMRepository : ISectionSMRepository
 
     public async Task<List<SectionSM>> GetSectionsBySubjectIdAsync(int subjectId)
     {
-        return await _dbContext.SectionSM.Where(s => s.SubjectId == subjectId).ToListAsync();
+        return await _dbContext.SectionSM.Where(s => s.SubjectSMId == subjectId).ToListAsync();
     }
 
     public async Task<SectionSM?> GetSectionByIdAsync(int id)

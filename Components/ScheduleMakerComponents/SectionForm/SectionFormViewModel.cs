@@ -17,7 +17,7 @@ public partial class SectionFormViewModel : ViewModelBase, IDialogContext
     
     [ObservableProperty] private string _instructor = string.Empty;
     
-    private bool CanExecuteSave => !string.IsNullOrWhiteSpace(Instructor);
+    private bool CanExecuteSave => !string.IsNullOrWhiteSpace(Title);
 
     public SectionFormViewModel(string header)
     {

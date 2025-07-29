@@ -3,10 +3,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:scheduleMaker="clr-namespace:SubjectHelper.ViewModels.ScheduleMaker"
+             xmlns:subjectComponent="clr-namespace:SubjectHelper.Components.ScheduleMakerComponents.SubjectComponent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SubjectHelper.Views.ScheduleMaker.SubjectsSMView"
              x:DataType="scheduleMaker:SubjectsSMViewModel">
     
-    <ContentControl Content="{Binding Section}" Width="512"/>
+    <StackPanel Orientation="Vertical">
+        <Button Content="Click Me" Command="{Binding AddCommand}"/>
+        <ItemsControl ItemsSource="{Binding Subjects}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel ItemSpacing="10" LineSpacing="15"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <subjectComponent:SubjectComponentView/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
     
 </UserControl>

@@ -26,6 +26,8 @@ public partial class SectionComponentViewModel : ViewModelBase
     [ObservableProperty] private string _instructor;
 
     public ObservableCollection<TimeComponentViewModel> Times { get; set; } = [];
+
+    public event EventHandler? OnDeletePressed;
     
     private static readonly DialogOptions DefaultDialogOptions = new()
     {
@@ -108,6 +110,7 @@ public partial class SectionComponentViewModel : ViewModelBase
         foreach (var time in allTimes)
             await _timeRepo.DeleteTimeAsync(time.Id);
         await _sectionRepo.DeleteSectionAsync(_section.Id);
+        OnDeletePressed?.Invoke(this, EventArgs.Empty);
     }
 
     private void PopulateTimes()

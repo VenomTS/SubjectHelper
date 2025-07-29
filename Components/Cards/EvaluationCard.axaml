@@ -1,0 +1,157 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:converters="clr-namespace:SubjectHelper.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SubjectHelper.Components.Cards.EvaluationCard"
+             x:Name="Root">
+
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="CardBackground">#212121</SolidColorBrush>
+        <SolidColorBrush x:Key="CardBorder">#303030</SolidColorBrush>
+
+        <SolidColorBrush x:Key="PrimaryText">#E0E0E0</SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryText">#A0A0A0</SolidColorBrush>
+
+        <SolidColorBrush x:Key="BadgeForeground">#FFFFFF</SolidColorBrush>
+
+        <converters:PercentageFormatConverter x:Key="PercentageFormatConverter" />
+        <converters:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
+        <converters:GradeConverter x:Key="GradeConverter" />
+    </UserControl.Resources>
+
+    <Border
+        Background="{StaticResource CardBackground}"
+        BorderBrush="{StaticResource CardBorder}"
+        BorderThickness="8 0 0 8"
+        Padding="10 12"
+        CornerRadius="8"
+        Width="448">
+
+        <Grid
+            RowDefinitions="Auto, Auto, Auto, Auto">
+
+            <!-- Title and Edit Button -->
+            <Grid
+                Grid.Row="0"
+                ColumnDefinitions="*, Auto">
+
+                <TextBlock
+                    Grid.Column="0"
+                    Text="{Binding Title, ElementName=Root}"
+                    FontWeight="Bold"
+                    LetterSpacing="1"
+                    FontSize="32"
+                    VerticalAlignment="Center"
+                    Foreground="{StaticResource PrimaryText}" />
+
+                <StackPanel
+                    Orientation="Horizontal"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Margin="0 0 12 0"
+                    Spacing="15">
+
+                    <Button
+                        Classes="Icon"
+                        VerticalAlignment="Center"
+                        Theme="{DynamicResource BorderlessButton}"
+                        Command="{Binding EditCommand, ElementName=Root}"
+                        CommandParameter="{Binding EditParameter, ElementName=Root}"
+                        Padding="0"
+                        Width="20">
+                        <Label
+                            FontFamily="{StaticResource FaRegular}"
+                            Content="&#xf044;"
+                            Padding="0"
+                            FontSize="18"
+                            Foreground="{StaticResource EditIconColor}" />
+                    </Button>
+
+                    <u:PopConfirm
+                        x:Name="PopConfirm"
+                        PopupHeader="Delete Evaluation?"
+                        Placement="TopEdgeAlignedRight"
+                        ConfirmCommand="{Binding DeleteCommand, ElementName=Root}"
+                        ConfirmCommandParameter="{Binding DeleteParameter, ElementName=Root}"
+                        TriggerMode="Click">
+
+                        <u:PopConfirm.PopupContent>
+                            <MultiBinding
+                                StringFormat="This will permanently delete the evaluation '{0}' and all of its data. This action cannot be undone">
+                                <Binding Path="Title" ElementName="Root" />
+                            </MultiBinding>
+                        </u:PopConfirm.PopupContent>
+
+                        <u:PopConfirm.KeyBindings>
+                            <KeyBinding
+                                Gesture="Enter"
+                                Command="{Binding ConfirmCommand, ElementName=PopConfirm}"
+                                CommandParameter="{Binding ConfirmCommandParameter, ElementName=PopConfirm}" />
+                        </u:PopConfirm.KeyBindings>
+
+                        <Button
+                            Classes="Icon"
+                            VerticalAlignment="Center"
+                            Theme="{DynamicResource BorderlessButton}"
+                            Padding="0"
+                            Width="20">
+                            <Label
+                                FontFamily="{StaticResource FaSolid}"
+                                Content="&#xf2ed;"
+                                Padding="0"
+                                FontSize="18"
+                                Foreground="{StaticResource DeleteIconColor}" />
+                        </Button>
+                    </u:PopConfirm>
+                </StackPanel>
+            </Grid>
+
+            <!-- Weight -->
+            <StackPanel
+                Orientation="Horizontal" Grid.Row="1" Margin="0 2 0 0">
+                <TextBlock
+                    Text="Weight: "
+                    Foreground="{StaticResource SecondaryText}" />
+                <TextBlock
+                    Text="{Binding Weight, ElementName=Root, Converter={StaticResource PercentageFormatConverter}}"
+                    Foreground="{StaticResource SecondaryText}" />
+            </StackPanel>
+
+            <Grid
+                ColumnDefinitions="*, Auto"
+                Grid.Row="2"
+                Margin="0 15 9 0"
+                ColumnSpacing="10">
+
+                <ProgressBar
+                    Grid.Column="0"
+                    ShowProgressText="True"
+                    ProgressTextFormat="Points - {0}"
+                    Minimum="0"
+                    Maximum="100"
+                    Value="{Binding Grade, ElementName=Root}"
+                    Foreground="{Binding Grade, ElementName=Root, Converter={StaticResource ProgressBarColorConverter}}"
+                    VerticalAlignment="Center">
+                </ProgressBar>
+
+                <Border
+                    Grid.Column="1"
+                    Margin="0 10 0 10"
+                    Background="{Binding Grade, ElementName=Root, Converter={StaticResource ProgressBarColorConverter}}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    CornerRadius="9"
+                    Width="24">
+                    <TextBlock
+                        Text="{Binding Grade, ElementName=Root, Converter={StaticResource GradeConverter}}"
+                        Foreground="{StaticResource BadgeForeground}"
+                        TextAlignment="Center" />
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+
+</UserControl>

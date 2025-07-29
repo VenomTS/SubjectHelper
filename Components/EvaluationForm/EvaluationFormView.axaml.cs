@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using SubjectHelper.Models;
 
 namespace SubjectHelper.Components.EvaluationForm;
 
@@ -34,5 +35,7 @@ public partial class EvaluationFormView : UserControl
     private void Control_OnLoaded(object? sender, RoutedEventArgs e)
     {
         EvaluationTitleInput.Focus();
+        if (string.IsNullOrWhiteSpace(EvaluationTitleInput.Text)) return;
+        EvaluationTitleInput.SelectAll();
     }
 }

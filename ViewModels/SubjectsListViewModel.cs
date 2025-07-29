@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -110,7 +111,7 @@ public partial class SubjectsListViewModel : PageViewModel
             Code = vm.SubjectCode.Trim(),
         };
         
-        newSubject = await _subjectRepo.UpdateSubjectAsync(subjectViewModel.Id, newSubject);
+        newSubject = await _subjectRepo.UpdateSubjectAsync(subjectViewModel.SubjectId, newSubject);
         
         if (newSubject == null)
         {
@@ -128,14 +129,14 @@ public partial class SubjectsListViewModel : PageViewModel
     [RelayCommand]
     private void GoToSubject(SubjectViewModel subject)
     {
-        _navigationService.NavigateToPage(ApplicationPages.Subject, subject.Id);
+        _navigationService.NavigateToPage(ApplicationPages.Subject, subject.SubjectId);
     }
 
     [RelayCommand]
     private async Task DeleteSubject(SubjectViewModel subjectViewModel)
     {
-        await _evaluationRepo.DeleteEvaluationsBySubjectIdAsync(subjectViewModel.Id);
-        await _subjectRepo.DeleteSubjectAsync(subjectViewModel.Id);
+        await _evaluationRepo.DeleteEvaluationsBySubjectIdAsync(subjectViewModel.SubjectId);
+        await _subjectRepo.DeleteSubjectAsync(subjectViewModel.SubjectId);
         
         Subjects.Remove(subjectViewModel);
         

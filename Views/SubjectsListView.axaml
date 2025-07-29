@@ -3,30 +3,52 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SubjectHelper.ViewModels"
-             xmlns:components="clr-namespace:SubjectHelper.Components"
+             xmlns:cards="clr-namespace:SubjectHelper.Components.Cards"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SubjectHelper.Views.SubjectsListView"
-             x:DataType="viewModels:SubjectsListViewModel">
+             x:DataType="viewModels:SubjectsListViewModel"
+             x:Name="Root">
     
     <StackPanel Orientation="Vertical" Margin="20 10">
-        
         <Grid
             ColumnDefinitions="*, Auto">
             
-            <TextBlock Grid.Column="0" Text="Subjects" FontSize="36" FontWeight="Bold" LetterSpacing="0.75"/>
+            <TextBlock 
+                Grid.Column="0" 
+                Text="Subjects" 
+                FontSize="36" 
+                FontWeight="Bold" 
+                LetterSpacing="0.75"/>
             
-            <Button Grid.Column="1" 
-                    Theme="{DynamicResource SolidButton}" 
-                    CornerRadius="12"
-                    Command="{Binding OpenSubjectAddFormDialogCommand}">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                    <TextBlock FontFamily="{StaticResource FaSolid}" Text="&#x2b;" FontSize="24" VerticalAlignment="Center"/>
-                    <TextBlock Text="Add Subject" FontSize="20" VerticalAlignment="Center"/>
+            <Button 
+                Grid.Column="1" 
+                Theme="{DynamicResource SolidButton}" 
+                CornerRadius="12"
+                Command="{Binding OpenSubjectAddFormDialogCommand}">
+                
+                <StackPanel 
+                    Orientation="Horizontal" 
+                    Spacing="5">
+                    
+                    <TextBlock 
+                        FontFamily="{StaticResource FaSolid}" 
+                        Text="&#x2b;" 
+                        FontSize="24" 
+                        VerticalAlignment="Center"/>
+                    
+                    <TextBlock 
+                        Text="Create Subject" 
+                        FontSize="20"
+                        VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </Grid>
         
-        <ItemsControl ItemsSource="{Binding Subjects}" Margin="0 10">
+        <ItemsControl 
+            ItemsSource="{Binding Subjects}" 
+            Margin="0 10"
+            x:Name="ItemsControl">
+            
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal" ItemSpacing="10" LineSpacing="20"/>
@@ -35,16 +57,16 @@
             
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <components:SubjectCard 
-                        Title="{Binding Name}" 
+                    <cards:SubjectCard 
+                        Title="{Binding Name}"
                         Code="{Binding Code}"
                         BorderColor="{Binding BorderColor}"
-                        ViewCommand="{Binding $parent[ItemsControl].((viewModels:SubjectsListViewModel)DataContext).GoToSubjectCommand}"
-                        ViewCommandParameter="{Binding .}"
-                        ConfirmDeleteCommand="{Binding $parent[ItemsControl].((viewModels:SubjectsListViewModel)DataContext).DeleteSubjectCommand}"
-                        ConfirmDeleteCommandParameter="{Binding .}"
-                        EditCommand="{Binding $parent[ItemsControl].((viewModels:SubjectsListViewModel)DataContext).OpenEditSubjectFormDialogCommand}"
-                        EditCommandParameter="{Binding .}"/>
+                        ViewCommand="{ReflectionBinding $parent[ItemsControl].DataContext.GoToSubjectCommand}"
+                        EditCommand="{ReflectionBinding $parent[ItemsControl].DataContext.OpenEditSubjectFormDialogCommand}"
+                        DeleteCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteSubjectCommand}"
+                        ViewParameter="{Binding}"
+                        EditParameter="{Binding}"
+                        DeleteParameter="{Binding}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
