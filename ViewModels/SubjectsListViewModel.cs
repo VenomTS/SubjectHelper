@@ -10,6 +10,8 @@ using SubjectHelper.Components.SubjectEdit;
 using SubjectHelper.Factories;
 using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
+using SubjectHelper.Interfaces.Repositories;
+using SubjectHelper.Interfaces.Services;
 using SubjectHelper.Models;
 using SubjectHelper.ViewModels.Bases;
 using Ursa.Controls;
@@ -104,22 +106,20 @@ public partial class SubjectsListViewModel : PageViewModel
         var result = await Dialog.ShowCustomModal<SubjectEditView, SubjectEditViewModel, DialogResult>(vm, options: CustomDialogOptions);
         
         if(result != DialogResult.OK) return;
-
-        var newSubject = new Subject
+        
+        var subject = await _subjectRepo.UpdateSubjectAsync(subjectViewModel.SubjectId, new SubjectUpdate
         {
             Name = vm.SubjectName.Trim(),
             Code = vm.SubjectCode.Trim(),
-        };
+        });
         
-        newSubject = await _subjectRepo.UpdateSubjectAsync(subjectViewModel.SubjectId, newSubject);
-        
-        if (newSubject == null)
+        if (subject == null)
         {
             ToastManager?.Show(ToastCreator.CreateToast("Subject already exists", NotificationType.Error));
             return;
         }
         
-        var newSubjectViewModel = CreateSubjectViewModel(newSubject);
+        var newSubjectViewModel = CreateSubjectViewModel(subject);
         
         Subjects[Subjects.IndexOf(subjectViewModel)] = newSubjectViewModel;
         

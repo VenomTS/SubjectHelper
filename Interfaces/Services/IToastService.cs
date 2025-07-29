@@ -1,7 +1,7 @@
 using Avalonia.Controls.Notifications;
 using Ursa.Controls;
 
-namespace SubjectHelper.Interfaces;
+namespace SubjectHelper.Interfaces.Services;
 
 public interface IToastService
 {

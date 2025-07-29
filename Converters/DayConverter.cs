@@ -4,7 +4,7 @@ using Avalonia.Data.Converters;
 
 namespace SubjectHelper.Converters;
 
-public class NumberDayConverter : IValueConverter
+public class DayConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {

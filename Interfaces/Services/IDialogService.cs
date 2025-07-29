@@ -4,7 +4,7 @@ using SubjectHelper.Components.EvaluationForm;
 using SubjectHelper.Models;
 using Ursa.Controls;
 
-namespace SubjectHelper.Interfaces;
+namespace SubjectHelper.Interfaces.Services;
 
 public interface IDialogService
 {

@@ -17,7 +17,6 @@
 
         <SolidColorBrush x:Key="BadgeForeground">#FFFFFF</SolidColorBrush>
 
-        <converters:PercentageFormatConverter x:Key="PercentageFormatConverter" />
         <converters:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
         <converters:GradeConverter x:Key="GradeConverter" />
     </UserControl.Resources>
@@ -115,9 +114,14 @@
                 <TextBlock
                     Text="Weight: "
                     Foreground="{StaticResource SecondaryText}" />
-                <TextBlock
-                    Text="{Binding Weight, ElementName=Root, Converter={StaticResource PercentageFormatConverter}}"
-                    Foreground="{StaticResource SecondaryText}" />
+                <TextBlock 
+                    Foreground="{StaticResource SecondaryText}">
+                    
+                    <TextBlock.Text>
+                        <Binding StringFormat="{}{0}%" Path="Weight" ElementName="Root"/>
+                    </TextBlock.Text>
+                    
+                </TextBlock>
             </StackPanel>
 
             <Grid

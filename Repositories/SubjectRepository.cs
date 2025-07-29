@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SubjectHelper.Data;
 using SubjectHelper.Interfaces;
+using SubjectHelper.Interfaces.Repositories;
 using SubjectHelper.Models;
 
 namespace SubjectHelper.Repositories;
@@ -11,10 +12,7 @@ public class SubjectRepository : ISubjectRepository
 {
     private readonly DatabaseContext _dbContext;
 
-    public SubjectRepository(DatabaseContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public SubjectRepository(DatabaseContext dbContext) => _dbContext = dbContext;
 
     public async Task<List<Subject>> GetSubjectsAsync()
     {
@@ -24,11 +22,6 @@ public class SubjectRepository : ISubjectRepository
     public async Task<Subject?> GetSubjectByIdAsync(int id)
     {
         return await _dbContext.Subjects.FindAsync(id);
-    }
-
-    public async Task<Subject?> GetSubjectByNameAsync(string name)
-    {
-        return await _dbContext.Subjects.FirstOrDefaultAsync(s => s.Name == name);
     }
 
     public async Task<Subject?> AddSubjectAsync(Subject subject)
@@ -41,36 +34,15 @@ public class SubjectRepository : ISubjectRepository
         return subject;
     }
 
-    public async Task<Subject?> UpdateSubjectAsync(int id, Subject updatedSubject)
+    public async Task<Subject?> UpdateSubjectAsync(int id, SubjectUpdate updatedSubject)
     {
         var subject = await _dbContext.Subjects.FindAsync(id);
-        if (subject == null) return null;
+        var subjectExists = await _dbContext.Subjects.AnyAsync(s => s.Id != id && s.Name == updatedSubject.Name);
+        if (subject == null || subjectExists) return null;
         
         subject.Name = updatedSubject.Name;
         subject.Code = updatedSubject.Code;
 
-        await _dbContext.SaveChangesAsync();
-        return subject;
-    }
-
-    public async Task<Subject?> UpdateSubjectAsync(string name, Subject updatedSubject)
-    {
-        var subject = await _dbContext.Subjects.FirstOrDefaultAsync(s => s.Name == name);
-        if (subject == null) return null;
-        
-        subject.Name = updatedSubject.Name;
-        subject.Code = updatedSubject.Code;
-
-        await _dbContext.SaveChangesAsync();
-        return subject;
-    }
-
-    public async Task<Subject?> DeleteSubjectAsync(string name)
-    {
-        var subject = await _dbContext.Subjects.FirstOrDefaultAsync(s => s.Name == name);
-        if (subject == null) return null;
-        
-        _dbContext.Subjects.Remove(subject);
         await _dbContext.SaveChangesAsync();
         return subject;
     }

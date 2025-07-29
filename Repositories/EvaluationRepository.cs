@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SubjectHelper.Data;
 using SubjectHelper.Interfaces;
+using SubjectHelper.Interfaces.Repositories;
 using SubjectHelper.Models;
 
 namespace SubjectHelper.Repositories;
@@ -35,15 +37,19 @@ public class EvaluationRepository : IEvaluationRepository
 
     public async Task<Evaluation?> AddEvaluationAsync(Evaluation evaluation)
     {
+        var isInDatabase = await _dbContext.Evaluations.AnyAsync(e => e.SubjectId == evaluation.SubjectId && e.Name == evaluation.Name);
+        if(isInDatabase) return null;
+        
         await _dbContext.Evaluations.AddAsync(evaluation);
         await _dbContext.SaveChangesAsync();
         return evaluation;
     }
 
-    public async Task<Evaluation?> UpdateEvaluationAsync(int id, Evaluation updatedEvaluation)
+    public async Task<Evaluation?> UpdateEvaluationAsync(int id, int subjectId, EvaluationUpdate updatedEvaluation)
     {
         var evaluation = await _dbContext.Evaluations.FindAsync(id);
-        if (evaluation == null) return null;
+        var isInDatabase = await _dbContext.Evaluations.AnyAsync(e => e.Id != id && e.SubjectId == subjectId && e.Name == updatedEvaluation.Name);
+        if (evaluation == null || isInDatabase) return null;
         
         evaluation.Name = updatedEvaluation.Name;
         evaluation.Weight = updatedEvaluation.Weight;
@@ -70,4 +76,5 @@ public class EvaluationRepository : IEvaluationRepository
             _dbContext.Evaluations.Remove(evaluation);
         await _dbContext.SaveChangesAsync();
     }
+    
 }

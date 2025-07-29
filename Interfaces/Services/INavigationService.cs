@@ -1,7 +1,7 @@
 using SubjectHelper.Helper;
 using SubjectHelper.ViewModels;
 
-namespace SubjectHelper.Interfaces;
+namespace SubjectHelper.Interfaces.Services;
 
 public interface INavigationService
 {

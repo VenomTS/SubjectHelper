@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SubjectHelper.Helper;
 using SubjectHelper.Models;
 
-namespace SubjectHelper.Interfaces;
+namespace SubjectHelper.Interfaces.Repositories;
 
 public interface ISubjectRepository
 {
@@ -11,6 +10,6 @@ public interface ISubjectRepository
     Task<Subject?> GetSubjectByIdAsync(int id);
 
     Task<Subject?> AddSubjectAsync(Subject subject);
-    Task<Subject?> UpdateSubjectAsync(int id, Subject updatedSubject);
+    Task<Subject?> UpdateSubjectAsync(int id, SubjectUpdate updatedSubject);
     Task<Subject?> DeleteSubjectAsync(int id);
 }

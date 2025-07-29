@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Controls.Notifications;
 using SubjectHelper.Interfaces;
+using SubjectHelper.Interfaces.Services;
 using Ursa.Controls;
 
 namespace SubjectHelper.Services;

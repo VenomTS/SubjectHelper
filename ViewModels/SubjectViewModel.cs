@@ -10,6 +10,8 @@ using CommunityToolkit.Mvvm.Input;
 using SubjectHelper.Components.EvaluationForm;
 using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
+using SubjectHelper.Interfaces.Repositories;
+using SubjectHelper.Interfaces.Services;
 using SubjectHelper.Models;
 using SubjectHelper.ViewModels.Bases;
 using Ursa.Controls;
@@ -29,7 +31,7 @@ public partial class SubjectViewModel : PageViewModel
     [ObservableProperty] private SolidColorBrush _borderColor;
     
     public ObservableCollection<EvaluationViewModel> Evaluations { get; } = [];
-    public int SubjectId { get; set; }
+    public int SubjectId { get; private set; }
 
     public SubjectViewModel(ISubjectRepository subjectRepo, IEvaluationRepository evaluationRepo, IDialogService dialogService, IToastService toastService)
     {
@@ -88,6 +90,12 @@ public partial class SubjectViewModel : PageViewModel
             SubjectId = SubjectId,
         });
         
+        if (evaluation == null)
+        {
+            _toastService.ShowToast("Evaluation Already Exists", NotificationType.Error);
+            return;
+        }
+        
         Evaluations.Add(CreateEvaluationViewModel(evaluation!));
         _toastService.ShowToast("Evaluation Created", NotificationType.Success);
     }
@@ -110,12 +118,18 @@ public partial class SubjectViewModel : PageViewModel
 
         var evaluationIndex = Evaluations.IndexOf(evaluationVM);
         
-        var newEvaluation = await _evaluationRepo.UpdateEvaluationAsync(evaluationVM.Id, new Evaluation
+        var newEvaluation = await _evaluationRepo.UpdateEvaluationAsync(evaluationVM.Id, SubjectId, new EvaluationUpdate
         {
             Name = vm.Title,
             Weight = vm.Weight,
             Grade = vm.Grade,
         });
+
+        if (newEvaluation == null)
+        {
+            _toastService.ShowToast("Evaluation Already Exists", NotificationType.Error);
+            return;
+        }
         
         Evaluations[evaluationIndex] = CreateEvaluationViewModel(newEvaluation!);
         _toastService.ShowToast("Evaluation Edited", NotificationType.Success);
