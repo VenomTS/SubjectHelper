@@ -3,24 +3,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:u="https://irihi.tech/ursa"
-             xmlns:subjectEdit="clr-namespace:SubjectHelper.Components.SubjectEdit"
+             xmlns:subjectForm="clr-namespace:SubjectHelper.Components.SubjectForm"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SubjectHelper.Components.SubjectEdit.SubjectEditView"
-             x:DataType="subjectEdit:SubjectEditViewModel"
-             Width="512"
-             Loaded="Control_OnLoaded">
+             x:Class="SubjectHelper.Components.SubjectForm.SubjectFormView"
+             x:DataType="subjectForm:SubjectFormViewModel"
+             Loaded="Control_OnLoaded"
+             Width="512">
     
     <UserControl.KeyBindings>
-        <KeyBinding Gesture="Escape" Command="{Binding CloseWindowCommand}"/>
+        <KeyBinding Gesture="Escape" Command="{Binding CancelCommand}"/>
     </UserControl.KeyBindings>
     
     <Grid RowDefinitions="Auto, *, Auto" Margin="24">
         
         <TextBlock 
             Grid.Row="0"
-            Text="Edit Subject"
-            FontSize="20"
-            />
+            Text="{Binding Header}"
+            FontSize="20"/>
         
         <u:Form 
             Grid.Row="1"
@@ -33,28 +32,28 @@
                 </ItemsPanelTemplate>
             </u:Form.ItemsPanel>
             
-            <u:FormItem Label="Subject Name">
+            <u:FormItem Label="Name">
                 <TextBox
                     x:Name="SubjectNameInput"
                     KeyDown="SubjectName_OnKeyDown"
-                    u:FormItem.Label="Subject Name"
                     u:FormItem.IsRequired="True"
-                    Text="{Binding SubjectName}"/>
+                    Text="{Binding Title}"/>
             </u:FormItem>
             
-            <u:FormItem Label="Subject Code">
+            <u:FormItem Label="Code">
                 <TextBox
                     x:Name="SubjectCodeInput"
                     KeyDown="SubjectCode_OnKeyDown"
-                    u:FormItem.Label="Subject Code"
                     u:FormItem.IsRequired="False"
-                    Text="{Binding SubjectCode}">
-                    
-                    <TextBox.KeyBindings>
-                        <KeyBinding Gesture="Enter" Command="{Binding EditSubjectCommand}"/>
-                    </TextBox.KeyBindings>
-                    
-                </TextBox>
+                    Text="{Binding Code}"/>
+            </u:FormItem>
+            
+            <u:FormItem Label="Color">
+                <ColorPicker 
+                    x:Name="SubjectColorInput"
+                    GotFocus="SubjectColorInput_OnGotFocus"
+                    HorizontalAlignment="Stretch"
+                    Color="{Binding Color}"/>
             </u:FormItem>
         </u:Form>
         
@@ -64,18 +63,18 @@
               ColumnSpacing="10">
             
             <Button Grid.Column="1"
-                    Content="Save"
+                    Content="Add Subject"
                     HorizontalAlignment="Stretch"
                     Theme="{DynamicResource SolidButton}"
                     Classes="Success"
-                    Command="{Binding EditSubjectCommand}"/>
+                    Command="{Binding SaveCommand}"/>
             
             <Button Grid.Column="0"
                     Content="Cancel"
                     HorizontalAlignment="Stretch"
                     Theme="{DynamicResource SolidButton}"
                     Classes="Danger"
-                    Command="{Binding CloseWindowCommand}"/>
+                    Command="{Binding CancelCommand}"/>
         </Grid>
     </Grid>
     

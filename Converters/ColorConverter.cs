@@ -2,22 +2,18 @@ using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using SubjectHelper.Helper;
 
 namespace SubjectHelper.Converters;
 
-public class ProgressBarColorConverter : IValueConverter
+public class ColorConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not int colorValue) return null;
-        var color = ColorInterpolator.GetColor(colorValue);
-
-        return new SolidColorBrush(color);
+        return value is not Color color ? null : new SolidColorBrush(color);
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        throw new NotImplementedException();
+        return value is not SolidColorBrush colorBrush ? null : colorBrush.Color;
     }
 }

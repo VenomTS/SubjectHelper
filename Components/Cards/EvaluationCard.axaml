@@ -21,10 +21,12 @@
         <converters:GradeConverter x:Key="GradeConverter" />
     </UserControl.Resources>
 
+    <!-- BorderBrush="{StaticResource CardBorder}" - OLD BORDER BRUSH -->
+    
     <Border
         Background="{StaticResource CardBackground}"
-        BorderBrush="{StaticResource CardBorder}"
-        BorderThickness="8 0 0 8"
+        BorderBrush="{Binding Grade, ElementName=Root, Converter={StaticResource ProgressBarColorConverter}}"
+        BorderThickness="2.5 0 0 2.5"
         Padding="10 12"
         CornerRadius="8"
         Width="448">

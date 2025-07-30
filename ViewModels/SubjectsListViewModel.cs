@@ -1,15 +1,13 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Controls.Converters;
 using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.Input;
-using SubjectHelper.Components.SubjectAdd;
-using SubjectHelper.Components.SubjectEdit;
+using SubjectHelper.Components.SubjectForm;
 using SubjectHelper.Factories;
 using SubjectHelper.Helper;
-using SubjectHelper.Interfaces;
 using SubjectHelper.Interfaces.Repositories;
 using SubjectHelper.Interfaces.Services;
 using SubjectHelper.Models;
@@ -23,27 +21,21 @@ public partial class SubjectsListViewModel : PageViewModel
     private readonly ISubjectRepository _subjectRepo;
     private readonly IEvaluationRepository _evaluationRepo;
     private readonly INavigationService _navigationService;
+    private readonly IDialogService _dialogService;
+    private readonly IToastService _toastService;
     private readonly PageFactory _factory;
     
     public ObservableCollection<SubjectViewModel> Subjects { get; } = [];
 
-    public WindowToastManager? ToastManager { get; set; }
-
-    private static readonly DialogOptions CustomDialogOptions = new()
-    {
-        StartupLocation = WindowStartupLocation.CenterOwner,
-        Mode = DialogMode.None,
-        IsCloseButtonVisible = false,
-        CanResize = false,
-    };
-
-    public SubjectsListViewModel(INavigationService navigationService, ISubjectRepository subjectRepo, PageFactory factory, IEvaluationRepository evaluationRepo)
+    public SubjectsListViewModel(INavigationService navigationService, IDialogService dialogService, IToastService toastService, ISubjectRepository subjectRepo, PageFactory factory, IEvaluationRepository evaluationRepo)
     {
         Page = ApplicationPages.Subjects;
         
         _subjectRepo = subjectRepo;
         _evaluationRepo = evaluationRepo;
         _navigationService = navigationService;
+        _dialogService = dialogService;
+        _toastService = toastService;
         _factory = factory;
 
         _ = PopulateSubjects();
@@ -64,73 +56,70 @@ public partial class SubjectsListViewModel : PageViewModel
     }
 
     [RelayCommand]
-    private async Task OpenSubjectAddFormDialog()
+    private async Task AddSubject()
     {
-        var vm = new SubjectAddViewModel();
+        var vm = new SubjectFormViewModel();
 
-        var result = await Dialog.ShowCustomModal<SubjectAddView, SubjectAddViewModel, DialogResult>(vm, options: CustomDialogOptions);
+        var result = await _dialogService.ShowSubjectForm("Add Subject", vm);
 
         if (result != DialogResult.OK) return;
 
-        var subject = new Subject
+        var subject = await _subjectRepo.AddSubjectAsync(new Subject
         {
-            Name = vm.SubjectName.Trim(),
-            Code = vm.SubjectCode.Trim(),
-            Evaluations = [],
-        };
-        
-        subject = await _subjectRepo.AddSubjectAsync(subject);
-
-        if (subject == null)
-        {
-            ToastManager?.Show(ToastCreator.CreateToast("Subject already exists", NotificationType.Error));
-            return;
-        }
-        
-        var subjectViewModel = CreateSubjectViewModel(subject);
-        
-        Subjects.Add(subjectViewModel);
-        
-        ToastManager?.Show(ToastCreator.CreateToast("Subject added", NotificationType.Success));
-    }
-
-    [RelayCommand]
-    private async Task OpenEditSubjectFormDialog(SubjectViewModel subjectViewModel)
-    {
-        var vm = new SubjectEditViewModel
-        {
-            SubjectName = subjectViewModel.Name,
-            SubjectCode = subjectViewModel.Code,
-        };
-        
-        var result = await Dialog.ShowCustomModal<SubjectEditView, SubjectEditViewModel, DialogResult>(vm, options: CustomDialogOptions);
-        
-        if(result != DialogResult.OK) return;
-        
-        var subject = await _subjectRepo.UpdateSubjectAsync(subjectViewModel.SubjectId, new SubjectUpdate
-        {
-            Name = vm.SubjectName.Trim(),
-            Code = vm.SubjectCode.Trim(),
+            Name = vm.Title,
+            Code = vm.Code,
+            Color = ColorToHexConverter.ToHexString(vm.Color, AlphaComponentPosition.Leading, includeAlpha: false),
         });
-        
+
         if (subject == null)
         {
-            ToastManager?.Show(ToastCreator.CreateToast("Subject already exists", NotificationType.Error));
+            _toastService.ShowToast("Subject Already Exists", NotificationType.Error);
             return;
         }
-        
-        var newSubjectViewModel = CreateSubjectViewModel(subject);
-        
-        Subjects[Subjects.IndexOf(subjectViewModel)] = newSubjectViewModel;
-        
-        ToastManager?.Show(ToastCreator.CreateToast("Subject edited", NotificationType.Success));
+
+        var subjectViewModel = CreateSubjectViewModel(subject);
+        Subjects.Add(subjectViewModel);
+        _toastService.ShowToast("Subject Created", NotificationType.Success);
     }
 
     [RelayCommand]
-    private void GoToSubject(SubjectViewModel subject)
+    private async Task EditSubject(SubjectViewModel subjectVM)
     {
-        _navigationService.NavigateToPage(ApplicationPages.Subject, subject.SubjectId);
+        
+        var vm = new SubjectFormViewModel
+        {
+            Title = subjectVM.Name,
+            Code = subjectVM.Code,
+            Color = subjectVM.Color,
+        };
+
+        var result = await _dialogService.ShowSubjectForm("Edit Subject", vm);
+
+        if (result != DialogResult.OK) return;
+
+        var subject = await _subjectRepo.UpdateSubjectAsync(subjectVM.SubjectId, new SubjectUpdate
+        {
+            Name = vm.Title,
+            Code = vm.Code,
+            Color = vm.Color,
+        });
+
+        if (subject == null)
+        {
+            _toastService.ShowToast("Subject Already Exists", NotificationType.Error);
+            return;
+        }
+
+        var newSubjectVM = CreateSubjectViewModel(subject);
+
+        var subjectIndex = Subjects.IndexOf(subjectVM);
+        Subjects[subjectIndex] = newSubjectVM;
+        
+        _toastService.ShowToast("Subject Edited", NotificationType.Success);
     }
+
+    [RelayCommand]
+    private void GoToSubject(SubjectViewModel subject) => _navigationService.NavigateToPage(ApplicationPages.Subject, subject.SubjectId);
 
     [RelayCommand]
     private async Task DeleteSubject(SubjectViewModel subjectViewModel)
@@ -140,6 +129,6 @@ public partial class SubjectsListViewModel : PageViewModel
         
         Subjects.Remove(subjectViewModel);
         
-        ToastManager?.Show(ToastCreator.CreateToast("Subject deleted", NotificationType.Warning));
+        _toastService.ShowToast("Subject Deleted", NotificationType.Success);
     }
 }

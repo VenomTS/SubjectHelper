@@ -1,16 +1,18 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
 
-namespace SubjectHelper.Components.SubjectAdd;
+namespace SubjectHelper.Components.SubjectForm;
 
-public partial class SubjectAddView : UserControl
+public partial class SubjectFormView : UserControl
 {
-    public SubjectAddView()
+    public SubjectFormView()
     {
         InitializeComponent();
     }
-    
+
     private void Control_OnLoaded(object? sender, RoutedEventArgs e)
     {
         SubjectNameInput.Focus();
@@ -18,17 +20,18 @@ public partial class SubjectAddView : UserControl
 
     private void SubjectName_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter)
-            return;
-
+        if (e.Key != Key.Enter) return;
         SubjectCodeInput.Focus();
     }
-    
+
     private void SubjectCode_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter)
-            return;
+        if (e.Key != Key.Enter) return;
+        SubjectColorInput.Focus();
+    }
 
-        SubjectNameInput.Focus();
+    private void SubjectColorInput_OnGotFocus(object? sender, GotFocusEventArgs e)
+    {
+        SubjectColorInput.IsColorModelVisible = true;
     }
 }

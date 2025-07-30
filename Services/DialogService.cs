@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using SubjectHelper.Components.EvaluationForm;
+using SubjectHelper.Components.SubjectForm;
 using SubjectHelper.Interfaces;
 using SubjectHelper.Interfaces.Services;
 using SubjectHelper.Models;
@@ -26,9 +27,10 @@ public class DialogService : IDialogService
         _rootWindow = rootWindow;
     }
 
-    public Task<DialogResult> ShowSubjectForm(string header, Subject? subject)
+    public async Task<DialogResult> ShowSubjectForm(string header, SubjectFormViewModel vm)
     {
-        throw new NotImplementedException();
+        vm.Header = header;
+        return await Dialog.ShowCustomModal<SubjectFormView, SubjectFormViewModel, DialogResult>(vm, _rootWindow, DefaultDialogOptions);
     }
 
     public async Task<DialogResult> ShowEvaluationForm(string header, EvaluationFormViewModel vm)

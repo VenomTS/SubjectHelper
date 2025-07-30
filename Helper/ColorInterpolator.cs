@@ -5,7 +5,7 @@ using Avalonia.Media;
 
 namespace SubjectHelper.Helper;
 
-public class IntegerToColorInterpolator
+public class ColorInterpolator
 {
     private static readonly Color FColor = Color.FromRgb(244, 67, 54);
     private static readonly Color CColor = Color.FromRgb(255, 152, 0);

@@ -4,6 +4,7 @@
              xmlns:local="using:SubjectHelper"
              xmlns:semi="https://irihi.tech/semi"
              xmlns:u-Semi="https://irihi.tech/ursa/themes/semi"
+             xmlns:converters="clr-namespace:SubjectHelper.Converters"
              RequestedThemeVariant="Dark">
 
     <Application.DataTemplates>
@@ -18,12 +19,15 @@
         <SolidColorBrush x:Key="ViewIconColor" Color="#60A5FA"/>
         <SolidColorBrush x:Key="EditIconColor" Color="#BB86FC"/>
         <SolidColorBrush x:Key="DeleteIconColor" Color="#FF5E5B"/>
+        
+        <converters:ColorConverter x:Key="ColorConverter"/>
     </Application.Resources>
   
     <Application.Styles>
         <semi:SemiTheme Locale="en-US"/>
-        <u-Semi:SemiTheme Locale="en-US"/>
         <semi:SemiPopupAnimations />
+        <semi:ColorPickerSemiTheme />
+        <u-Semi:SemiTheme Locale="en-US"/>
         
         <Style Selector="Button.Icon:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="Transparent"/>

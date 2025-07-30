@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Controls.Converters;
 using Microsoft.EntityFrameworkCore;
 using SubjectHelper.Data;
 using SubjectHelper.Interfaces;
@@ -42,6 +44,7 @@ public class SubjectRepository : ISubjectRepository
         
         subject.Name = updatedSubject.Name;
         subject.Code = updatedSubject.Code;
+        subject.Color = ColorToHexConverter.ToHexString(updatedSubject.Color, AlphaComponentPosition.Trailing, includeAlpha: false);
 
         await _dbContext.SaveChangesAsync();
         return subject;

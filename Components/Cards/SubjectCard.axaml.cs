@@ -7,7 +7,7 @@ namespace SubjectHelper.Components.Cards;
 
 public partial class SubjectCard : UserControl
 {
-    public static readonly StyledProperty<IBrush> BorderColorProperty = AvaloniaProperty.Register<SubjectCard, IBrush>(nameof(BorderColor));
+    public static readonly StyledProperty<Color> ColorProperty = AvaloniaProperty.Register<SubjectCard, Color>(nameof(Color));
     public static readonly StyledProperty<string> TitleProperty = AvaloniaProperty.Register<SubjectCard, string>(nameof(Title));
     public static readonly StyledProperty<string> CodeProperty = AvaloniaProperty.Register<SubjectCard, string>(nameof(Code));
     public static readonly StyledProperty<ICommand> ViewCommandProperty = AvaloniaProperty.Register<SubjectCard, ICommand>(nameof(ViewCommand));
@@ -22,10 +22,10 @@ public partial class SubjectCard : UserControl
         InitializeComponent();
     }
 
-    public IBrush BorderColor
+    public Color Color
     {
-        get => GetValue(BorderColorProperty);
-        set => SetValue(BorderColorProperty, value);
+        get => GetValue(ColorProperty);
+        set => SetValue(ColorProperty, value);
     }
 
     public string Title

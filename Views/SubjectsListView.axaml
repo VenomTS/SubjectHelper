@@ -24,7 +24,7 @@
                 Grid.Column="1" 
                 Theme="{DynamicResource SolidButton}" 
                 CornerRadius="12"
-                Command="{Binding OpenSubjectAddFormDialogCommand}">
+                Command="{Binding AddSubjectCommand}">
                 
                 <StackPanel 
                     Orientation="Horizontal" 
@@ -60,9 +60,9 @@
                     <cards:SubjectCard 
                         Title="{Binding Name}"
                         Code="{Binding Code}"
-                        BorderColor="{Binding BorderColor}"
+                        Color="{Binding Color}"
                         ViewCommand="{ReflectionBinding $parent[ItemsControl].DataContext.GoToSubjectCommand}"
-                        EditCommand="{ReflectionBinding $parent[ItemsControl].DataContext.OpenEditSubjectFormDialogCommand}"
+                        EditCommand="{ReflectionBinding $parent[ItemsControl].DataContext.EditSubjectCommand}"
                         DeleteCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteSubjectCommand}"
                         ViewParameter="{Binding}"
                         EditParameter="{Binding}"

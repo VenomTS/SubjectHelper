@@ -38,15 +38,11 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.6.25358.103" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.3.efcore.9.0.0" />
         <PackageReference Include="Semi.Avalonia" Version="11.2.1.9" />
+        <PackageReference Include="Semi.Avalonia.ColorPicker" Version="11.2.1.9" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="SubjectHelperDB.db" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Dialogs\" />
-      <Folder Include="Styles\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -17,8 +17,9 @@
         Width="384" 
         Height="148" 
         BorderThickness="2.5 0 0 2.5"
-        BorderBrush="{Binding BorderColor, ElementName=Root}" 
+        BorderBrush="{Binding Color, ElementName=Root, Converter={StaticResource ColorConverter}}" 
         CornerRadius="16">
+        <!-- Dodati color converter ako ovo ne radi -->
 
         <Grid 
             RowDefinitions="70*, 30*">

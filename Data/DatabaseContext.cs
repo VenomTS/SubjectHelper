@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using SubjectHelper.Models;
 
@@ -17,7 +19,11 @@ public sealed class DatabaseContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite($"Data Source={DatabasePath}");
+        var currentWorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+        var finalPath = Path.Combine(currentWorkingDirectory, DatabasePath);
+        
+        optionsBuilder.UseSqlite($"Data Source={finalPath}");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

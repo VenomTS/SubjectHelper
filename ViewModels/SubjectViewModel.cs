@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Controls.Converters;
 using Avalonia.Controls.Notifications;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -28,7 +30,7 @@ public partial class SubjectViewModel : PageViewModel
     [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _code = string.Empty;
     [ObservableProperty] private int _weightedGrade;
-    [ObservableProperty] private SolidColorBrush _borderColor;
+    [ObservableProperty] private Color _color;
     
     public ObservableCollection<EvaluationViewModel> Evaluations { get; } = [];
     public int SubjectId { get; private set; }
@@ -36,10 +38,6 @@ public partial class SubjectViewModel : PageViewModel
     public SubjectViewModel(ISubjectRepository subjectRepo, IEvaluationRepository evaluationRepo, IDialogService dialogService, IToastService toastService)
     {
         Page = ApplicationPages.Subject;
-
-        var color = RandomColorGenerator.GenerateRandomColor();
-        
-        _borderColor = new SolidColorBrush(color);
         
         _subjectRepo = subjectRepo;
         _evaluationRepo = evaluationRepo;
@@ -60,6 +58,7 @@ public partial class SubjectViewModel : PageViewModel
         SubjectId = id;
         Name = subject.Name;
         Code = subject.Code;
+        Color = ColorToHexConverter.ParseHexString(subject.Color, AlphaComponentPosition.Leading)!.Value;
 
         var evaluations = await _evaluationRepo.GetEvaluationsBySubjectIdAsync(SubjectId);
         foreach (var evaluation in evaluations)
