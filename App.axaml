@@ -21,6 +21,8 @@
         <SolidColorBrush x:Key="DeleteIconColor" Color="#FF5E5B"/>
         
         <converters:ColorConverter x:Key="ColorConverter"/>
+        <converters:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
+        <converters:GradeConverter x:Key="GradeConverter" />
     </Application.Resources>
   
     <Application.Styles>

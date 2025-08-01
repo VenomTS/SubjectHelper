@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.Converters;
@@ -54,6 +55,11 @@ public class SubjectRepository : ISubjectRepository
     {
         var subject = await _dbContext.Subjects.FindAsync(id);
         if (subject == null) return null;
+
+        var affectedEvaluations = await _dbContext.Evaluations.Where(eval => eval.SubjectId == id).ToListAsync();
+        foreach (var eval in affectedEvaluations)
+            _dbContext.Evaluations.Remove(eval);
+        
         
         _dbContext.Subjects.Remove(subject);
         await _dbContext.SaveChangesAsync();

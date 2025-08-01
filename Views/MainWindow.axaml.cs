@@ -1,4 +1,6 @@
+using System;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using SubjectHelper.ViewModels;
 using Ursa.Controls;
@@ -16,11 +18,6 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    private void UpdatePaneVisibility(object? sender, RoutedEventArgs e)
-    {
-        SplitPane.IsPaneOpen = !SplitPane.IsPaneOpen;
-    }
-
     private void Control_OnLoaded(object? sender, RoutedEventArgs e)
     {
         if(DataContext is not MainWindowViewModel vm) return;
@@ -31,5 +28,15 @@ public partial class MainWindow : Window
     private void Control_OnUnloaded(object? sender, RoutedEventArgs e)
     {
         _viewModel?.UninstallToastService();
+    }
+
+    private void SplitPanePanel_OnPointerEntered(object? sender, PointerEventArgs e)
+    {
+        SplitPane.IsPaneOpen = true;
+    }
+
+    private void SplitPanePanel_OnPointerExited(object? sender, PointerEventArgs e)
+    {
+        SplitPane.IsPaneOpen = false;
     }
 }

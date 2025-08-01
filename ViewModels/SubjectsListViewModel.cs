@@ -19,7 +19,6 @@ namespace SubjectHelper.ViewModels;
 public partial class SubjectsListViewModel : PageViewModel
 {
     private readonly ISubjectRepository _subjectRepo;
-    private readonly IEvaluationRepository _evaluationRepo;
     private readonly INavigationService _navigationService;
     private readonly IDialogService _dialogService;
     private readonly IToastService _toastService;
@@ -27,12 +26,11 @@ public partial class SubjectsListViewModel : PageViewModel
     
     public ObservableCollection<SubjectViewModel> Subjects { get; } = [];
 
-    public SubjectsListViewModel(INavigationService navigationService, IDialogService dialogService, IToastService toastService, ISubjectRepository subjectRepo, PageFactory factory, IEvaluationRepository evaluationRepo)
+    public SubjectsListViewModel(INavigationService navigationService, IDialogService dialogService, IToastService toastService, ISubjectRepository subjectRepo, PageFactory factory)
     {
         Page = ApplicationPages.Subjects;
         
         _subjectRepo = subjectRepo;
-        _evaluationRepo = evaluationRepo;
         _navigationService = navigationService;
         _dialogService = dialogService;
         _toastService = toastService;
@@ -124,7 +122,6 @@ public partial class SubjectsListViewModel : PageViewModel
     [RelayCommand]
     private async Task DeleteSubject(SubjectViewModel subjectViewModel)
     {
-        await _evaluationRepo.DeleteEvaluationsBySubjectIdAsync(subjectViewModel.SubjectId);
         await _subjectRepo.DeleteSubjectAsync(subjectViewModel.SubjectId);
         
         Subjects.Remove(subjectViewModel);

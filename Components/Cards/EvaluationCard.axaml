@@ -3,36 +3,29 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:u="https://irihi.tech/ursa"
-             xmlns:converters="clr-namespace:SubjectHelper.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SubjectHelper.Components.Cards.EvaluationCard"
              x:Name="Root">
 
     <UserControl.Resources>
         <SolidColorBrush x:Key="CardBackground">#212121</SolidColorBrush>
-        <SolidColorBrush x:Key="CardBorder">#303030</SolidColorBrush>
 
         <SolidColorBrush x:Key="PrimaryText">#E0E0E0</SolidColorBrush>
         <SolidColorBrush x:Key="SecondaryText">#A0A0A0</SolidColorBrush>
 
         <SolidColorBrush x:Key="BadgeForeground">#FFFFFF</SolidColorBrush>
-
-        <converters:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
-        <converters:GradeConverter x:Key="GradeConverter" />
     </UserControl.Resources>
-
-    <!-- BorderBrush="{StaticResource CardBorder}" - OLD BORDER BRUSH -->
     
     <Border
         Background="{StaticResource CardBackground}"
         BorderBrush="{Binding Grade, ElementName=Root, Converter={StaticResource ProgressBarColorConverter}}"
-        BorderThickness="2.5 0 0 2.5"
+        BorderThickness="2.5"
         Padding="10 12"
         CornerRadius="8"
         Width="448">
 
         <Grid
-            RowDefinitions="Auto, Auto, Auto, Auto">
+            RowDefinitions="Auto, Auto, Auto">
 
             <!-- Title and Edit Button -->
             <Grid
@@ -112,7 +105,9 @@
 
             <!-- Weight -->
             <StackPanel
-                Orientation="Horizontal" Grid.Row="1" Margin="0 2 0 0">
+                Orientation="Horizontal" 
+                Grid.Row="1" 
+                Margin="0 2 0 0">
                 <TextBlock
                     Text="Weight: "
                     Foreground="{StaticResource SecondaryText}" />
