@@ -8,6 +8,7 @@ using SubjectHelper.Data;
 using SubjectHelper.Interfaces;
 using SubjectHelper.Interfaces.Repositories;
 using SubjectHelper.Models;
+using SubjectHelper.Models.Customs;
 
 namespace SubjectHelper.Repositories;
 

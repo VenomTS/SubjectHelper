@@ -20,7 +20,6 @@
         DisplayMode="CompactInline"
         CompactPaneLength="35"
         OpenPaneLength="200">
-
         <SplitView.Pane>
             
             <Grid 

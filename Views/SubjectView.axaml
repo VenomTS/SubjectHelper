@@ -16,7 +16,7 @@
     </UserControl.Resources>
 
     <ScrollViewer>
-        <Grid RowDefinitions="Auto, *" Margin="20 10">
+        <Grid RowDefinitions="Auto, Auto, Auto" Margin="20 10">
             <Grid
                 Grid.Row="0"
                 ColumnDefinitions="*, *, *"
@@ -115,6 +115,60 @@
 
                 <TextBlock
                     Text="Add your first evaluation to get started" TextAlignment="Center"
+                    FontSize="16"
+                    Margin="0 10 0 0"
+                    Foreground="DarkGray" />
+
+            </StackPanel>
+            
+            <!-- Absences Part -->
+            <ItemsControl
+                IsVisible="{Binding Absences.Count}"
+                Margin="0 25 0 0"
+                Grid.Row="2"
+                ItemsSource="{Binding Absences}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel ItemSpacing="10" LineSpacing="15" Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <cards:AbsenceCard
+                            AbsenceType="{Binding Type}"
+                            Title="{Binding Title}"
+                            Week="{Binding Week}"
+                            HoursMissed="{Binding HoursMissed}"
+                            Date="{Binding Date}"
+                            TextColor="{Binding TextColor}"
+                            BackgroundColor="{Binding BackgroundColor}"
+                            EditCommand="{ReflectionBinding $parent[ItemsControl].DataContext.EditAbsenceCommand}"
+                            DeleteCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteAbsenceCommand}"
+                            EditParameter="{Binding}"
+                            DeleteParameter="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <StackPanel
+                Grid.Row="2"
+                HorizontalAlignment="Center"
+                Orientation="Vertical"
+                IsVisible="{Binding !Absences.Count}"
+                Margin="0 25 0 0">
+
+                <Label
+                    FontFamily="{StaticResource FaSolid}" Content="&#xf56c;" FontSize="64"
+                    HorizontalAlignment="Center" />
+
+                <TextBlock
+                    Text="No absences yet" TextAlignment="Center"
+                    FontSize="30"
+                    FontWeight="SemiBold"
+                    Margin="0 15 0 0" />
+
+                <TextBlock
+                    Text="Add your first absence to get started" TextAlignment="Center"
                     FontSize="16"
                     Margin="0 10 0 0"
                     Foreground="DarkGray" />

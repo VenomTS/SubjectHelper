@@ -22,7 +22,8 @@
         BorderThickness="2.5"
         Padding="10 12"
         CornerRadius="8"
-        Width="448">
+        Width="448"
+        Height="148">
 
         <Grid
             RowDefinitions="Auto, Auto, Auto">

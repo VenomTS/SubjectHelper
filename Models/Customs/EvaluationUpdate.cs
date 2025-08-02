@@ -1,12 +1,8 @@
-namespace SubjectHelper.Models;
+namespace SubjectHelper.Models.Customs;
 
-public class Evaluation
+public class EvaluationUpdate
 {
-    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public decimal Weight { get; set; }
     public int Grade { get; set; }
-
-    public int SubjectId { get; set; }
 }
-

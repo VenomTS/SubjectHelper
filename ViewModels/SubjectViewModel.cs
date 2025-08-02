@@ -15,6 +15,7 @@ using SubjectHelper.Interfaces;
 using SubjectHelper.Interfaces.Repositories;
 using SubjectHelper.Interfaces.Services;
 using SubjectHelper.Models;
+using SubjectHelper.Models.Customs;
 using SubjectHelper.ViewModels.Bases;
 using Ursa.Controls;
 
@@ -33,6 +34,7 @@ public partial class SubjectViewModel : PageViewModel
     [ObservableProperty] private Color _color;
     
     public ObservableCollection<EvaluationViewModel> Evaluations { get; } = [];
+    public ObservableCollection<AbsenceViewModel> Absences { get; set; } = [];
     public int SubjectId { get; private set; }
 
     public SubjectViewModel(ISubjectRepository subjectRepo, IEvaluationRepository evaluationRepo, IDialogService dialogService, IToastService toastService)
@@ -45,6 +47,37 @@ public partial class SubjectViewModel : PageViewModel
         _toastService = toastService;
         
         Evaluations.CollectionChanged += EvaluationsUpdated;
+        
+        Absences.Add(new AbsenceViewModel(new Absence
+        {
+            Title = "Lecture",
+            Date = new DateOnly(2025, 11, 6),
+            HoursMissed = 3,
+            Id = 0,
+            SubjectId = 1,
+            Type = AbsenceTypes.Lecture,
+            Week = 6,
+        }));
+        Absences.Add(new AbsenceViewModel(new Absence
+        {
+            Title = "Tutorial",
+            Date = new DateOnly(2025, 11, 6),
+            HoursMissed = 3,
+            Id = 0,
+            SubjectId = 1,
+            Type = AbsenceTypes.Tutorial,
+            Week = 6,
+        }));
+        Absences.Add(new AbsenceViewModel(new Absence
+        {
+            Title = "Lab",
+            Date = new DateOnly(2025, 11, 6),
+            HoursMissed = 3,
+            Id = 0,
+            SubjectId = 1,
+            Type = AbsenceTypes.Lab,
+            Week = 6,
+        }));
     }
 
     private void EvaluationsUpdated(object? sender, NotifyCollectionChangedEventArgs e) => _ = CalculateWeightedGrade();

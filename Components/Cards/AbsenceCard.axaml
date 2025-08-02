@@ -1,0 +1,162 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SubjectHelper.Components.Cards.AbsenceCard"
+             x:Name="Root">
+
+	<UserControl.Resources>
+		<SolidColorBrush x:Key="CardBackground" Color="#212121" />
+		<SolidColorBrush x:Key="CardBottomBackground" Color="#303030" />
+	</UserControl.Resources>
+
+	<Border
+		Background="{StaticResource CardBackground}"
+		Width="448"
+		Height="148"
+		BorderThickness="2.5 0 0 2.5"
+		BorderBrush="{Binding BackgroundColor, ElementName=Root, Converter={StaticResource ColorConverter}}"
+		CornerRadius="16">
+		<Grid
+			RowDefinitions="Auto, 60*, 40*">
+
+			<Grid
+				Grid.Row="0"
+				Margin="10, 10"
+				ColumnDefinitions="Auto, *">
+
+				<Border
+					Grid.Column="0"
+					Margin="0 5 0 0"
+					Background="{Binding BackgroundColor, ElementName=Root, Converter={StaticResource ColorConverter}}"
+					CornerRadius="20"
+					Height="20"
+					VerticalAlignment="Top">
+					<TextBlock
+						Text="{Binding AbsenceType, ElementName=Root, Converter={StaticResource AbsenceTypeConverter}}"
+						FontSize="10"
+						FontWeight="Bold"
+						TextWrapping="Wrap"
+						Foreground="{Binding TextColor, ElementName=Root, Converter={StaticResource ColorConverter}}"
+						Width="100"
+						TextAlignment="Center"
+						VerticalAlignment="Center" />
+				</Border>
+
+				<StackPanel
+					Grid.Column="1"
+					HorizontalAlignment="Right"
+					VerticalAlignment="Top">
+					<TextBlock
+						FontSize="20"
+						Foreground="{Binding TextColor, ElementName=Root, Converter={StaticResource ColorConverter}}"
+						Text="2h"
+						HorizontalAlignment="Right" />
+					<TextBlock
+						FontSize="10"
+						Foreground="LightGray"
+						Text="Missed hours" />
+				</StackPanel>
+			</Grid>
+
+			<TextBlock
+				Grid.Row="1"
+				Margin="10 -20 0 0"
+				FontSize="20"
+				FontWeight="Bold"
+				Text="{Binding Title, ElementName=Root}" />
+
+			<Border
+				Grid.Row="2"
+				Background="{StaticResource CardBottomBackground}"
+				CornerRadius="0 0 16 16">
+
+				<Grid
+					ColumnDefinitions="*, Auto">
+					
+					<StackPanel
+						Margin="10 0 0 0"
+						Grid.Column="0"
+						Orientation="Horizontal"
+						VerticalAlignment="Center">
+						
+						<TextBlock 
+							FontFamily="{StaticResource FaSolid}"
+							Text="&#xf073;"
+							FontSize="18"
+							VerticalAlignment="Center"/>
+						
+						<TextBlock
+							Margin="10 2.5 0 0"
+							VerticalAlignment="Center"
+							FontSize="14"
+							FontWeight="Light"
+							Text="{Binding Date, ElementName=Root}"/>
+						
+					</StackPanel>
+
+					<StackPanel
+						Grid.Column="1"
+						Orientation="Horizontal"
+						Spacing="10"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Center"
+						Margin="0 0 10 0">
+
+						<Button
+							Classes="Icon"
+							VerticalAlignment="Center"
+							Theme="{DynamicResource BorderlessButton}"
+							Command="{Binding EditCommand, ElementName=Root}"
+							CommandParameter="{Binding EditParameter, ElementName=Root}"
+							Padding="0"
+							Width="24">
+							<Label FontFamily="{StaticResource FaRegular}"
+							       Content="&#xf044;"
+							       Padding="0"
+							       FontSize="18"
+							       Foreground="{StaticResource EditIconColor}" />
+						</Button>
+
+						<u:PopConfirm
+							x:Name="PopConfirm"
+							PopupHeader="Delete Absence?"
+							Placement="TopEdgeAlignedRight"
+							ConfirmCommand="{Binding DeleteCommand, ElementName=Root}"
+							ConfirmCommandParameter="{Binding DeleteParameter, ElementName=Root}">
+							<u:PopConfirm.PopupContent>
+								<MultiBinding
+									StringFormat="This will permanently delete the absence '{0}' and all of its data. This action cannot be undone">
+									<Binding Path="Title" ElementName="Root" />
+								</MultiBinding>
+							</u:PopConfirm.PopupContent>
+
+							<u:PopConfirm.KeyBindings>
+								<KeyBinding Gesture="Enter"
+								            Command="{Binding ConfirmCommand, ElementName=PopConfirm}"
+								            CommandParameter="{Binding ConfirmCommandParameter, ElementName=PopConfirm}" />
+							</u:PopConfirm.KeyBindings>
+
+							<Button
+								Classes="Icon"
+								VerticalAlignment="Center"
+								Theme="{DynamicResource BorderlessButton}"
+								Padding="0"
+								Width="24">
+								<Label FontFamily="{StaticResource FaRegular}"
+								       Content="&#xf2ed;"
+								       Padding="0"
+								       FontSize="18"
+								       Foreground="{StaticResource DeleteIconColor}" />
+							</Button>
+						</u:PopConfirm>
+					</StackPanel>
+				</Grid>
+			</Border>
+
+		</Grid>
+	</Border>
+
+</UserControl>

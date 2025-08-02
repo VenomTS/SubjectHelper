@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SubjectHelper.Data;
-using SubjectHelper.Interfaces;
 using SubjectHelper.Interfaces.Repositories;
 using SubjectHelper.Models;
+using SubjectHelper.Models.Customs;
 
 namespace SubjectHelper.Repositories;
 

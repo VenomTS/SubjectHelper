@@ -23,6 +23,7 @@
         <converters:ColorConverter x:Key="ColorConverter"/>
         <converters:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
         <converters:GradeConverter x:Key="GradeConverter" />
+        <converters:AbsenceTypeConverter x:Key="AbsenceTypeConverter"/>
     </Application.Resources>
   
     <Application.Styles>

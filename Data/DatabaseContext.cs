@@ -11,6 +11,7 @@ public sealed class DatabaseContext : DbContext
     
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<Evaluation> Evaluations { get; set; }
+    public DbSet<Absence> Absences { get; set; }
 
     public DatabaseContext()
     {
