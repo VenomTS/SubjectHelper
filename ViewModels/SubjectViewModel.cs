@@ -9,6 +9,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SubjectHelper.Components.AbsenceForm;
 using SubjectHelper.Components.EvaluationForm;
 using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
@@ -25,6 +26,7 @@ public partial class SubjectViewModel : PageViewModel
 {
     private readonly ISubjectRepository _subjectRepo;
     private readonly IEvaluationRepository _evaluationRepo;
+    private readonly IAbsenceRepository _absenceRepo;
     private readonly IDialogService _dialogService;
     private readonly IToastService _toastService;
 
@@ -37,47 +39,17 @@ public partial class SubjectViewModel : PageViewModel
     public ObservableCollection<AbsenceViewModel> Absences { get; set; } = [];
     public int SubjectId { get; private set; }
 
-    public SubjectViewModel(ISubjectRepository subjectRepo, IEvaluationRepository evaluationRepo, IDialogService dialogService, IToastService toastService)
+    public SubjectViewModel(ISubjectRepository subjectRepo, IEvaluationRepository evaluationRepo, IAbsenceRepository absenceRepo, IDialogService dialogService, IToastService toastService)
     {
         Page = ApplicationPages.Subject;
         
         _subjectRepo = subjectRepo;
         _evaluationRepo = evaluationRepo;
+        _absenceRepo = absenceRepo;
         _dialogService = dialogService;
         _toastService = toastService;
         
         Evaluations.CollectionChanged += EvaluationsUpdated;
-        
-        Absences.Add(new AbsenceViewModel(new Absence
-        {
-            Title = "Lecture",
-            Date = new DateOnly(2025, 11, 6),
-            HoursMissed = 3,
-            Id = 0,
-            SubjectId = 1,
-            Type = AbsenceTypes.Lecture,
-            Week = 6,
-        }));
-        Absences.Add(new AbsenceViewModel(new Absence
-        {
-            Title = "Tutorial",
-            Date = new DateOnly(2025, 11, 6),
-            HoursMissed = 3,
-            Id = 0,
-            SubjectId = 1,
-            Type = AbsenceTypes.Tutorial,
-            Week = 6,
-        }));
-        Absences.Add(new AbsenceViewModel(new Absence
-        {
-            Title = "Lab",
-            Date = new DateOnly(2025, 11, 6),
-            HoursMissed = 3,
-            Id = 0,
-            SubjectId = 1,
-            Type = AbsenceTypes.Lab,
-            Week = 6,
-        }));
     }
 
     private void EvaluationsUpdated(object? sender, NotifyCollectionChangedEventArgs e) => _ = CalculateWeightedGrade();
@@ -95,7 +67,21 @@ public partial class SubjectViewModel : PageViewModel
 
         var evaluations = await _evaluationRepo.GetEvaluationsBySubjectIdAsync(SubjectId);
         foreach (var evaluation in evaluations)
-            Evaluations.Add(new EvaluationViewModel(evaluation));
+            Evaluations.Add(CreateEvaluationViewModel(evaluation));
+
+        var absences = await _absenceRepo.GetAbsencesBySubjectIdAsync(SubjectId);
+        foreach(var absence in absences)
+            Absences.Add(CreateAbsenceViewModel(absence));
+    }
+
+    [RelayCommand]
+    private async Task RandomlyPickWhichOneToAdd()
+    {
+        var random = new Random();
+        if (random.Next(0, 2) == 0)
+            await CreateEvaluation();
+        else
+            await CreateAbsence();
     }
 
     [RelayCommand]
@@ -133,16 +119,42 @@ public partial class SubjectViewModel : PageViewModel
     }
 
     [RelayCommand]
+    private async Task CreateAbsence()
+    {
+        var vm = new AbsenceFormViewModel();
+
+        var result = await _dialogService.ShowAbsenceForm("Create Absence", vm);
+
+        if (result != DialogResult.OK) return;
+
+        var date = new DateOnly(vm.Date.Year, vm.Date.Month, vm.Date.Day);
+
+        var absence = await _absenceRepo.AddAbsenceAsync(new Absence
+        {
+            Type = vm.SelectedAbsenceType,
+            Title = vm.Title,
+            Week = vm.Week,
+            HoursMissed = vm.HoursMissed,
+            Date = date,
+            SubjectId = SubjectId,
+        });
+
+        if (absence == null)
+        {
+            _toastService.ShowToast("Absence Already Exists", NotificationType.Error);
+            return;
+        }
+
+        Absences.Add(CreateAbsenceViewModel(absence!));
+        _toastService.ShowToast("Absence Created", NotificationType.Success);
+    }
+
+    [RelayCommand]
     private async Task EditEvaluation(EvaluationViewModel evaluationVM)
     {
         var maxWeight = await GetMaximumAllowedWeight(evaluationVM.Weight);
-        
-        var vm = new EvaluationFormViewModel(new EvaluationFormViewModel
-        {
-            Title = evaluationVM.Name,
-            Weight = evaluationVM.Weight,
-            Grade = evaluationVM.Grade,
-        }, maxWeight);
+
+        var vm = new EvaluationFormViewModel(evaluationVM.Name, evaluationVM.Weight, evaluationVM.Grade, maxWeight);
         
         var result = await _dialogService.ShowEvaluationForm("Edit Evaluation", vm);
         
@@ -168,6 +180,37 @@ public partial class SubjectViewModel : PageViewModel
     }
 
     [RelayCommand]
+    private async Task EditAbsence(AbsenceViewModel absenceVM)
+    {
+        var vm = new AbsenceFormViewModel(absenceVM.Type, absenceVM.Title, absenceVM.Week, absenceVM.HoursMissed, absenceVM.Date);
+        
+        var result = await _dialogService.ShowAbsenceForm("Edit Evaluation", vm);
+        
+        if (result != DialogResult.OK) return;
+        
+        var absenceIndex = Absences.IndexOf(absenceVM);
+
+        var newAbsence = await _absenceRepo.UpdateAbsenceAsync(absenceVM.AbsenceId, absenceVM.SubjectId, 
+            new AbsenceUpdate
+            {
+                Type = vm.SelectedAbsenceType,
+                Title = vm.Title,
+                Week = vm.Week,
+                HoursMissed = vm.HoursMissed,
+                Date = new DateOnly(vm.Date.Year, vm.Date.Month, vm.Date.Day),
+            });
+        
+        if (newAbsence == null)
+        {
+            _toastService.ShowToast("Absence Already Exists", NotificationType.Error);
+            return;
+        }
+
+        Absences[absenceIndex] = CreateAbsenceViewModel(newAbsence);
+        _toastService.ShowToast("Absence Edited", NotificationType.Success);
+    }
+
+    [RelayCommand]
     private async Task DeleteEvaluation(EvaluationViewModel evaluationViewModel)
     {
         await _evaluationRepo.DeleteEvaluationAsync(evaluationViewModel.Id);
@@ -177,9 +220,24 @@ public partial class SubjectViewModel : PageViewModel
         _toastService.ShowToast("Evaluation Deleted", NotificationType.Success);
     }
 
+    [RelayCommand]
+    private async Task DeleteAbsence(AbsenceViewModel absenceViewModel)
+    {
+        await _absenceRepo.DeleteAbsenceAsync(absenceViewModel.AbsenceId);
+
+        Absences.Remove(absenceViewModel);
+        
+        _toastService.ShowToast("Absence Deleted", NotificationType.Success);
+    }
+
     private static EvaluationViewModel CreateEvaluationViewModel(Evaluation evaluation)
     {
         return new EvaluationViewModel(evaluation);
+    }
+    
+    private static AbsenceViewModel CreateAbsenceViewModel(Absence absence)
+    {
+        return new AbsenceViewModel(absence);
     }
 
     private async Task CalculateWeightedGrade()

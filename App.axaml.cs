@@ -43,6 +43,7 @@ public partial class App : Application
         collection.AddScoped<SubjectsListViewModel>();
         collection.AddScoped<ISubjectRepository, SubjectRepository>();
         collection.AddScoped<IEvaluationRepository, EvaluationRepository>();
+        collection.AddScoped<IAbsenceRepository, AbsenceRepository>();
         
         // Transient - Created every time
         // MUST BE TRANSIENT - IF NOT ISSUES MAY HAPPEN

@@ -49,11 +49,12 @@ public class AbsenceRepository : IAbsenceRepository
     {
         var absence = await _dbContext.Absences.FindAsync(id);
         var exists =
-            await _dbContext.Absences.AnyAsync(x => x.Date == absenceUpdate.Date && x.Type == absenceUpdate.Type);
+            await _dbContext.Absences.AnyAsync(x => x.Date == absenceUpdate.Date && x.Type == absenceUpdate.Type && x.Week == absenceUpdate.Week && x.SubjectId == subjectId);
         if (absence == null || exists) return null;
 
         absence.Type = absenceUpdate.Type;
         absence.Title = absenceUpdate.Title;
+        absence.Week = absenceUpdate.Week;
         absence.HoursMissed = absenceUpdate.HoursMissed;
         absence.Date = absenceUpdate.Date;
 

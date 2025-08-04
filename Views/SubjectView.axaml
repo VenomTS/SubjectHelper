@@ -6,6 +6,7 @@
              xmlns:viewModels="clr-namespace:SubjectHelper.ViewModels"
              xmlns:converters="clr-namespace:SubjectHelper.Converters"
              xmlns:cards="clr-namespace:SubjectHelper.Components.Cards"
+             xmlns:u="https://irihi.tech/ursa"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SubjectHelper.Views.SubjectView"
              x:DataType="viewModels:SubjectViewModel">
@@ -16,7 +17,7 @@
     </UserControl.Resources>
 
     <ScrollViewer>
-        <Grid RowDefinitions="Auto, Auto, Auto" Margin="20 10">
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" Margin="20 10">
             <Grid
                 Grid.Row="0"
                 ColumnDefinitions="*, *, *"
@@ -50,7 +51,7 @@
                         </MultiBinding>
                     </ProgressBar.ProgressTextFormat>
                 </ProgressBar>
-
+                
                 <Button
                     Grid.Column="2"
                     Classes="Icon"
@@ -58,24 +59,28 @@
                     Padding="0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Command="{Binding CreateEvaluationCommand}">
+                    Command="{Binding RandomlyPickWhichOneToAddCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Label Content="Add"
+                               VerticalAlignment="Center"
+                               FontSize="16" />
                         <Label
                             FontFamily="{StaticResource FaSolid}"
                             Content="&#xf055;"
                             VerticalAlignment="Center"
                             FontSize="16" />
-                        <Label Content="Create Evaluation"
-                               VerticalAlignment="Center"
-                               FontSize="16" />
                     </StackPanel>
                 </Button>
             </Grid>
+            
+            <u:Divider
+                Grid.Row="1"
+                Margin="0 25"/>
 
             <ItemsControl
                 IsVisible="{Binding Evaluations.Count}"
-                Margin="0 25 0 0"
-                Grid.Row="1"
+                Margin="0 0 0 0"
+                Grid.Row="2"
                 ItemsSource="{Binding Evaluations}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -97,11 +102,11 @@
             </ItemsControl>
 
             <StackPanel
-                Grid.Row="1"
+                Grid.Row="2"
                 HorizontalAlignment="Center"
                 Orientation="Vertical"
                 IsVisible="{Binding !Evaluations.Count}"
-                Margin="0 25 0 0">
+                Margin="0 0 0 0">
 
                 <Label
                     FontFamily="{StaticResource FaSolid}" Content="&#xf56c;" FontSize="64"
@@ -121,11 +126,16 @@
 
             </StackPanel>
             
+            <!-- Divider between grades and absences -->
+            <u:Divider
+                Grid.Row="3"
+                Margin="0 25"/>
+            
             <!-- Absences Part -->
             <ItemsControl
                 IsVisible="{Binding Absences.Count}"
-                Margin="0 25 0 0"
-                Grid.Row="2"
+                Margin="0 0 0 0"
+                Grid.Row="4"
                 ItemsSource="{Binding Absences}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -139,7 +149,7 @@
                             Title="{Binding Title}"
                             Week="{Binding Week}"
                             HoursMissed="{Binding HoursMissed}"
-                            Date="{Binding Date}"
+                            Date="{Binding DateString}"
                             TextColor="{Binding TextColor}"
                             BackgroundColor="{Binding BackgroundColor}"
                             EditCommand="{ReflectionBinding $parent[ItemsControl].DataContext.EditAbsenceCommand}"
@@ -151,11 +161,11 @@
             </ItemsControl>
 
             <StackPanel
-                Grid.Row="2"
+                Grid.Row="4"
                 HorizontalAlignment="Center"
                 Orientation="Vertical"
                 IsVisible="{Binding !Absences.Count}"
-                Margin="0 25 0 0">
+                Margin="0 0 0 0">
 
                 <Label
                     FontFamily="{StaticResource FaSolid}" Content="&#xf56c;" FontSize="64"

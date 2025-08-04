@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using SubjectHelper.Components.AbsenceForm;
 using SubjectHelper.Components.EvaluationForm;
 using SubjectHelper.Components.SubjectForm;
 using SubjectHelper.Interfaces;
@@ -37,5 +38,11 @@ public class DialogService : IDialogService
     {
         vm.Header = header;
         return await Dialog.ShowCustomModal<EvaluationFormView, EvaluationFormViewModel, DialogResult>(vm, _rootWindow, DefaultDialogOptions);
+    }
+
+    public async Task<DialogResult> ShowAbsenceForm(string header, AbsenceFormViewModel vm)
+    {
+        vm.Header = header;
+        return await Dialog.ShowCustomModal<AbsenceFormView, AbsenceFormViewModel, DialogResult>(vm, _rootWindow, DefaultDialogOptions);
     }
 }

@@ -16,12 +16,16 @@ public partial class AbsenceViewModel : ViewModelBase
 
     [ObservableProperty] private AbsenceTypes _type;
     [ObservableProperty] private string _title;
-    [ObservableProperty] private string _date;
+    [ObservableProperty] private string _dateString;
     [ObservableProperty] private int _week;
     [ObservableProperty] private int _hoursMissed;
 
     [ObservableProperty] private Color _textColor;
     [ObservableProperty] private Color _backgroundColor;
+    
+    [ObservableProperty] private DateOnly _date;
+
+    partial void OnDateChanged(DateOnly value) => DateString = value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
     
     // First value in array is background, second is text
     private readonly Dictionary<AbsenceTypes, Color[]> _colorDictionary = new()
@@ -39,17 +43,17 @@ public partial class AbsenceViewModel : ViewModelBase
 
     public AbsenceViewModel(Absence absence)
     {
-        _type = absence.Type;
-        _title = absence.Title;
-        _week = absence.Week;
-        _hoursMissed = absence.HoursMissed;
-
-        var date = absence.Date;
-        _date = date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+        Type = absence.Type;
+        Title = absence.Title;
+        Week = absence.Week;
+        HoursMissed = absence.HoursMissed;
+        Date = absence.Date;
+        DateString = string.Empty;
 
         AbsenceId = absence.Id;
         SubjectId = absence.SubjectId;
 
-        OnTypeChanged(_type);
+        OnTypeChanged(Type);
+        OnDateChanged(Date);
     }
 }

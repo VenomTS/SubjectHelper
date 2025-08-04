@@ -25,6 +25,8 @@
             <Grid 
                 PointerEntered="SplitPanePanel_OnPointerEntered"
                 PointerExited="SplitPanePanel_OnPointerExited"
+                Background="Transparent"
+                Height="4096"
                 RowDefinitions="*">
                 <StackPanel
                     Grid.Row="0"

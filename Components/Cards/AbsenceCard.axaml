@@ -52,21 +52,45 @@
 					<TextBlock
 						FontSize="20"
 						Foreground="{Binding TextColor, ElementName=Root, Converter={StaticResource ColorConverter}}"
-						Text="2h"
-						HorizontalAlignment="Right" />
+						HorizontalAlignment="Right">
+						
+						<TextBlock.Text>
+							<MultiBinding StringFormat="{}{0}h">
+								<Binding Path="HoursMissed" ElementName="Root"/>
+							</MultiBinding>
+						</TextBlock.Text>
+						
+					</TextBlock>
 					<TextBlock
 						FontSize="10"
 						Foreground="LightGray"
 						Text="Missed hours" />
 				</StackPanel>
 			</Grid>
-
-			<TextBlock
+			
+			<StackPanel
 				Grid.Row="1"
-				Margin="10 -20 0 0"
-				FontSize="20"
-				FontWeight="Bold"
-				Text="{Binding Title, ElementName=Root}" />
+				Margin="10 -20 0 0">
+				
+				<TextBlock
+					FontSize="20"
+					FontWeight="Bold"
+					Text="{Binding Title, ElementName=Root}" />
+				
+				<TextBlock
+					FontSize="10"
+					Foreground="LightGray"
+					FontWeight="Bold">
+					
+					<TextBlock.Text>
+						<MultiBinding StringFormat="Week: {0}">
+							<Binding Path="Week" ElementName="Root"/>
+						</MultiBinding>
+					</TextBlock.Text>
+					
+				</TextBlock>
+				
+			</StackPanel>
 
 			<Border
 				Grid.Row="2"

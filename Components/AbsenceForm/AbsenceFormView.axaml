@@ -1,0 +1,88 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:absenceForm="clr-namespace:SubjectHelper.Components.AbsenceForm"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SubjectHelper.Components.AbsenceForm.AbsenceFormView"
+             x:DataType="absenceForm:AbsenceFormViewModel"
+             Width="512">
+	
+	<UserControl.KeyBindings>
+        <KeyBinding Gesture="Escape" Command="{Binding CancelCommand}"/>
+    </UserControl.KeyBindings>
+    
+    <Grid RowDefinitions="Auto, *, Auto"
+          Margin="24">
+        
+        <TextBlock Grid.Row="0"
+                   Text="{Binding Header}"
+                   VerticalAlignment="Bottom"
+                   FontSize="20"/>
+        
+        <u:Form Grid.Row="1"
+                Margin="0 20 0 0"
+                HorizontalAlignment="Stretch"
+                LabelPosition="Top">
+            
+            <u:Form.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel/>
+                </ItemsPanelTemplate>
+            </u:Form.ItemsPanel>
+            
+            <u:FormItem Label="Absence Type">
+                <ComboBox SelectedIndex="{Binding SelectedAbsence}">
+                    <ComboBoxItem Content="Lecture"/>
+                    <ComboBoxItem Content="Tutorial"/>
+                    <ComboBoxItem Content="Lab"/>
+                </ComboBox>
+            </u:FormItem>
+            
+            <u:FormItem Label="Title">
+                <TextBox
+                    x:Name="AbsenceTitleInput"
+                    Text="{Binding Title, Mode=TwoWay}"/>
+            </u:FormItem>
+            
+            <u:FormItem Label="Week">
+                <NumericUpDown
+                    Value="{Binding Week, Mode=TwoWay}"
+                    ShowButtonSpinner="False"/>
+            </u:FormItem>
+            
+            <u:FormItem Label="Hours Missed">
+                <NumericUpDown
+                    Value="{Binding HoursMissed, Mode=TwoWay}"
+                    ShowButtonSpinner="False"/>
+            </u:FormItem>
+            
+            <u:FormItem Label="Date">
+                <DatePicker
+                    SelectedDate="{Binding Date, Mode=TwoWay}"/>
+            </u:FormItem>
+        </u:Form>
+        
+        <Grid Grid.Row="2"
+              Margin="0 10 0 0"
+              ColumnDefinitions="*, *"
+              ColumnSpacing="25">
+            
+            <Button Grid.Column="0" 
+                    Classes="Danger"
+                    Theme="{DynamicResource SolidButton}"
+                    HorizontalAlignment="Stretch"
+                    Content="Cancel"
+                    Command="{Binding CancelCommand}"/>
+            
+            <Button Grid.Column="1"
+                    Classes="Success"
+                    Theme="{DynamicResource SolidButton}"
+                    HorizontalAlignment="Stretch"
+                    Content="Save"
+                    Command="{Binding SaveCommand}"/>
+        </Grid>
+    </Grid>
+	
+</UserControl>

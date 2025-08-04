@@ -40,11 +40,11 @@ public partial class EvaluationFormViewModel : ViewModelBase, IDialogContext
         MaximumWeight = maxWeight;
     }
 
-    public EvaluationFormViewModel(EvaluationFormViewModel oldVM, decimal maxWeight = 0)
+    public EvaluationFormViewModel(string title, decimal weight, int grade, decimal maxWeight = 0)
     {
-        Title = oldVM.Title;
-        Weight = oldVM.Weight;
-        Grade = oldVM.Grade;
+        Title = title;
+        Weight = weight;
+        Grade = grade;
         MaximumWeight = maxWeight;
     }
 
