@@ -75,13 +75,21 @@ public partial class SubjectViewModel : PageViewModel
     }
 
     [RelayCommand]
-    private async Task RandomlyPickWhichOneToAdd()
+    private async Task Create()
     {
-        var random = new Random();
-        if (random.Next(0, 2) == 0)
-            await CreateEvaluation();
-        else
-            await CreateAbsence();
+        var result = await _dialogService.ShowSelectionForm();
+
+        switch (result)
+        {
+            case DialogResult.Cancel:
+                return;
+            case DialogResult.Yes:
+                await CreateAbsence();
+                break;
+            default:
+                await CreateEvaluation();
+                break;
+        }
     }
 
     [RelayCommand]

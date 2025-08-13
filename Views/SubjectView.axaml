@@ -59,7 +59,7 @@
                     Padding="0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Command="{Binding RandomlyPickWhichOneToAddCommand}">
+                    Command="{Binding CreateCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="5">
                         <Label Content="Add"
                                VerticalAlignment="Center"

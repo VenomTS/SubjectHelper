@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using SubjectHelper.Components.AbsenceForm;
 using SubjectHelper.Components.EvaluationForm;
+using SubjectHelper.Components.SelectionForm;
 using SubjectHelper.Components.SubjectForm;
 using SubjectHelper.Interfaces;
 using SubjectHelper.Interfaces.Services;
@@ -44,5 +45,12 @@ public class DialogService : IDialogService
     {
         vm.Header = header;
         return await Dialog.ShowCustomModal<AbsenceFormView, AbsenceFormViewModel, DialogResult>(vm, _rootWindow, DefaultDialogOptions);
+    }
+
+    public async Task<DialogResult> ShowSelectionForm()
+    {
+        var customDialogOptions = DefaultDialogOptions;
+        customDialogOptions.IsCloseButtonVisible = true;
+        return await Dialog.ShowCustomModal<SelectionFormView, SelectionFormViewModel, DialogResult>(new SelectionFormViewModel(), _rootWindow, customDialogOptions);
     }
 }

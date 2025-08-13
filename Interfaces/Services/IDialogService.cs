@@ -17,4 +17,6 @@ public interface IDialogService
     Task<DialogResult> ShowEvaluationForm(string header, EvaluationFormViewModel vm);
 
     Task<DialogResult> ShowAbsenceForm(string header, AbsenceFormViewModel vm);
+
+    Task<DialogResult> ShowSelectionForm();
 }

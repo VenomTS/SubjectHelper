@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:selectionForm="clr-namespace:SubjectHelper.Components.SelectionForm"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SubjectHelper.Components.SelectionForm.SelectionFormView"
+             x:DataType="selectionForm:SelectionFormViewModel"
+             Width="512">
+	
+	<UserControl.KeyBindings>
+        <KeyBinding Gesture="Escape" Command="{Binding CancelCommand}"/>
+    </UserControl.KeyBindings>
+    
+    <Grid RowDefinitions="Auto, *, Auto"
+          RowSpacing="24"
+          Margin="24">
+	    
+	    <TextBlock 
+		    Grid.Row="0"
+		    Text="Selection Form"
+		    VerticalAlignment="Top"
+		    FontSize="20"/>
+        
+        <TextBlock 
+            Grid.Row="1"
+            Text="Select whether you want to create an absence or an evaluation"
+            VerticalAlignment="Center"
+            FontSize="14"/>
+        
+        <Grid Grid.Row="2"
+              Margin="0 10 0 0"
+              ColumnDefinitions="*, *"
+              ColumnSpacing="25">
+            
+            <Button Grid.Column="0"
+                    Theme="{DynamicResource SolidButton}"
+                    HorizontalAlignment="Stretch"
+                    Content="Create Absence"
+                    Command="{Binding CreateAbsenceCommand}"/>
+            
+            <Button Grid.Column="1"
+                    Classes="Success"
+                    Theme="{DynamicResource SolidButton}"
+                    HorizontalAlignment="Stretch"
+                    Content="Create Evaluation"
+                    Command="{Binding CreateEvaluationCommand}"/>
+        </Grid>
+    </Grid>
+	
+</UserControl>
