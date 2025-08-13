@@ -49,8 +49,13 @@ public class DialogService : IDialogService
 
     public async Task<DialogResult> ShowSelectionForm()
     {
-        var customDialogOptions = DefaultDialogOptions;
-        customDialogOptions.IsCloseButtonVisible = true;
+        var customDialogOptions = new DialogOptions
+        {
+            StartupLocation = DefaultDialogOptions.StartupLocation,
+            Mode = DefaultDialogOptions.Mode,
+            IsCloseButtonVisible = true,
+            CanResize = DefaultDialogOptions.CanResize,
+        };
         return await Dialog.ShowCustomModal<SelectionFormView, SelectionFormViewModel, DialogResult>(new SelectionFormViewModel(), _rootWindow, customDialogOptions);
     }
 }
