@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Avalonia.Controls;
 using Avalonia.Data.Converters;
 
 namespace SubjectHelper.Converters;
@@ -25,8 +26,20 @@ public class DayConverter : IValueConverter
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not string day) return null;
+        if (value is string day)
+            return GetDayOfWeek(day);
 
+        if (value?.GetType() == typeof(ComboBoxItem))
+        {
+            var cbItem = (ComboBoxItem)value;
+            return GetDayOfWeek(cbItem?.Content?.ToString());
+        }
+
+        return null;
+    }
+
+    private DayOfWeek? GetDayOfWeek(string? day)
+    {
         return day switch
         {
             "Monday" => DayOfWeek.Monday,

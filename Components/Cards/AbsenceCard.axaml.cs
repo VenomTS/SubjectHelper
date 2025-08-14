@@ -41,10 +41,10 @@ public partial class AbsenceCard : UserControl
         set => SetValue(TitleProperty, value);
     }
 
-    public static readonly StyledProperty<DateOnly> DateProperty = AvaloniaProperty.Register<AbsenceCard, DateOnly>(
+    public static readonly StyledProperty<string> DateProperty = AvaloniaProperty.Register<AbsenceCard, string>(
         nameof(Date));
 
-    public DateOnly Date
+    public string Date
     {
         get => GetValue(DateProperty);
         set => SetValue(DateProperty, value);

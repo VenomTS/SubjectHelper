@@ -7,23 +7,23 @@ namespace SubjectHelper.Interfaces.ScheduleMaker;
 public interface IScheduleMakerRepository
 {
     // Subject related
-    Task<List<SubjectSM>> GetSubjects();
-    Task<SubjectSM?> GetSubject(int subjectId);
-    Task<SubjectSM> AddSubject(string name);
+    Task<List<SMSubject>> GetSubjects();
+    Task<SMSubject?> GetSubject(int subjectId);
+    Task<SMSubject> AddSubject(string name);
     Task RemoveSubject(int subjectId);
     // Task UpdateSubject()
     
     // Section related
-    Task<List<SectionSM>> GetSections(int subjectId);
-    Task<SectionSM?> GetSection(int sectionId);
-    Task<SectionSM> AddSection(int subjectId);
+    Task<List<SMSection>> GetSections(int subjectId);
+    Task<SMSection?> GetSection(int sectionId);
+    Task<SMSection> AddSection(int subjectId);
     Task RemoveSection(int sectionId);
     // Task UpdateSection()
     
     // Time related
-    Task<List<TimeSM>> GetTimes(int sectionId);
-    Task<TimeSM?> GetTime(int timeId);
-    Task<TimeSM> AddTime(int sectionId);
+    Task<List<SMTime>> GetTimes(int sectionId);
+    Task<SMTime?> GetTime(int timeId);
+    Task<SMTime> AddTime(int sectionId, SMTime time);
     Task RemoveTime(int timeId);
     
     // Task UpdateTime();

@@ -3,14 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:u="https://irihi.tech/ursa"
-             xmlns:subjectForm="clr-namespace:SubjectHelper.Components.SubjectForm"
+             xmlns:subject="clr-namespace:SubjectHelper.Components.ScheduleMaker.Forms.Subject"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SubjectHelper.Components.SubjectForm.SubjectFormView"
-             x:DataType="subjectForm:SubjectFormViewModel"
+             x:DataType="subject:SMSubjectFormViewModel"
+             x:Class="SubjectHelper.Components.ScheduleMaker.Forms.Subject.SMSubjectFormView"
              Loaded="Control_OnLoaded"
              Width="512">
-    
-    <UserControl.KeyBindings>
+	
+	<UserControl.KeyBindings>
         <KeyBinding Gesture="Escape" Command="{Binding CancelCommand}"/>
     </UserControl.KeyBindings>
     
@@ -35,25 +35,14 @@
             <u:FormItem Label="Name">
                 <TextBox
                     x:Name="SubjectNameInput"
-                    KeyDown="SubjectName_OnKeyDown"
                     u:FormItem.IsRequired="True"
-                    Text="{Binding Title}"/>
-            </u:FormItem>
-            
-            <u:FormItem Label="Code">
-                <TextBox
-                    x:Name="SubjectCodeInput"
-                    KeyDown="SubjectCode_OnKeyDown"
-                    u:FormItem.IsRequired="False"
-                    Text="{Binding Code}"/>
-            </u:FormItem>
-            
-            <u:FormItem Label="Color">
-                <ColorPicker 
-                    x:Name="SubjectColorInput"
-                    GotFocus="SubjectColorInput_OnGotFocus"
-                    HorizontalAlignment="Stretch"
-                    Color="{Binding Color}"/>
+                    Text="{Binding Title, Mode=TwoWay}">
+                    
+                    <TextBox.KeyBindings>
+                        <KeyBinding Gesture="Enter" Command="{Binding SaveCommand}"/>
+                    </TextBox.KeyBindings>
+                    
+                </TextBox>
             </u:FormItem>
         </u:Form>
         
@@ -77,5 +66,5 @@
                     Command="{Binding CancelCommand}"/>
         </Grid>
     </Grid>
-    
+	
 </UserControl>

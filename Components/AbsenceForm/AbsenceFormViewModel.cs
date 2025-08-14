@@ -10,16 +10,18 @@ namespace SubjectHelper.Components.AbsenceForm;
 
 public partial class AbsenceFormViewModel : ViewModelBase, IDialogContext
 {
-    private static readonly DateTime Today = DateTime.Now;
+    // private static readonly DateTime Today = DateTime.Now;
     
     [ObservableProperty] private string _header = string.Empty;
     [ObservableProperty] private int _selectedAbsence;
     [ObservableProperty] private string _title = string.Empty;
     [ObservableProperty] private int _week = 1;
     [ObservableProperty] private int _hoursMissed = 1;
-    [ObservableProperty] private DateTimeOffset _date = new(Today);
+    [ObservableProperty] private DateTime _date = DateTime.Now;
 
     public AbsenceTypes SelectedAbsenceType { get; set; }
+
+    
 
     partial void OnSelectedAbsenceChanged(int value)
     {
@@ -49,7 +51,7 @@ public partial class AbsenceFormViewModel : ViewModelBase, IDialogContext
         Title = title;
         Week = week;
         HoursMissed = hoursMissed;
-        Date = new DateTimeOffset(date, TimeOnly.MinValue, TimeSpan.Zero);
+        Date = new DateTime(date, TimeOnly.MinValue);
         SelectedAbsenceType = absenceType;
     }
 

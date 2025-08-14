@@ -2,7 +2,7 @@ using System;
 
 namespace SubjectHelper.Models.ScheduleMaker;
 
-public class TimeSM
+public class SMTime
 {
     public int Id { get; set; }
     
@@ -11,5 +11,5 @@ public class TimeSM
     public DayOfWeek Day { get; set; }
 
     public int SectionId { get; set; }
-    public SectionSM Section { get; set; }
+    public SMSection SMSection { get; set; }
 }

@@ -50,9 +50,9 @@
         <DependentUpon>SubjectCard.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Components\ScheduleMaker\Forms\" />
+      <Compile Update="Components\ScheduleMaker\Forms\Subject\SMSubjectFormView.axaml.cs">
+        <DependentUpon>SMSubjectFormView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

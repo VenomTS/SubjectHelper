@@ -14,9 +14,9 @@ public sealed class DatabaseContext : DbContext
     public DbSet<Evaluation> Evaluations { get; set; }
     public DbSet<Absence> Absences { get; set; }
 
-    public DbSet<SubjectSM> SMSubjects { get; set; }
-    public DbSet<SectionSM> SMSections { get; set; }
-    public DbSet<TimeSM> SMTimes { get; set; }
+    public DbSet<SMSubject> SMSubjects { get; set; }
+    public DbSet<SMSection> SMSections { get; set; }
+    public DbSet<SMTime> SMTimes { get; set; }
 
     public DatabaseContext()
     {

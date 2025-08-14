@@ -1,13 +1,13 @@
-using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using SubjectHelper.Components.AbsenceForm;
 using SubjectHelper.Components.EvaluationForm;
+using SubjectHelper.Components.ScheduleMaker.Forms.Subject;
+using SubjectHelper.Components.ScheduleMaker.Forms.Timeslot;
 using SubjectHelper.Components.SelectionForm;
 using SubjectHelper.Components.SubjectForm;
-using SubjectHelper.Interfaces;
 using SubjectHelper.Interfaces.Services;
-using SubjectHelper.Models;
+using SubjectHelper.ViewModels.ScheduleMaker;
 using Ursa.Controls;
 
 namespace SubjectHelper.Services;
@@ -57,5 +57,19 @@ public class DialogService : IDialogService
             CanResize = DefaultDialogOptions.CanResize,
         };
         return await Dialog.ShowCustomModal<SelectionFormView, SelectionFormViewModel, DialogResult>(new SelectionFormViewModel(), _rootWindow, customDialogOptions);
+    }
+
+    public async Task<DialogResult> ShowSMSubjectForm(string header, SMSubjectFormViewModel vm)
+    {
+        vm.Header = header;
+        return await Dialog.ShowCustomModal<SMSubjectFormView, SMSubjectFormViewModel, DialogResult>(vm, _rootWindow,
+            DefaultDialogOptions);
+    }
+
+    public async Task<DialogResult> ShowSMTimeForm(string header, SMTimeFormViewModel vm)
+    {
+        vm.Header = header;
+        return await Dialog.ShowCustomModal<SMTimeFormView, SMTimeFormViewModel, DialogResult>(vm, _rootWindow,
+            DefaultDialogOptions);
     }
 }

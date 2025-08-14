@@ -10,7 +10,7 @@
              x:Class="SubjectHelper.Components.ScheduleMaker.SMSubjectCard">
 	
 	<Border
-		Width="684"
+		Width="674"
 		Background="{StaticResource CardBackground}"
 		CornerRadius="8"
 		Padding="16 8">
@@ -105,7 +105,7 @@
 					<DataTemplate DataType="scheduleMaker:SMSectionViewModel">
 						
 						<scheduleMaker1:SMSectionCard
-							SectionId="{Binding Id}"
+							SectionId="{Binding SectionId}"
 							DeleteCommand="{Binding DeleteSectionCommand, ElementName=Root}"
 							DeleteParameter="{Binding .}"
 							EditCommand="{Binding EditSectionCommand, ElementName=Root}"

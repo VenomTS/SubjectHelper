@@ -59,7 +59,10 @@
             </u:FormItem>
             
             <u:FormItem Label="Date">
-                <DatePicker
+                <u:DatePicker
+                    DisplayFormat="dd/MM/yyyy"
+                    Watermark="01/01/2000"
+                    MinWidth="110"
                     SelectedDate="{Binding Date, Mode=TwoWay}"/>
             </u:FormItem>
         </u:Form>

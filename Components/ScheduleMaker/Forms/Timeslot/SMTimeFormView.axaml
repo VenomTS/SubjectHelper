@@ -3,14 +3,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:u="https://irihi.tech/ursa"
-             xmlns:subjectForm="clr-namespace:SubjectHelper.Components.SubjectForm"
+             xmlns:timeslot="clr-namespace:SubjectHelper.Components.ScheduleMaker.Forms.Timeslot"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SubjectHelper.Components.SubjectForm.SubjectFormView"
-             x:DataType="subjectForm:SubjectFormViewModel"
-             Loaded="Control_OnLoaded"
+             x:DataType="timeslot:SMTimeFormViewModel"
+             x:Class="SubjectHelper.Components.ScheduleMaker.Forms.Timeslot.SMTimeFormView"
              Width="512">
-    
-    <UserControl.KeyBindings>
+	
+	<UserControl.KeyBindings>
         <KeyBinding Gesture="Escape" Command="{Binding CancelCommand}"/>
     </UserControl.KeyBindings>
     
@@ -32,28 +31,30 @@
                 </ItemsPanelTemplate>
             </u:Form.ItemsPanel>
             
-            <u:FormItem Label="Name">
-                <TextBox
-                    x:Name="SubjectNameInput"
-                    KeyDown="SubjectName_OnKeyDown"
-                    u:FormItem.IsRequired="True"
-                    Text="{Binding Title}"/>
+            <u:FormItem Label="Day">
+                <ComboBox SelectedItem="{Binding Day, Converter={StaticResource DayConverter}, Mode=TwoWay}">
+                    <ComboBoxItem Content="Monday"/>
+                    <ComboBoxItem Content="Tuesday"/>
+                    <ComboBoxItem Content="Wednesday"/>
+                    <ComboBoxItem Content="Thursday"/>
+                    <ComboBoxItem Content="Friday"/>
+                </ComboBox>
             </u:FormItem>
             
-            <u:FormItem Label="Code">
-                <TextBox
-                    x:Name="SubjectCodeInput"
-                    KeyDown="SubjectCode_OnKeyDown"
-                    u:FormItem.IsRequired="False"
-                    Text="{Binding Code}"/>
+            <u:FormItem Label="Start Time">
+                <u:TimePicker 
+                    PanelFormat="HH mm"
+                    DisplayFormat="HH:mm"
+                    NeedConfirmation="False"
+                    SelectedTime="{Binding StartTime, Converter={StaticResource TimeSpanTimeOnlyConverter}, Mode=TwoWay}"></u:TimePicker>
             </u:FormItem>
             
-            <u:FormItem Label="Color">
-                <ColorPicker 
-                    x:Name="SubjectColorInput"
-                    GotFocus="SubjectColorInput_OnGotFocus"
-                    HorizontalAlignment="Stretch"
-                    Color="{Binding Color}"/>
+            <u:FormItem Label="End Time">
+                <u:TimePicker 
+                    PanelFormat="HH mm"
+                    DisplayFormat="HH:mm"
+                    NeedConfirmation="False"
+                    SelectedTime="{Binding EndTime, Converter={StaticResource TimeSpanTimeOnlyConverter}, Mode=TwoWay}"></u:TimePicker>
             </u:FormItem>
         </u:Form>
         
@@ -63,7 +64,7 @@
               ColumnSpacing="10">
             
             <Button Grid.Column="1"
-                    Content="Save"
+                    Content="Add Subject"
                     HorizontalAlignment="Stretch"
                     Theme="{DynamicResource SolidButton}"
                     Classes="Success"
@@ -77,5 +78,5 @@
                     Command="{Binding CancelCommand}"/>
         </Grid>
     </Grid>
-    
+	
 </UserControl>

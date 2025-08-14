@@ -11,8 +11,8 @@ namespace SubjectHelper.ViewModels;
 
 public partial class AbsenceViewModel : ViewModelBase
 {
-    public int AbsenceId { get; set; }
-    public int SubjectId { get; set; }
+    public int AbsenceId { get; }
+    public int SubjectId { get; }
 
     [ObservableProperty] private AbsenceTypes _type;
     [ObservableProperty] private string _title;
