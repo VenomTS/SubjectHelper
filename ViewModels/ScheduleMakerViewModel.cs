@@ -18,75 +18,36 @@ public partial class ScheduleMakerViewModel : PageViewModel
     {
         Page = ApplicationPages.ScheduleMakerSubjects;
         _scheduleMakerRepo = scheduleMakerRepo;
-        
-        InitializeTestingData();
     }
 
-    private void InitializeTestingData()
+    [RelayCommand]
+    private void AddSubject()
     {
-        var math = new SMSubjectViewModel
-        {
-            Id = 1,
-            Title = "Mathematics",
-            Sections =
-            [
-                new SMSectionViewModel
-                {
-                    Id = 1, Times =
-                    [
-                        new SMTimeViewModel
-                            { Day = DayOfWeek.Monday, StartTime = new TimeOnly(9, 0), EndTime = new TimeOnly(10, 0) },
-                        new SMTimeViewModel
-                        {
-                            Day = DayOfWeek.Wednesday, StartTime = new TimeOnly(11, 0), EndTime = new TimeOnly(12, 0)
-                        },
-                    ]
-                },
-                new SMSectionViewModel
-                {
-                    Id = 2, Times =
-                    [
-                        new SMTimeViewModel
-                            { Day = DayOfWeek.Tuesday, StartTime = new TimeOnly(10, 0), EndTime = new TimeOnly(11, 0) }
-                    ]
-                },
-            ]
-        };
         
-        var physics = new SMSubjectViewModel
-        {
-            Id = 2,
-            Title = "Physics",
-            Sections =
-            [
-                new SMSectionViewModel
-                {
-                    Id = 3, Times =
-                    [
-                        new SMTimeViewModel
-                            { Day = DayOfWeek.Thursday, StartTime = new TimeOnly(13, 0), EndTime = new TimeOnly(14, 0) },
-                        new SMTimeViewModel
-                        {
-                            Day = DayOfWeek.Friday, StartTime = new TimeOnly(15, 0), EndTime = new TimeOnly(16, 0)
-                        },
-                    ]
-                }
-            ]
-        };
-        Subjects.Add(math);
-        Subjects.Add(physics);
+    }
+
+    [RelayCommand]
+    private void AddSection(SMSubjectViewModel vm)
+    {
+        Console.WriteLine($"Adding a section to {vm.Title}");
+    }
+
+    [RelayCommand]
+    private void AddTime(SMSectionViewModel vm)
+    {
+        Console.WriteLine($"Adding a time to {vm.Id}");
     }
     
     [RelayCommand]
-    private void DeleteSubject()
+    private void DeleteSubject(SMSubjectViewModel vm)
     {
-        Console.WriteLine("Deleting a subject");
+        Console.WriteLine($"Deleting subject {vm.Title}");
     }
 
     [RelayCommand]
-    private void DeleteSection()
+    private void DeleteSection(SMSectionViewModel vm)
     {
-        Console.WriteLine("Deleting a section");
+        Console.WriteLine($"Deleting section {vm.Id}");
     }
     
     [RelayCommand]

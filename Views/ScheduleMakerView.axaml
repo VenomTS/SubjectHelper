@@ -8,27 +8,43 @@
              x:Class="SubjectHelper.Views.ScheduleMakerView"
              x:DataType="viewModels:ScheduleMakerViewModel">
 	
-	<ItemsControl
-		Margin="10"
-		ItemsSource="{Binding Subjects}">
+	<ScrollViewer>
+		<Grid
+			Margin="5 10"
+			RowDefinitions="Auto, *">
+			
+			<Button
+				Grid.Row="0" Content="+ Add Subject"
+				CornerRadius="16"
+				Command="{Binding AddSubjectCommand}"/>
 		
-		<ItemsControl.ItemsPanel>
-			<ItemsPanelTemplate>
-				<WrapPanel ItemSpacing="10" LineSpacing="15"/>
-			</ItemsPanelTemplate>
-		</ItemsControl.ItemsPanel>
+			<ItemsControl
+				Grid.Row="1"
+				Margin="10"
+				ItemsSource="{Binding Subjects}">
 		
-		<ItemsControl.ItemTemplate>
-			<DataTemplate>
-				<scheduleMaker:SMSubjectCard
-					Title="{Binding Title}"
-					Sections="{Binding Sections}"
-					DeleteCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteSubjectCommand}"
-					DeleteSectionCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteSectionCommand}"
-					DeleteTimeCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteTimeCommand}"/>
-			</DataTemplate>
-		</ItemsControl.ItemTemplate>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<WrapPanel ItemSpacing="10" LineSpacing="15"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
 		
-	</ItemsControl>
-	
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<scheduleMaker:SMSubjectCard
+							Title="{Binding Title}"
+							Sections="{Binding Sections}"
+							DeleteCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteSubjectCommand}"
+							DeleteParameter="{Binding .}"
+							DeleteSectionCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteSectionCommand}"
+							DeleteTimeCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteTimeCommand}"
+							AddTimeCommand="{ReflectionBinding $parent[ItemsControl].DataContext.AddTimeCommand}"
+							AddSectionCommand="{ReflectionBinding $parent[ItemsControl].DataContext.AddSectionCommand}"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+		
+			</ItemsControl>
+		
+		</Grid>
+	</ScrollViewer>
 </UserControl>

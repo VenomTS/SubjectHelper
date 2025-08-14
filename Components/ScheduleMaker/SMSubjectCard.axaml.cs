@@ -103,4 +103,22 @@ public partial class SMSubjectCard : UserControl
         get => GetValue(EditTimeCommandProperty);
         set => SetValue(EditTimeCommandProperty, value);
     }
+
+    public static readonly StyledProperty<ICommand> AddTimeCommandProperty =
+        AvaloniaProperty.Register<SMSubjectCard, ICommand>(nameof(AddTimeCommand));
+
+    public ICommand AddTimeCommand
+    {
+        get => GetValue(AddTimeCommandProperty);
+        set => SetValue(AddTimeCommandProperty, value);
+    }
+    
+    public static readonly StyledProperty<ICommand> AddSectionCommandProperty =
+        AvaloniaProperty.Register<SMSubjectCard, ICommand>(nameof(AddSectionCommand));
+
+    public ICommand AddSectionCommand
+    {
+        get => GetValue(AddSectionCommandProperty);
+        set => SetValue(AddSectionCommandProperty, value);
+    }
 }

@@ -30,9 +30,24 @@
 				
 				<StackPanel 
 					Grid.Column="1"
-					Spacing="3"
+					Spacing="6"
 					VerticalAlignment="Center"
 					Orientation="Horizontal">
+					
+					<Button
+						Theme="{DynamicResource BorderlessButton}"
+						Classes="Icon"
+						VerticalAlignment="Center"
+						Command="{Binding AddSectionCommand, ElementName=Root}"
+						CommandParameter="{ReflectionBinding .}"
+						Padding="0">
+						<Label FontFamily="{StaticResource FaRegular}"
+						       Content="&#x2b;"
+						       Padding="0"
+						       FontSize="18"
+						       Width="16"
+						       Foreground="{StaticResource AddIconColor}" />
+					</Button>
 				
 					<Button
 						Classes="Icon"
@@ -95,6 +110,7 @@
 							DeleteParameter="{Binding .}"
 							EditCommand="{Binding EditSectionCommand, ElementName=Root}"
 							EditParameter="{Binding .}"
+							AddTimeCommand="{Binding AddTimeCommand, ElementName=Root}"
 							DeleteTimeCommand="{Binding DeleteTimeCommand, ElementName=Root}"
 							EditTimeCommand="{Binding EditTimeCommand, ElementName=Root}"
 							TimeSlots="{Binding Times}"

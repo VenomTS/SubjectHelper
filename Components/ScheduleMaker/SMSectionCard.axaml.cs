@@ -68,6 +68,15 @@ public partial class SMSectionCard : UserControl
         set => SetValue(TimeSlotsProperty, value);
     }
 
+    public static readonly StyledProperty<ICommand> AddTimeCommandProperty = AvaloniaProperty.Register<SMSectionCard, ICommand>(
+        nameof(AddTimeCommand));
+
+    public ICommand AddTimeCommand
+    {
+        get => GetValue(AddTimeCommandProperty);
+        set => SetValue(AddTimeCommandProperty, value);
+    }
+
     public static readonly StyledProperty<ICommand> EditTimeCommandProperty = AvaloniaProperty.Register<SMSectionCard, ICommand>(
         nameof(EditTimeCommand));
 

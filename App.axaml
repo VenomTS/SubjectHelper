@@ -16,6 +16,7 @@
         <FontFamily x:Key="FaRegular">/Assets/Fonts/Regular.otf#Font Awesome 6 Regular</FontFamily>
         <FontFamily x:Key="FaSolid">/Assets/Fonts/Solid.otf#Font Awesome 6 Regular</FontFamily>
         
+        <SolidColorBrush x:Key="AddIconColor" Color="#81B6FB"/>
         <SolidColorBrush x:Key="ViewIconColor" Color="#60A5FA"/>
         <SolidColorBrush x:Key="EditIconColor" Color="#BB86FC"/>
         <SolidColorBrush x:Key="DeleteIconColor" Color="#FF5E5B"/>
