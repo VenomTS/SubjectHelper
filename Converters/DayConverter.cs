@@ -8,17 +8,17 @@ public class DayConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not int day) return null;
+        if (value is not DayOfWeek day) return null;
 
         return day switch
         {
-            0 => "Mon",
-            1 => "Tue",
-            2 => "Wed",
-            3 => "Thu",
-            4 => "Fri",
-            5 => "Sat",
-            6 => "Sun",
+            DayOfWeek.Monday => "Monday",
+            DayOfWeek.Tuesday => "Tuesday",
+            DayOfWeek.Wednesday => "Wednesday",
+            DayOfWeek.Thursday => "Thursday",
+            DayOfWeek.Friday => "Friday",
+            DayOfWeek.Saturday => "Saturday",
+            DayOfWeek.Sunday => "Sunday",
             _ => null,
         };
     }
@@ -29,13 +29,13 @@ public class DayConverter : IValueConverter
 
         return day switch
         {
-            "Mon" => 0,
-            "Tue" => 1,
-            "Wed" => 2,
-            "Thu" => 3,
-            "Fri" => 4,
-            "Sat" => 5,
-            "Sun" => 6,
+            "Monday" => DayOfWeek.Monday,
+            "Tuesday" => DayOfWeek.Tuesday,
+            "Wednesday" => DayOfWeek.Wednesday,
+            "Thursday" => DayOfWeek.Thursday,
+            "Friday" => DayOfWeek.Friday,
+            "Saturday" => DayOfWeek.Saturday,
+            "Sunday" => DayOfWeek.Sunday,
             _ => null,
         };
     }

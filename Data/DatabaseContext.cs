@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using SubjectHelper.Models;
+using SubjectHelper.Models.ScheduleMaker;
 
 namespace SubjectHelper.Data;
 
@@ -12,6 +13,10 @@ public sealed class DatabaseContext : DbContext
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<Evaluation> Evaluations { get; set; }
     public DbSet<Absence> Absences { get; set; }
+
+    public DbSet<SubjectSM> SMSubjects { get; set; }
+    public DbSet<SectionSM> SMSections { get; set; }
+    public DbSet<TimeSM> SMTimes { get; set; }
 
     public DatabaseContext()
     {

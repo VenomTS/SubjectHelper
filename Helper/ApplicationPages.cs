@@ -6,9 +6,4 @@ public enum ApplicationPages
     Subjects,
     Subject,
     ScheduleMakerSubjects,
-    ScheduleMakerSchedule,
-    
-    TimeComponent,
-    SectionComponent,
-    SubjectComponent,
 }

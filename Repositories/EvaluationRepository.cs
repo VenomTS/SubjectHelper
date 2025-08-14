@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SubjectHelper.Data;
 using SubjectHelper.Interfaces.Repositories;
 using SubjectHelper.Models;
-using SubjectHelper.Models.Customs;
+using SubjectHelper.Models.Updates;
 
 namespace SubjectHelper.Repositories;
 

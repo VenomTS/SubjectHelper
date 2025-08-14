@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:scheduleMaker="clr-namespace:SubjectHelper.Components.ScheduleMaker"
+             xmlns:viewModels="clr-namespace:SubjectHelper.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SubjectHelper.Views.ScheduleMakerView"
+             x:DataType="viewModels:ScheduleMakerViewModel">
+	
+	<ItemsControl
+		Margin="10"
+		ItemsSource="{Binding Subjects}">
+		
+		<ItemsControl.ItemsPanel>
+			<ItemsPanelTemplate>
+				<WrapPanel ItemSpacing="10" LineSpacing="15"/>
+			</ItemsPanelTemplate>
+		</ItemsControl.ItemsPanel>
+		
+		<ItemsControl.ItemTemplate>
+			<DataTemplate>
+				<scheduleMaker:SMSubjectCard
+					Title="{Binding Title}"
+					Sections="{Binding Sections}"
+					DeleteCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteSubjectCommand}"
+					DeleteSectionCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteSectionCommand}"
+					DeleteTimeCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteTimeCommand}"/>
+			</DataTemplate>
+		</ItemsControl.ItemTemplate>
+		
+	</ItemsControl>
+	
+</UserControl>

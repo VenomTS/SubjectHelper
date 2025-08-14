@@ -10,8 +10,10 @@ using SubjectHelper.Factories;
 using SubjectHelper.Helper;
 using SubjectHelper.Interfaces;
 using SubjectHelper.Interfaces.Repositories;
+using SubjectHelper.Interfaces.ScheduleMaker;
 using SubjectHelper.Interfaces.Services;
 using SubjectHelper.Repositories;
+using SubjectHelper.Repositories.ScheduleMaker;
 using SubjectHelper.Services;
 using SubjectHelper.ViewModels;
 using SubjectHelper.ViewModels.Bases;
@@ -41,9 +43,11 @@ public partial class App : Application
         
         // Scoped = Created once and reused
         collection.AddScoped<SubjectsListViewModel>();
+        collection.AddScoped<ScheduleMakerViewModel>();
         collection.AddScoped<ISubjectRepository, SubjectRepository>();
         collection.AddScoped<IEvaluationRepository, EvaluationRepository>();
         collection.AddScoped<IAbsenceRepository, AbsenceRepository>();
+        collection.AddScoped<IScheduleMakerRepository, ScheduleMakerRepository>();
         
         // Transient - Created every time
         // MUST BE TRANSIENT - IF NOT ISSUES MAY HAPPEN
@@ -61,6 +65,8 @@ public partial class App : Application
                     var vm = provider.GetRequiredService<SubjectViewModel>();
                     _ = vm.Initialize(subjectId);
                     return vm;
+                case ApplicationPages.ScheduleMakerSubjects:
+                    return provider.GetRequiredService<ScheduleMakerViewModel>();
                 case ApplicationPages.Unknown:
                     break;
                 default:

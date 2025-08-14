@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Name="Root"
+             x:Class="SubjectHelper.Components.ScheduleMaker.SMTimeCard">
+	
+	<Border
+		Background="{StaticResource CardBackground}"
+		BorderThickness="1"
+		CornerRadius="8"
+		Padding="8 4">
+		<Grid
+			ColumnDefinitions="*, Auto">
+			<TextBlock
+				Grid.Column="0"
+				VerticalAlignment="Center"
+				Text="{Binding Day, ElementName=Root, Converter={StaticResource DayConverter}}"/>
+			
+			<StackPanel
+				Grid.Column="1"
+				Spacing="5"
+				Orientation="Horizontal">
+				
+				<!-- Time Text -->
+				<TextBlock
+					VerticalAlignment="Center">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="{}{0} - {1}">
+							<Binding Path="StartTime" ElementName="Root" Converter="{StaticResource TimeSpanTimeOnlyConverter}" StringFormat="hh\:mm"/>
+							<Binding Path="EndTime" ElementName="Root" Converter="{StaticResource TimeSpanTimeOnlyConverter}" StringFormat="hh\:mm"/>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+				
+				<!-- Edit Button -->
+				<Button
+					Classes="Icon"
+					Theme="{DynamicResource BorderlessButton}"
+					VerticalAlignment="Center"
+					Command="{Binding EditCommand, ElementName=Root}"
+					CommandParameter="{Binding EditParameter, ElementName=Root}"
+					Padding="0">
+					<Label FontFamily="{StaticResource FaRegular}"
+					       Content="&#xf044;"
+					       Padding="0"
+					       FontSize="18"
+					       Foreground="{StaticResource EditIconColor}" />
+				</Button>
+				
+				<!-- Delete Button -->
+				<u:PopConfirm
+					x:Name="PopConfirm"
+					PopupHeader="Delete Timeslot?"
+					Placement="TopEdgeAlignedRight"
+					PopupContent="This will permanently delete this time slot and all of its data. This action cannot be undone"
+					ConfirmCommand="{Binding DeleteCommand, ElementName=Root}"
+					ConfirmCommandParameter="{Binding DeleteParameter, ElementName=Root}">
+					<u:PopConfirm.KeyBindings>
+						<KeyBinding Gesture="Enter"
+						            Command="{Binding ConfirmCommand, ElementName=PopConfirm}"
+						            CommandParameter="{Binding ConfirmCommandParameter, ElementName=PopConfirm}" />
+					</u:PopConfirm.KeyBindings>
+
+					<Button
+						Classes="Icon"
+						Theme="{DynamicResource BorderlessButton}"
+						VerticalAlignment="Center"
+						Padding="0">
+						<Label FontFamily="{StaticResource FaRegular}"
+						       Content="&#xf2ed;"
+						       Padding="0"
+						       FontSize="18"
+						       Foreground="{StaticResource DeleteIconColor}" />
+					</Button>
+				</u:PopConfirm>
+			</StackPanel>
+		</Grid>
+	</Border>
+	
+</UserControl>

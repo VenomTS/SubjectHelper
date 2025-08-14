@@ -1,0 +1,109 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:scheduleMaker="clr-namespace:SubjectHelper.ViewModels.ScheduleMaker"
+             xmlns:scheduleMaker1="clr-namespace:SubjectHelper.Components.ScheduleMaker"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Name="Root"
+             x:Class="SubjectHelper.Components.ScheduleMaker.SMSubjectCard">
+	
+	<Border
+		Width="684"
+		Background="{StaticResource CardBackground}"
+		CornerRadius="8"
+		Padding="16 8">
+		
+		<Grid
+			RowDefinitions="Auto, *">
+			
+			<Grid 
+				Grid.Row="0"
+				ColumnDefinitions="*, Auto">
+				
+				<TextBlock 
+					Grid.Column="0"
+					FontSize="18"
+					Text="{Binding Title, ElementName=Root}">
+				</TextBlock>
+				
+				<StackPanel 
+					Grid.Column="1"
+					Spacing="3"
+					VerticalAlignment="Center"
+					Orientation="Horizontal">
+				
+					<Button
+						Classes="Icon"
+						VerticalAlignment="Center"
+						Theme="{DynamicResource BorderlessButton}"
+						Command="{Binding EditCommand, ElementName=Root}"
+						CommandParameter="{Binding EditParameter, ElementName=Root}"
+						Padding="0">
+						<Label FontFamily="{StaticResource FaRegular}"
+						       Content="&#xf044;"
+						       Padding="0"
+						       FontSize="18"
+						       Foreground="{StaticResource EditIconColor}" />
+					</Button>
+
+					<u:PopConfirm
+						x:Name="PopConfirm"
+						PopupHeader="Delete Subject?"
+						Placement="TopEdgeAlignedRight"
+						PopupContent="This will permanently delete this subject and all of its data. This action cannot be undone"
+						ConfirmCommand="{Binding DeleteCommand, ElementName=Root}"
+						ConfirmCommandParameter="{Binding DeleteParameter, ElementName=Root}">
+						<u:PopConfirm.KeyBindings>
+							<KeyBinding Gesture="Enter"
+							            Command="{Binding ConfirmCommand, ElementName=PopConfirm}"
+							            CommandParameter="{Binding ConfirmCommandParameter, ElementName=PopConfirm}" />
+						</u:PopConfirm.KeyBindings>
+
+						<Button
+							Classes="Icon"
+							VerticalAlignment="Center"
+							Theme="{DynamicResource BorderlessButton}"
+							Padding="0">
+							<Label FontFamily="{StaticResource FaRegular}"
+							       Content="&#xf2ed;"
+							       Padding="0"
+							       FontSize="18"
+							       Foreground="{StaticResource DeleteIconColor}" />
+						</Button>
+					</u:PopConfirm>
+				</StackPanel>
+			</Grid>
+			
+			<ItemsControl
+				Grid.Row="1"
+				ItemsSource="{Binding Sections, ElementName=Root}">
+				
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Spacing="8"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				
+				<ItemsControl.ItemTemplate>
+					<DataTemplate DataType="scheduleMaker:SMSectionViewModel">
+						
+						<scheduleMaker1:SMSectionCard
+							SectionId="{Binding Id}"
+							DeleteCommand="{Binding DeleteSectionCommand, ElementName=Root}"
+							DeleteParameter="{Binding .}"
+							EditCommand="{Binding EditSectionCommand, ElementName=Root}"
+							EditParameter="{Binding .}"
+							DeleteTimeCommand="{Binding DeleteTimeCommand, ElementName=Root}"
+							EditTimeCommand="{Binding EditTimeCommand, ElementName=Root}"
+							TimeSlots="{Binding Times}"
+							/>
+						
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</Grid>
+	</Border>
+	
+</UserControl>

@@ -1,6 +1,6 @@
 using Avalonia.Media;
 
-namespace SubjectHelper.Models.Customs;
+namespace SubjectHelper.Models.Updates;
 
 public class SubjectUpdate
 {

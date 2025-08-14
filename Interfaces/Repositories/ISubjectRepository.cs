@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SubjectHelper.Models;
-using SubjectHelper.Models.Customs;
+using SubjectHelper.Models.Updates;
 
 namespace SubjectHelper.Interfaces.Repositories;
 

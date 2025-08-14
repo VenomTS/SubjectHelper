@@ -20,10 +20,15 @@
         <SolidColorBrush x:Key="EditIconColor" Color="#BB86FC"/>
         <SolidColorBrush x:Key="DeleteIconColor" Color="#FF5E5B"/>
         
+        <SolidColorBrush x:Key="CardBackground" Color="#212121"/>
+        <SolidColorBrush x:Key="CardBottomBackground" Color="#303030"/>
+        
         <converters:ColorConverter x:Key="ColorConverter"/>
         <converters:ProgressBarColorConverter x:Key="ProgressBarColorConverter" />
         <converters:GradeConverter x:Key="GradeConverter" />
         <converters:AbsenceTypeConverter x:Key="AbsenceTypeConverter"/>
+        <converters:DayConverter x:Key="DayConverter"/>
+        <converters:TimeSpanTimeOnlyConverter x:Key="TimeSpanTimeOnlyConverter"/>
     </Application.Resources>
   
     <Application.Styles>

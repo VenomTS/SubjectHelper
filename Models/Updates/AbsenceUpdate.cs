@@ -1,7 +1,7 @@
 using System;
 using SubjectHelper.Helper;
 
-namespace SubjectHelper.Models.Customs;
+namespace SubjectHelper.Models.Updates;
 
 public class AbsenceUpdate
 {
