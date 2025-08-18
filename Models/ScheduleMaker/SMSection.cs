@@ -9,6 +9,6 @@ public class SMSection
     public int SectionId { get; set; }
     public List<SMTime> Times { get; set; } = [];
 
-    public int SubjectId { get; set; }
-    public SMSubject SMSubject { get; set; }
+    public int SMSubjectId { get; set; }
+    public SMSubject? SMSubject { get; set; }
 }

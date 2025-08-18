@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using SubjectHelper.Data;
 using SubjectHelper.Interfaces.ScheduleMaker;
 using SubjectHelper.Models.ScheduleMaker;
+using SubjectHelper.Models.ScheduleMaker.Updates;
 
 namespace SubjectHelper.Repositories.ScheduleMaker;
 
@@ -41,13 +42,26 @@ public class ScheduleMakerRepository : IScheduleMakerRepository
         return subject;
     }
 
+    public async Task<SMSubject?> UpdateSubject(int subjectId, SMSubjectUpdate subjectUpdate)
+    {
+        var subject = await GetSubject(subjectId);
+
+        if (subject == null) throw new Exception("Trying to update a non-existing subject");
+
+        subject.Title = subjectUpdate.Title;
+
+        await _dbContext.SaveChangesAsync();
+
+        return subject;
+    }
+
     public async Task RemoveSubject(int subjectId)
     {
         var subject = await GetSubject(subjectId);
         if (subject == null)
             return;
 
-        var affectedSections = await _dbContext.SMSections.Where(x => x.SubjectId == subjectId).ToListAsync();
+        var affectedSections = await _dbContext.SMSections.Where(x => x.SMSubjectId == subjectId).ToListAsync();
 
         foreach (var section in affectedSections)
             await RemoveSection(section.Id);
@@ -58,7 +72,7 @@ public class ScheduleMakerRepository : IScheduleMakerRepository
 
     public async Task<List<SMSection>> GetSections(int subjectId)
     {
-        return await _dbContext.SMSections.Where(x => x.SubjectId == subjectId).Include(x => x.Times).ToListAsync();
+        return await _dbContext.SMSections.Where(x => x.SMSubjectId == subjectId).Include(x => x.Times).ToListAsync();
     }
 
     public async Task<SMSection?> GetSection(int sectionId)
@@ -73,7 +87,7 @@ public class ScheduleMakerRepository : IScheduleMakerRepository
             throw new Exception("Trying to add section to a non-existent subject");
         var section = new SMSection
         {
-            SubjectId = subjectId,
+            SMSubjectId = subjectId,
             SMSubject = subject,
             SectionId = subject.GetAvailableSectionId(),
         };
@@ -90,7 +104,7 @@ public class ScheduleMakerRepository : IScheduleMakerRepository
         if (section == null)
             return;
 
-        var affectedTimes = await _dbContext.SMTimes.Where(x => x.SectionId == sectionId).ToListAsync();
+        var affectedTimes = await _dbContext.SMTimes.Where(x => x.SMSectionId == sectionId).ToListAsync();
 
         foreach (var time in affectedTimes)
             await RemoveTime(time.Id);
@@ -101,7 +115,7 @@ public class ScheduleMakerRepository : IScheduleMakerRepository
 
     public async Task<List<SMTime>> GetTimes(int sectionId)
     {
-        return await _dbContext.SMTimes.Where(x => x.SectionId == sectionId).ToListAsync();
+        return await _dbContext.SMTimes.Where(x => x.SMSectionId == sectionId).ToListAsync();
     }
 
     public async Task<SMTime?> GetTime(int timeId)
@@ -119,6 +133,21 @@ public class ScheduleMakerRepository : IScheduleMakerRepository
 
         await _dbContext.SMTimes.AddAsync(time);
         await _dbContext.SaveChangesAsync();
+        return time;
+    }
+
+    public async Task<SMTime?> UpdateTime(int timeId, SMTimeUpdate timeUpdate)
+    {
+        var time = await GetTime(timeId);
+
+        if (time == null) throw new Exception("Trying to update a non-existent time");
+
+        time.Day = timeUpdate.Day;
+        time.StartTime = timeUpdate.StartTime;
+        time.EndTime = timeUpdate.EndTime;
+
+        await _dbContext.SaveChangesAsync();
+
         return time;
     }
 

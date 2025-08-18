@@ -32,7 +32,8 @@
             </u:Form.ItemsPanel>
             
             <u:FormItem Label="Day">
-                <ComboBox SelectedItem="{Binding Day, Converter={StaticResource DayConverter}, Mode=TwoWay}">
+                <ComboBox SelectedIndex="{Binding DayIndex, Mode=TwoWay}">
+                <!-- <ComboBox SelectedItem="{Binding Day, Converter={StaticResource DayConverter}, Mode=TwoWay}"> -->
                     <ComboBoxItem Content="Monday"/>
                     <ComboBoxItem Content="Tuesday"/>
                     <ComboBoxItem Content="Wednesday"/>

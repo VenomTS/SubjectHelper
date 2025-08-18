@@ -34,8 +34,12 @@
 						<scheduleMaker:SMSubjectCard
 							Title="{Binding Title}"
 							Sections="{Binding Sections}"
+							EditCommand="{ReflectionBinding $parent[ItemsControl].DataContext.EditSubjectCommand}"
+							EditParameter="{Binding .}"
 							DeleteCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteSubjectCommand}"
 							DeleteParameter="{Binding .}"
+							EditSectionCommand="{ReflectionBinding $parent[ItemsControl].DataContext.EditSectionCommand}"
+							EditTimeCommand="{ReflectionBinding $parent[ItemsControl].DataContext.EditTimeCommand}"
 							DeleteSectionCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteSectionCommand}"
 							DeleteTimeCommand="{ReflectionBinding $parent[ItemsControl].DataContext.DeleteTimeCommand}"
 							AddTimeCommand="{ReflectionBinding $parent[ItemsControl].DataContext.AddTimeCommand}"

@@ -105,7 +105,7 @@
 					<DataTemplate DataType="scheduleMaker:SMSectionViewModel">
 						
 						<scheduleMaker1:SMSectionCard
-							SectionId="{Binding SectionId}"
+							SectionId="{Binding SMSectionId}"
 							DeleteCommand="{Binding DeleteSectionCommand, ElementName=Root}"
 							DeleteParameter="{Binding .}"
 							EditCommand="{Binding EditSectionCommand, ElementName=Root}"

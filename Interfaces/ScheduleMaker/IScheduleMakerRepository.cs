@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SubjectHelper.Models.ScheduleMaker;
+using SubjectHelper.Models.ScheduleMaker.Updates;
 
 namespace SubjectHelper.Interfaces.ScheduleMaker;
 
@@ -10,6 +11,7 @@ public interface IScheduleMakerRepository
     Task<List<SMSubject>> GetSubjects();
     Task<SMSubject?> GetSubject(int subjectId);
     Task<SMSubject> AddSubject(string name);
+    Task<SMSubject?> UpdateSubject(int subjectId, SMSubjectUpdate subjectUpdate);
     Task RemoveSubject(int subjectId);
     // Task UpdateSubject()
     
@@ -24,6 +26,7 @@ public interface IScheduleMakerRepository
     Task<List<SMTime>> GetTimes(int sectionId);
     Task<SMTime?> GetTime(int timeId);
     Task<SMTime> AddTime(int sectionId, SMTime time);
+    Task<SMTime?> UpdateTime(int timeId, SMTimeUpdate timeUpdate);
     Task RemoveTime(int timeId);
     
     // Task UpdateTime();

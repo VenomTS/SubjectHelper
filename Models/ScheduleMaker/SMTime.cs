@@ -10,6 +10,6 @@ public class SMTime
     public TimeOnly EndTime { get; set; }
     public DayOfWeek Day { get; set; }
 
-    public int SectionId { get; set; }
-    public SMSection SMSection { get; set; }
+    public int SMSectionId { get; set; }
+    public SMSection? SMSection { get; set; }
 }

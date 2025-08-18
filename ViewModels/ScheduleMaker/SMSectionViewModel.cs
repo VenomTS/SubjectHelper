@@ -10,8 +10,8 @@ public partial class SMSectionViewModel : ViewModelBase
 
     public ObservableCollection<SMTimeViewModel> Times { get; set; } = [];
 
-    public int SectionId { get; set; }
-    public int SubjectId { get; set; }
+    public int SMSectionId { get; set; }
+    public int SMSubjectId { get; set; }
 
     public SMSectionViewModel()
     {
@@ -21,8 +21,8 @@ public partial class SMSectionViewModel : ViewModelBase
     public SMSectionViewModel(SMSection section)
     {
         Id = section.Id;
-        SectionId = section.SectionId;
-        SubjectId = section.SubjectId;
+        SMSectionId = section.SectionId;
+        SMSubjectId = section.SMSubjectId;
         foreach (var time in section.Times)
         {
             Times.Add(new SMTimeViewModel(time));

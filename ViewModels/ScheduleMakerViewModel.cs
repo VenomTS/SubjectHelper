@@ -10,6 +10,7 @@ using SubjectHelper.Helper;
 using SubjectHelper.Interfaces.ScheduleMaker;
 using SubjectHelper.Interfaces.Services;
 using SubjectHelper.Models.ScheduleMaker;
+using SubjectHelper.Models.ScheduleMaker.Updates;
 using SubjectHelper.ViewModels.Bases;
 using SubjectHelper.ViewModels.ScheduleMaker;
 using Ursa.Controls;
@@ -84,12 +85,63 @@ public partial class ScheduleMakerViewModel : PageViewModel
             Day = timeVM.Day,
             StartTime = timeVM.StartTime,
             EndTime = timeVM.EndTime,
-            SectionId = vm.SectionId,
+            SMSectionId = vm.Id,
         });
 
         vm.Times.Add(new SMTimeViewModel(time));
         
         _toastService.ShowToast("Time Added", NotificationType.Success);
+    }
+
+    [RelayCommand]
+    private async Task EditSubject(SMSubjectViewModel vm)
+    {
+        var subjectVM = new SMSubjectFormViewModel
+        {
+            Title = vm.Title,
+        };
+
+        var result = await _dialogService.ShowSMSubjectForm("Edit Subject", subjectVM);
+
+        if (result != DialogResult.OK) return;
+
+        var subject = await _scheduleMakerRepo.UpdateSubject(vm.Id, new SMSubjectUpdate { Title = subjectVM.Title });
+
+        var currentIndex = Subjects.IndexOf(vm);
+
+        Subjects[currentIndex] = new SMSubjectViewModel(subject!);
+        
+        _toastService.ShowToast("Subject Edited", NotificationType.Success);
+    }
+
+    [RelayCommand]
+    private void EditSection() => _toastService.ShowToast("Not Implemented", NotificationType.Error);
+
+    [RelayCommand]
+    private async Task EditTime(SMTimeViewModel vm)
+    {
+        var timeVM = new SMTimeFormViewModel
+        {
+            Day = vm.Day,
+            StartTime = vm.StartTime,
+            EndTime = vm.EndTime,
+        };
+
+        var result = await _dialogService.ShowSMTimeForm("Edit Timeslot", timeVM);
+
+        if (result != DialogResult.OK) return;
+
+        var time = await _scheduleMakerRepo.UpdateTime(vm.Id,
+            new SMTimeUpdate { Day = timeVM.Day, StartTime = timeVM.StartTime, EndTime = timeVM.EndTime });
+
+        var subject = Subjects.First(x => x.Id == vm.SMSubjectId);
+        var section = subject.Sections.First(x => x.Id == vm.SMSectionId);
+
+        var timeIndex = section.Times.IndexOf(vm);
+
+        section.Times[timeIndex] = new SMTimeViewModel(time!);
+        
+        _toastService.ShowToast("Time Edited", NotificationType.Success);
     }
     
     [RelayCommand]
@@ -107,7 +159,7 @@ public partial class ScheduleMakerViewModel : PageViewModel
     {
         await _scheduleMakerRepo.RemoveSection(vm.Id);
 
-        var subject = Subjects.First(x => x.Id == vm.SubjectId);
+        var subject = Subjects.First(x => x.Id == vm.SMSubjectId);
 
         subject.Sections.Remove(vm);
         
@@ -119,8 +171,9 @@ public partial class ScheduleMakerViewModel : PageViewModel
     {
         await _scheduleMakerRepo.RemoveTime(vm.Id);
 
-        var subject = Subjects.First(x => x.Id == vm.SubjectId);
-        var section = subject.Sections.First(x => x.Id == vm.SectionId);
+        var subject = Subjects.First(x => x.Id == vm.SMSubjectId);
+        
+        var section = subject.Sections.First(x => x.Id == vm.SMSectionId);
 
         section.Times.Remove(vm);
         

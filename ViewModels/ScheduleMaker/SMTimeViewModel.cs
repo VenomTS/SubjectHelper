@@ -13,8 +13,8 @@ public partial class SMTimeViewModel : ViewModelBase
     [ObservableProperty] private TimeOnly _startTime;
     [ObservableProperty] private TimeOnly _endTime;
 
-    public int SectionId { get; set; }
-    public int SubjectId { get; set; }
+    public int SMSectionId { get; set; }
+    public int SMSubjectId { get; set; }
 
     public SMTimeViewModel()
     {
@@ -24,8 +24,8 @@ public partial class SMTimeViewModel : ViewModelBase
     public SMTimeViewModel(SMTime time)
     {
         Id = time.Id;
-        SectionId = time.SectionId;
-        SubjectId = time.SMSection.SubjectId;
+        SMSectionId = time.SMSectionId;
+        SMSubjectId = time.SMSection!.SMSubjectId;
         Day = time.Day;
         StartTime = time.StartTime;
         EndTime = time.EndTime;
