@@ -13,10 +13,23 @@
 			Margin="5 10"
 			RowDefinitions="Auto, *">
 			
-			<Button
-				Grid.Row="0" Content="+ Add Subject"
-				CornerRadius="16"
-				Command="{Binding AddSubjectCommand}"/>
+			<StackPanel 
+				Grid.Row="0"
+				Orientation="Horizontal"
+				HorizontalAlignment="Center"
+				Spacing="10">
+				
+				<Button
+					Content="+ Add Subject"
+					CornerRadius="16"
+					Command="{Binding AddSubjectCommand}"/>
+				
+				<Button 
+					Content="Generate Schedules"
+					CornerRadius="16"
+					Command="{Binding GenerateSchedulesCommand}"/>
+				
+			</StackPanel>
 		
 			<ItemsControl
 				Grid.Row="1"
@@ -46,9 +59,33 @@
 							AddSectionCommand="{ReflectionBinding $parent[ItemsControl].DataContext.AddSectionCommand}"/>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
-		
 			</ItemsControl>
-		
+			
+			<!-- If there are no subjects, show this -->
+			<StackPanel
+				Grid.Row="1"
+				HorizontalAlignment="Center"
+				Orientation="Vertical"
+				IsVisible="{Binding !Subjects.Count}"
+				Margin="0 25 0 0">
+
+				<Label
+					FontFamily="{StaticResource FaSolid}" Content="&#xf56c;" FontSize="64"
+					HorizontalAlignment="Center" />
+
+				<TextBlock
+					Text="No subjects yet" TextAlignment="Center"
+					FontSize="30"
+					FontWeight="SemiBold"
+					Margin="0 15 0 0" />
+
+				<TextBlock
+					Text="Add your first subject to get started" TextAlignment="Center"
+					FontSize="16"
+					Margin="0 10 0 0"
+					Foreground="DarkGray" />
+			</StackPanel>
+			
 		</Grid>
 	</ScrollViewer>
 </UserControl>

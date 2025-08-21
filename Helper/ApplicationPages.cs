@@ -6,4 +6,5 @@ public enum ApplicationPages
     Subjects,
     Subject,
     ScheduleMakerSubjects,
+    ScheduleMakerSchedule,
 }

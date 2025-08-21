@@ -40,6 +40,7 @@ public partial class App : Application
         collection.AddSingleton<INavigationService, NavigationService>();
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<IToastService, ToastService>();
+        collection.AddSingleton<IScheduleMakingService, ScheduleMakingService>();
         
         // Scoped = Created once and reused
         collection.AddScoped<SubjectsListViewModel>();
@@ -52,6 +53,7 @@ public partial class App : Application
         // Transient - Created every time
         // MUST BE TRANSIENT - IF NOT ISSUES MAY HAPPEN
         collection.AddTransient<SubjectViewModel>();
+        collection.AddTransient<ScheduleMakerScheduleViewModel>();
 
         collection.AddSingleton<Func<ApplicationPages, object?, PageViewModel>>(provider => (name, data) =>
         {
@@ -67,12 +69,11 @@ public partial class App : Application
                     return vm;
                 case ApplicationPages.ScheduleMakerSubjects:
                     return provider.GetRequiredService<ScheduleMakerViewModel>();
-                case ApplicationPages.Unknown:
-                    break;
+                case ApplicationPages.ScheduleMakerSchedule:
+                    return provider.GetRequiredService<ScheduleMakerScheduleViewModel>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(name), name, null);
             }
-            throw new Exception("Unknown ApplicationPage");
         });
         
         var services = collection.BuildServiceProvider();

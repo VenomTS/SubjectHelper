@@ -22,15 +22,17 @@ public partial class ScheduleMakerViewModel : PageViewModel
     private readonly IScheduleMakerRepository _scheduleMakerRepo;
     private readonly IDialogService _dialogService;
     private readonly IToastService _toastService;
+    private readonly INavigationService _navigationService;
 
     public ObservableCollection<SMSubjectViewModel> Subjects { get; } = [];
     
-    public ScheduleMakerViewModel(IScheduleMakerRepository scheduleMakerRepo, IDialogService dialogService, IToastService toastService)
+    public ScheduleMakerViewModel(IScheduleMakerRepository scheduleMakerRepo, IDialogService dialogService, IToastService toastService, INavigationService navigationService)
     {
         Page = ApplicationPages.ScheduleMakerSubjects;
         _scheduleMakerRepo = scheduleMakerRepo;
         _dialogService = dialogService;
         _toastService = toastService;
+        _navigationService = navigationService;
 
         _ = Initialize();
     }
@@ -43,6 +45,12 @@ public partial class ScheduleMakerViewModel : PageViewModel
         {
             Subjects.Add(new SMSubjectViewModel(subject));
         }
+    }
+
+    [RelayCommand]
+    private void GenerateSchedules()
+    {
+        _navigationService.NavigateToPage(ApplicationPages.ScheduleMakerSchedule);
     }
 
     [RelayCommand]
