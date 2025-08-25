@@ -4,5 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SubjectHelper.Views.ScheduleMakerScheduleView">
-	Welcome to Avalonia!
+	
+	<UserControl.Resources>
+	</UserControl.Resources>
+	
+	<ScrollViewer
+		HorizontalScrollBarVisibility="Auto">
+		
+		<!-- Grid is dynamically created in the code-behind -->
+		
+		<Grid
+			x:Name="MainGrid"
+			Margin="20 10"
+			ShowGridLines="False">
+			
+			
+		</Grid>
+	</ScrollViewer>
+	
 </UserControl>
