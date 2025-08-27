@@ -10,13 +10,14 @@ public class ScheduleMakingService : IScheduleMakingService
 {
     private List<List<SMSectionViewModel>> _allSchedules = [];
 
-    private SMSubjectViewModel? _impossibleSubject = null;
+    private SMSubjectViewModel? _impossibleSubject;
 
     private int _requiredSubjectCount;
     
     public (SMSubjectViewModel?, List<List<SMSectionViewModel>>?) GenerateAllSchedules(List<SMSubjectViewModel> subjects)
     {
         _allSchedules = [];
+        _impossibleSubject = null;
 
         _requiredSubjectCount = subjects.Count;
         

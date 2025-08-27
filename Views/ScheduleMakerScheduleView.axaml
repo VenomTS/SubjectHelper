@@ -2,24 +2,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SubjectHelper.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SubjectHelper.Views.ScheduleMakerScheduleView">
+             x:DataType="viewModels:ScheduleMakerScheduleViewModel"
+             x:Class="SubjectHelper.Views.ScheduleMakerScheduleView"
+             Loaded="Control_OnLoaded">
 	
-	<UserControl.Resources>
-	</UserControl.Resources>
-	
-	<ScrollViewer
-		HorizontalScrollBarVisibility="Auto">
+	<Grid
+		RowDefinitions="Auto, *">
+		
+		<StackPanel
+			Grid.Row="0"
+			Margin="0 5 0 0"
+			Spacing="25"
+			Orientation="Horizontal"
+			HorizontalAlignment="Center">
+			
+			<Button 
+				Command="{Binding GoPreviousCommand}"
+				Classes="Danger"
+				Width="128"
+				Content="Previous"/>
+			
+			<Button 
+				Command="{Binding GoNextCommand}"
+				Classes="Success"
+				Width="128"
+				Content="Next"/>
+			
+		</StackPanel>
 		
 		<!-- Grid is dynamically created in the code-behind -->
-		
 		<Grid
-			x:Name="MainGrid"
-			Margin="20 10"
-			ShowGridLines="False">
-			
-			
+			Grid.Row="1"
+			AttachedToVisualTree="MainGrid_OnAttachedToVisualTree"
+			x:Name="MainGrid">
 		</Grid>
-	</ScrollViewer>
+	</Grid>
 	
 </UserControl>

@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using SubjectHelper.ViewModels;
 
 namespace SubjectHelper.Views;
 
@@ -27,30 +29,23 @@ public partial class ScheduleMakerScheduleView : UserControl
     private const int ColSpacerRowSpan = Days + 1;
 
     private const int HourMarkColSpan = 4;
+
+    private const int ScheduleStartingColumn = 1;
     
     // + 1 since there is a row for hours / There is extra column for days
-    private int _rows = Days + 1;
-    private int _cols = HoursDisplayed * SectionsPerHour + 1;
+    private const int Rows = Days + 1;
+    private const int Columns = HoursDisplayed * SectionsPerHour + 1;
+
+    private ScheduleMakerScheduleViewModel? _viewModel;
     
     public ScheduleMakerScheduleView()
     {
         InitializeComponent();
     }
 
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToVisualTree(e);
-
-        GenerateRows();
-        GenerateColumns();
-        GenerateSpacers();
-        GenerateDays();
-        GenerateHourMarks();
-    }
-
     private void GenerateRows()
     {
-        for(var i = 0; i < _rows; i++)
+        for(var i = 0; i < Rows; i++)
             MainGrid.RowDefinitions.Add(new RowDefinition(GridLength.Star));
     }
 
@@ -58,7 +53,7 @@ public partial class ScheduleMakerScheduleView : UserControl
     {
         MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(DaysColumnWidth)));
 
-        for (var i = 1; i < _cols; i++)
+        for (var i = 1; i < Columns; i++)
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(SectionColumnWidth)));
     }
 
@@ -84,8 +79,8 @@ public partial class ScheduleMakerScheduleView : UserControl
         };
 
         Grid.SetRow(endHourMark, 0);
-        Grid.SetColumn(endHourMark, _cols - 3);
-        Grid.SetColumnSpan(endHourMark, 4);
+        Grid.SetColumn(endHourMark, Columns - 3);
+        Grid.SetColumnSpan(endHourMark, HourMarkColSpan);
         
         MainGrid.Children.Add(startHourMark);
         MainGrid.Children.Add(endHourMark);
@@ -102,7 +97,7 @@ public partial class ScheduleMakerScheduleView : UserControl
             
             Grid.SetRow(hourMark, 0);
             Grid.SetColumn(hourMark, (i - StartHour) * SectionsPerHour - 1);
-            Grid.SetColumnSpan(hourMark, 4);
+            Grid.SetColumnSpan(hourMark, HourMarkColSpan);
 
             // Grid.SetRow(hourMark, 0);
             // Grid.SetColumn(hourMark, (i - StartHour) * SectionsPerHour);
@@ -114,7 +109,7 @@ public partial class ScheduleMakerScheduleView : UserControl
 
     private void GenerateSpacers()
     {
-        for (var i = 0; i < _rows; i++)
+        for (var i = 0; i < Rows; i++)
         {
             var verticalSpacer = new Rectangle
             {
@@ -141,7 +136,7 @@ public partial class ScheduleMakerScheduleView : UserControl
         Grid.SetColumn(horizontalSpacer, 0);
         MainGrid.Children.Add(horizontalSpacer);
 
-        for (var i = 0; i < _cols; i += 6)
+        for (var i = 0; i < Columns; i += 6)
         {
             horizontalSpacer = new Rectangle
             {
@@ -159,7 +154,6 @@ public partial class ScheduleMakerScheduleView : UserControl
 
     private void GenerateDays()
     {
-
         List<string> days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
         for (var i = 0; i < days.Count; i++)
@@ -175,5 +169,104 @@ public partial class ScheduleMakerScheduleView : UserControl
             Grid.SetColumn(dayMark, 0);
             MainGrid.Children.Add(dayMark);
         }
+    }
+
+    private void MainGrid_OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        GenerateRows();
+        GenerateColumns();
+        GenerateHourMarks();
+        GenerateDays();
+        GenerateSpacers();
+    }
+
+    private void Control_OnLoaded(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not ScheduleMakerScheduleViewModel vm) return;
+
+        _viewModel = vm;
+        
+        _viewModel.OnCurrentScheduleChanged += OnScheduleChanged;
+
+        _viewModel.TriggerScheduleChange();
+    }
+
+    private void OnScheduleChanged(object? sender, ScheduleChangedEventArgs e)
+    {
+        var rectangleChildren = MainGrid.Children.Where(x => x.Classes.Contains("ScheduleItem"));
+
+        MainGrid.Children.RemoveAll(rectangleChildren);
+
+        foreach (var display in e.Schedule)
+        {
+            var text = new TextBlock
+            {
+                Text = $"{display.SectionFullName}\n{display.StartTime} - {display.EndTime}",
+                Background = new SolidColorBrush(GenerateRandomColor()),
+                TextAlignment = TextAlignment.Center,
+                Classes = { "ScheduleItem" },
+            };
+
+            var row = GetRowFromDay(display.Day);
+            var col = GetColumnFromStartTime(display.StartTime);
+            var colSpan = GetColumnSpanFromStartEndTime(display.StartTime, display.EndTime);
+            
+            Grid.SetRow(text, row);
+            Grid.SetColumn(text, col);
+            Grid.SetColumnSpan(text, colSpan);
+
+            MainGrid.Children.Add(text);
+        }
+    }
+    
+    // NOTE:
+    // Move 6 for each hour, move 1 for 10 minutes
+    private int GetColumnSpanFromStartEndTime(TimeOnly startTime, TimeOnly endTime)
+    {
+        var hourDifference = endTime.Hour - startTime.Hour;
+        var minuteDifference = endTime.Minute - startTime.Minute;
+
+        if (minuteDifference < 0)
+        {
+            minuteDifference += 60;
+            hourDifference -= 1;
+        }
+
+        return (int) (hourDifference * 6 + Math.Ceiling(minuteDifference / 10d));
+    }
+
+    // NOTE:
+    // Move 6 for each hour, move 1 for 10 minutes
+    private int GetColumnFromStartTime(TimeOnly startTime)
+    {
+        var hourDifference = startTime.Hour - StartHour;
+        var minuteDifference = startTime.Minute;
+        return (int)(ScheduleStartingColumn + hourDifference * 6 + Math.Ceiling(minuteDifference / 10d));
+    }
+
+    private int GetRowFromDay(DayOfWeek day)
+    {
+        return day switch
+        {
+            DayOfWeek.Monday => 1,
+            DayOfWeek.Tuesday => 2,
+            DayOfWeek.Wednesday => 3,
+            DayOfWeek.Thursday => 4,
+            DayOfWeek.Friday => 5,
+            _ => throw new Exception("Day out of range of rows")
+        };
+    }
+    
+    private Color GenerateRandomColor()
+    {
+        var random = new Random();
+
+        var r = (byte) random.Next(0, 256);
+        var g = (byte) random.Next(0, 256);
+        var b = (byte) random.Next(0, 256);
+
+        const int alpha = 255;
+
+        return new Color(alpha, r, g, b);
     }
 }
