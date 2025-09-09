@@ -31,6 +31,12 @@ public partial class ScheduleMakerScheduleView : UserControl
     private const int HourMarkColSpan = 4;
 
     private const int ScheduleStartingColumn = 1;
+
+    private const int BorderColorValue = 100;
+    private const int TextColorValue = 33;
+
+    private static readonly Color BorderColor = new(255, BorderColorValue, BorderColorValue, BorderColorValue);
+    private static readonly Color TextColor = new(255, TextColorValue, TextColorValue, TextColorValue);
     
     // + 1 since there is a row for hours / There is extra column for days
     private const int Rows = Days + 1;
@@ -116,6 +122,7 @@ public partial class ScheduleMakerScheduleView : UserControl
                 Fill = Brushes.White,
                 Height = 1d,
                 VerticalAlignment = VerticalAlignment.Bottom,
+                ZIndex = 10,
             };
             
             Grid.SetRow(verticalSpacer, i);
@@ -143,6 +150,7 @@ public partial class ScheduleMakerScheduleView : UserControl
                 Fill = Brushes.White,
                 Width = 1d,
                 HorizontalAlignment = HorizontalAlignment.Right,
+                ZIndex = 10,
             };
             
             Grid.SetRow(horizontalSpacer, 1);
@@ -201,21 +209,29 @@ public partial class ScheduleMakerScheduleView : UserControl
         {
             var text = new TextBlock
             {
-                Text = $"{display.SectionFullName}\n{display.StartTime} - {display.EndTime}",
-                Background = new SolidColorBrush(GenerateRandomColor()),
-                TextAlignment = TextAlignment.Center,
+                Text = $"{display.SectionFullName}",
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(TextColor),
+                ZIndex = 100,
+                Margin = new Thickness(5d, 0d),
+            };
+            
+            var border = new Border
+            {
+                Background = new SolidColorBrush(BorderColor),
                 Classes = { "ScheduleItem" },
+                Child = text,
             };
 
             var row = GetRowFromDay(display.Day);
             var col = GetColumnFromStartTime(display.StartTime);
             var colSpan = GetColumnSpanFromStartEndTime(display.StartTime, display.EndTime);
             
-            Grid.SetRow(text, row);
-            Grid.SetColumn(text, col);
-            Grid.SetColumnSpan(text, colSpan);
+            Grid.SetRow(border, row);
+            Grid.SetColumn(border, col);
+            Grid.SetColumnSpan(border, colSpan);
 
-            MainGrid.Children.Add(text);
+            MainGrid.Children.Add(border);
         }
     }
     
@@ -255,18 +271,5 @@ public partial class ScheduleMakerScheduleView : UserControl
             DayOfWeek.Friday => 5,
             _ => throw new Exception("Day out of range of rows")
         };
-    }
-    
-    private Color GenerateRandomColor()
-    {
-        var random = new Random();
-
-        var r = (byte) random.Next(0, 256);
-        var g = (byte) random.Next(0, 256);
-        var b = (byte) random.Next(0, 256);
-
-        const int alpha = 255;
-
-        return new Color(alpha, r, g, b);
     }
 }
