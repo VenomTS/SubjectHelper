@@ -5,5 +5,5 @@ namespace SubjectHelper.Interfaces.Services;
 
 public interface IScheduleMakingService
 {
-    (SMSubjectViewModel?, List<List<SMSectionViewModel>>?) GenerateAllSchedules(List<SMSubjectViewModel> subjects);
+    List<List<SMSectionViewModel>> GenerateAllSchedules(List<SMSubjectViewModel> subjects);
 }

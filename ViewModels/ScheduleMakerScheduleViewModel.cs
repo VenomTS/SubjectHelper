@@ -37,11 +37,11 @@ public partial class ScheduleMakerScheduleViewModel : PageViewModel
 
         InitializeSubjects(_scheduleMakerRepo);
 
-        var (possibleSubject, possibleListOfSubjects) = scheduleMakingService.GenerateAllSchedules(_subjects);
+        var possibleListOfSubjects = scheduleMakingService.GenerateAllSchedules(_subjects);
 
-        if (possibleSubject != null)
+        if (possibleListOfSubjects.Count == 0)
         {
-            toastService.ShowToast($"Cannot create schedule - Problem: {possibleSubject.Title}", NotificationType.Error);
+            toastService.ShowToast("Cannot create schedule - Impossible overlaps", NotificationType.Error);
             return;
         }
 
